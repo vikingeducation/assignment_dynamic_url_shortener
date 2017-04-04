@@ -1,12 +1,15 @@
 var linkShortener = require('./lib/linkShortener');
 
-var str = 'www.google.com123456';
+var str1 = 'www.facebook.com';
+var str2 = 'www.nytimes.com';
+var str3 = 'www.cnn.com';
 
-linkShortener.checkUrl(str)
-.then((exists) => {
-  if (!exists) linkShortener.set(str);
-  return linkShortener.get(str);
-}).then((shortUrl) => {
-  // this is our shortURL
-  console.log(shortUrl);
+linkShortener.get(str1).then((data) => {
+  console.log(`${str1}: ${data}`);
+})
+linkShortener.get(str2).then((data) => {
+  console.log(`${str2}: ${data}`);
+})
+linkShortener.get(str3).then((data) => {
+  console.log(`${str3}: ${data}`);
 })
