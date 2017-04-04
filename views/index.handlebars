@@ -1,0 +1,26 @@
+
+  <form method="post" action="/update">
+    <label for="baseURL">URL Input</label>
+    <input type="text" name="baseURL">
+    <input type="submit">
+  </form>
+  <fieldset>
+    <table>
+      <caption>URL Shortener Stats</caption>
+      <thead>
+        <tr>
+          <th>Original URL</th>
+          <th>Short URL</th>
+          <th>Clicks</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>{{urlPair.inputURL}}</td>
+          <td>{{urlPair.shortURL}}</td>
+        </tr>
+      </tbody>
+
+    </table>
+
+  </fieldset>
