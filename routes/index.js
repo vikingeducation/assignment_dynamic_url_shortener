@@ -9,7 +9,21 @@ var router = express.Router();
 router.get('/', function(req, res, next) {
   // show all relevant full urls and shortened urls and pass to hbs
   redisClient.keys('*', (err, data) => {
-    res.render('index', { title: 'Express', keys: data })
+    //Some helper function that takes keys and returns an object or key/value pairs
+    let urlPairs = [];
+    
+    data.forEach((key) => {
+        redisClient.get(key, (err, value) => {
+          urlPairs.push({ key: value });
+          
+        });
+
+      
+    });
+    
+    
+    
+    res.render('index', { title: 'Express', urlPairs })
   });
 });
 
