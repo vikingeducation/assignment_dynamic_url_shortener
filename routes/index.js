@@ -8,28 +8,22 @@ var router = express.Router();
 /* GET home page. */
 router.get('/', function(req, res, next) {
   // show all relevant full urls and shortened urls and pass to hbs
-  redisClient.keys('*', (err, data) => {
-    //Some helper function that takes keys and returns an object or key/value pairs
-    let urlPairs = [];
-    data.forEach((key) => {
-      redisClient.hgetall(key, (err, value) => {
-        urlPairs.push(
-        {
-          url: key,
-          short: value['short'],
-          created: value['created'],
-          clicks: value['clicks']
-        });
-      });
-    });
-    res.render('index', { title: 'Express', urlPairs })
+  linkShortener.getUrlPairs()
+  .then((urlPairs) => {
+      res.render('index', { title: 'Express', urlPairs });
   });
 });
 
-router.get('/redirect/:shortUrl', function(req, res, next){
-  // do something
-  //res.redirect(the real url)
-})
+router.get('/:uniqueID', function(req, res, next){
+  
+  let uniqueID = req.params.uniqueID;
+  
+  //grab from redis database
+  linkShortener.hget(uniqueID, 'url')
+  .then((data) => {
+    res.redirect(`http://${data}`);
+  });
+});
 // {
 //   nytimes.com: xyz
 // }
@@ -39,12 +33,8 @@ router.get('/redirect/:shortUrl', function(req, res, next){
 // }
 router.post('/', function(req, res, next) {
   var userUrl = req.body.url;
-  linkShortener.checkUrl(userUrl)
-  .then((exists) => {
-    if (!exists) linkShortener.set(userUrl);
-  }).then(() => {
-    res.redirect('/');
-  })
+  linkShortener.set(userUrl);
+  res.redirect('/');
 });
 
 // update post request so that when we set the hashed URL, we also set the inverse key/value pair
