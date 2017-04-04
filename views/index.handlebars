@@ -13,7 +13,7 @@
 </head>
 <body>
 
-  <h1>Link shortener!</h1>
+  <h1>Link shortener (but usually lengthener):</h1>
 
   <!-- <h1 id="count"></h1> -->
 <form method="post" action="/" class="form">
@@ -29,7 +29,7 @@
   <th>All clicks</th>
 </table> -->
 
-{{#each urls as |url|}}
+<!-- {{#each urls as |url|}}
 <div class="borderBox">
   <p>{{url}}</p>
 </div>
@@ -39,7 +39,30 @@
 <div class="borderBox">
   <a href='/{{hash}}'>{{hash}}</p>
 </div>
+{{/each}} -->
+
+{{#each allKeys as |key|}}
+<p>{{key}}</p>
+<p>{{key.url}}</p>
+<p>{{key.count}}</p>
 {{/each}}
+<!-- <div class="row" style="display:table;">
+  <div class="col-xs-6 left">
+    {{#each urls as |url|}}
+    <div class="borderBox">
+      <p>{{url}}</p>
+    </div>
+    {{/each}}
+  </div>
+
+  <div class="col-xs-6 right">
+    {{#each hashes as |hash|}}
+    <div class="borderBox">
+      <a href='/{{hash}}'>localhost:3000/{{hash}}</p>
+    </div>
+    {{/each}}
+  </div>
+</div> -->
 </body>
 
 <script>

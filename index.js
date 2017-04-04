@@ -23,28 +23,17 @@ app.set('view engine', 'handlebars');
 //redisClient.flushall();
 
 app.get('/', (req, res) => {
-  var urls = [];
-  var hashes = [];
+  var allKeys = [];
 
   redisClient.keys('-*', (err, results) => {
-    hashes = results;
-    // redisClient.keys('*', (err, results) => {
-
-    hashes.forEach(function(value) {
-      redisClient.get(value, (err, results) => {
-        urls.push(results);
-        console.log(urls);
+    results.forEach(function(key) {
+      redisClient.hgetall(key, (err, results) => {
+        console.log(results);
+        allKeys.push(results);
       });
     });
-
-    res.render('index', { urls, hashes });
-
-    // });
-
-    //console.log(results);
   });
-  //Get redis keys, pass them through
-  //  res.render('castles', { kingdomName, castles });
+  res.render('index', { allKeys });
 });
 
 app.get('/:hashcode', (req, res) => {
@@ -56,25 +45,54 @@ app.get('/:hashcode', (req, res) => {
   });
 });
 
-var redObj = {};
+//var redObj = {};
 
 app.post('/', (req, res) => {
-  var userURL = req.body.userURL;
+  //hash: { url: originalURL, count: x };
+  //hashID = hash + whatever
+  //var userURL = req.body.userURL;
   var hashedURL = encode().value(req.body.userURL);
 
-  //var redObj = { userURL: hashedURL };
-  redisClient.set(hashedURL, userURL);
-  redisClient.set(userURL, hashedURL);
+  redisClient.hmset(
+    hashedURL,
+    'url',
+    req.body.userURL,
+    'count',
+    0,
+    (err, results) => {
+      redisClient.hgetall(hashedURL, (err, results) => {
+        console.log(results);
+      });
+    }
+  );
+
   res.redirect('back');
-
-  //redisClient.set(hashedURL, userURL);
-
-  //redisClient.set(userURL, redObj);
-
-  // redisClient.get(userURL, (err, results) => {
-  //   console.log(results);
-  // });
 });
+
+// redisClient.hset(
+//   hashedURL,
+//   'url',
+//   req.body.userURL,
+//   'count',
+//   0,
+//   (err, results) => {
+//     console.log(err);
+
+// );
+
+//var redObj = { userURL: hashedURL };
+
+// redisClient.set(hashedURL, userURL);
+// redisClient.set(userURL, hashedURL);
+
+//redisClient.set(hashedURL, userURL);
+
+//redisClient.set(userURL, redObj);
+
+// redisClient.get(userURL, (err, results) => {
+//   console.log(results);
+// });
+//});
 
 //
 // io.on('connection', client => {
