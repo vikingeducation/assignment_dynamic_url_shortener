@@ -5,7 +5,7 @@ var express = require('express');
 var router = express.Router();
 
 router.get('/', function(req, res, next) {
-  let baseUrl = req.headers.referer
+  let baseUrl = req.headers.host;
   linkShortener.getUrlPairs()
   .then((urlPairs) => {
       res.render('index', { title: 'Express', urlPairs, baseUrl });
@@ -16,7 +16,6 @@ router.get('/:uniqueID', function(req, res, next){
   let uniqueID = req.params.uniqueID;
   linkShortener.hget(uniqueID, 'url')
   .then((data) => {
-    console.log(`data ${data}`);
     res.redirect(`http://${data}`);
   });
 });
