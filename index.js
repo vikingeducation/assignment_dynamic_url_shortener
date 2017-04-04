@@ -21,7 +21,7 @@ app.use(express.static(__dirname + '/public'));
 app.engine('handlebars', hbs.engine);
 app.set('view engine', 'handlebars');
 
-// redisClient.flushall();
+//redisClient.flushall();
 
 app.get('/', (req, res) => {
   var allKeys = [];
@@ -42,23 +42,25 @@ app.get('/:uniqueID', (req, res) => {
 
   redisClient.hget(hashedURL, 'count', (err, results) => {
     redisClient.hincrby(hashedURL, 'count', 1, () => {
-    redisClient.hget(hashedURL, 'url', (err, results) => {
-      console.log(results);
-      res.redirect(`http://www.${results}`);
+      redisClient.hget(hashedURL, 'url', (err, results) => {
+        console.log(results);
+        res.redirect(`http://www.${results}`);
+      });
     });
-    })
   });
-
-  
 });
 
 app.post('/', (req, res) => {
   var uniqueID = shortid.generate(req.body.userURL);
+  var d = new Date();
+  var creationTime = d.toString();
 
   redisClient.hmset(
     uniqueID,
     'uniqueID',
     uniqueID,
+    'creationTime',
+    creationTime,
     'url',
     req.body.userURL,
     'count',
@@ -73,48 +75,23 @@ app.post('/', (req, res) => {
   res.redirect('back');
 });
 
-// redisClient.hset(
-//   hashedURL,
-//   'url',
-//   req.body.userURL,
-//   'count',
-//   0,
-//   (err, results) => {
-//     console.log(err);
+io.on('connection', client => {
+  redisClient.get('count', (err, count) => {
+    client.emit('new count', count);
+  });
 
-// );
+  client.on('increment', uniqueID => {
+    redisClient.hincrby(uniqueID, 'count', 1, () => {
+      console.log('incremented ' + uniqueID);
+      io.emit('new count', count);
+    });
+  });
 
-//var redObj = { userURL: hashedURL };
-
-// redisClient.set(hashedURL, userURL);
-// redisClient.set(userURL, hashedURL);
-
-//redisClient.set(hashedURL, userURL);
-
-//redisClient.set(userURL, redObj);
-
-// redisClient.get(userURL, (err, results) => {
-//   console.log(results);
-// });
-//});
-
-//
-// io.on('connection', client => {
-//   redisClient.get('count', (err, count) => {
-//     client.emit('new count', count);
-//   });
-//
-//   client.on('increment', () => {
-//     redisClient.incr('count', (err, count) => {
-//       io.emit('new count', count);
-//     });
-//   });
-//
-//   client.on('decrement', () => {
-//     redisClient.decr('count', (err, count) => {
-//       io.emit('new count', count);
-//     });
-//   });
-// });
+  client.on('decrement', () => {
+    redisClient.decr('count', (err, count) => {
+      io.emit('new count', count);
+    });
+  });
+});
 
 server.listen(3000);
