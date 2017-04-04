@@ -7,16 +7,17 @@ function _shortenUrl(url) {
 
 function storeUrl(url) {
   let shortUrl = _shortenUrl(url);
-  redisClient.hsetnx("urlHash", shortUrl, url, (err, result) => {
-    if (err) {
-      throw err;
-    }
-    if (result) {
-      console.log("new field set");
-    } else {
-      console.log("field already exists");
+  redisClient.hsetnx("urlHash", shortUrl, url, (err, data) => {
+    if (data) {
+      redisClient.hsetnx("counterHash", shortUrl, 0, (err, data) => {})
     }
   });
+}
+
+function updateCounter(hash) {
+  redisClient.hincrby("counterHash", hash, 1, (err, number) => {
+    console.log(number);
+  }); 
 }
 
 function getUrls() {
@@ -38,5 +39,6 @@ function getUrl(hash) {
 module.exports = {
   storeUrl,
   getUrls,
-  getUrl
+  getUrl,
+  updateCounter
 };

@@ -2,9 +2,9 @@
 	<div class="jumbotron">
 	  <h1>Simplify your links</h1>
 
-	  <form>
+	  <form action="add" method="POST">
 		  <div class="form-group">
-		    <input type="text" class="form-control" id="url-name" placeholder="Your original URL here">
+		    <input name="url" type="text" class="form-control" id="url-name" placeholder="Your original URL here">
 		  </div>
 		  <button type="submit" class="btn btn-default">SHORTEN URL</button>
 		</form>
@@ -24,7 +24,7 @@
 	    	{{#each data as |urlpair|}}
 	    		<tr>
 	    			<td><a href="http://{{urlpair.value}}"> {{urlpair.value}}</a></td>
-	    			<td><a href="{{urlpair.key}}"> {{urlpair.key}}</a></td>
+	    			<td><a href="{{urlpair.key}}">localhost:3000/{{urlpair.key}}</a></td>
 	    		</tr>
 	    	{{/each}}
 	    </tbody>
