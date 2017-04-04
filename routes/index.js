@@ -1,11 +1,16 @@
+const redis = require('redis')
+const redisClient = redis.createClient()
+
 var linkShortener = require('../lib/linkShortener');
 var express = require('express');
 var router = express.Router();
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  // use the standard redis stuff
-  res.render('index', { title: 'Express' });
+  // show all relevant full urls and shortened urls and pass to hbs
+  redisClient.keys('*', (err, data) => {
+    res.render('index', { title: 'Express', keys: data })
+  });
 });
 
 router.post('/', function(req, res, next) {
@@ -13,10 +18,16 @@ router.post('/', function(req, res, next) {
   linkShortener.checkUrl(userUrl)
   .then((exists) => {
     if (!exists) linkShortener.set(userUrl);
-    return linkShortener.get(userUrl);
   }).then(() => {
     res.redirect('/');
   })
 });
 
 module.exports = router;
+
+
+// app.get('/', (req, res) => {
+// redisClient.incr('visitor-count', (err, count) => {
+//   res.send(`Visitor Count: ${count}`)
+// })
+// })
