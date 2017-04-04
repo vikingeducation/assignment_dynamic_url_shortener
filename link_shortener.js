@@ -2,7 +2,7 @@ const redisClient = require("redis").createClient();
 const sh = require("shorthash");
 
 function _shortenUrl(url) {
-  return sh.unique(url);
+  return sh.unique(url + Math.floor(Math.random() * 9999999));
 }
 
 function storeUrl(url, callback) {
@@ -22,14 +22,12 @@ function storeUrl(url, callback) {
 }
 
 function updateCounter(hash) {
-  redisClient.hincrby("counterHash", hash, 1, (err, number) => {
-    console.log(number);
-  });
+  redisClient.hincrby("counterHash", hash, 1, (err, number) => {});
 }
 
 function getCounterAndStamp(hash, callback) {
   redisClient.hget("counterHash", hash, (err, counterData) => {
-    redisClient.hget("timeHash", hash, (err, timeData) => {        
+    redisClient.hget("timeHash", hash, (err, timeData) => {
       callback(counterData, timeData);
     });
   });
@@ -58,4 +56,3 @@ module.exports = {
   updateCounter,
   getCounterAndStamp
 };
-

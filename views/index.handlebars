@@ -25,9 +25,9 @@
 	    <tbody>
 	    	{{#each data as |urldata|}}
 	    		<tr>
-	    			<td><a href="http://{{urldata.value}}"> {{urldata.value}}</a></td>
+	    			<td><a href="http://{{urldata.value}}" target="_blank"> {{urldata.value}}</a></td>
 	    			<td>{{urldata.timestamp}}</td>
-	    			<td><a href="{{urldata.key}}">localhost:3000/{{urldata.key}}</a></td>
+	    			<td><a class="link" href="{{urldata.key}}" target="_blank">localhost:3000/{{urldata.key}}</a></td>
 	    			<td>{{urldata.counter}}</td>
 	    		</tr>
 	    	{{/each}}
