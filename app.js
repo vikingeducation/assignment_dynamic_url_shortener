@@ -50,9 +50,9 @@ app.use(function(err, req, res, next) {
 
 io.on('connection', client => {
 
-  client.on('increment', () => {
+  client.on('increment', (shortUrl) => {
     redisClient.hincrby(shortUrl, "count", 1, (err, count) => {
-      io.emit('increment', count);
+      io.emit('increment', [shortUrl, count]);
     });
   });
 });
