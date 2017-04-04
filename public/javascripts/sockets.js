@@ -1,5 +1,6 @@
 $(document).ready(function(){
-  var socket = io.connect('http://localhost:3000');
+  var currentUrl = $(location).attr('href')
+  var socket = io.connect(currentUrl);
   socket.on('new count', function(obj) {
     var id = '#' + obj.id;
     $(id).text(obj.clicks);
