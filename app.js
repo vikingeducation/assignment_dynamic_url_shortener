@@ -3,10 +3,12 @@ const app = express();
 const server = require("http").createServer(app);
 const io = require("socket.io")(server);
 
-const { storeUrl, 
-	getUrls, 
-	getUrl,
-	updateCounter } = require("./link_shortener");
+const {
+  storeUrl,
+  getUrls,
+  getUrl,
+  updateCounter
+} = require("./link_shortener");
 const { objectToArray } = require("./helpers");
 
 // Set up handlebars
@@ -28,16 +30,16 @@ app.get("/", (req, res) => {
 app.get("/:hash", (req, res) => {
   let hash = req.params.hash;
   updateCounter(hash);
-  getUrl(hash)
-  	.then(data => {
+  getUrl(hash).then(data => {
     res.redirect(`http://${data}`);
-  	});
+  });
 });
 
 app.post("/add", (req, res) => {
   let url = req.body.url;
-  storeUrl(url);
-  res.redirect("/");
-})
+  storeUrl(url, () => {
+    res.redirect("/");
+  });
+});
 
 server.listen(3000);
