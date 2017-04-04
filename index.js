@@ -42,6 +42,8 @@ app.get('/:uniqueID', (req, res) => {
 
   redisClient.hget(hashedURL, 'count', (err, results) => {
     redisClient.hincrby(hashedURL, 'count', 1, () => {
+      //emit the fact that incrementing has happened
+      //io.emit (messagename, updatedCount)
       redisClient.hget(hashedURL, 'url', (err, results) => {
         console.log(results);
         res.redirect(`http://www.${results}`);
