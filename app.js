@@ -9,13 +9,24 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
+import javascript_time_ago from 'javascript-time-ago';
+javascript_time_ago.locale(require('javascript-time-ago/locales/en'));
+require('javascript-time-ago/intl-messageformat-global')
+require('intl-messageformat/dist/locale-data/en')
+const time_ago = new javascript_time_ago('en-US');
+
 var index = require('./routes/index');
 
 var redisClient = require("redis").createClient();
 
 // view engine setup
 app.engine('handlebars', expressHbs({
-  defaultLayout: 'main'
+  defaultLayout: 'main',
+  helpers: {
+    time: (time) => {
+      time_ago.format(new Date(time));
+    }
+  }
 }))
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'handlebars');
