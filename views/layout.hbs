@@ -6,11 +6,24 @@
     <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css' />
     <link rel='stylesheet' href='/stylesheets/style.css' />
-
+    <script src="/socket.io/socket.io.js"></script>
   </head>
   <body>
     <main class="container">
       {{{body}}}
     </main>
+    <button id="increment">Increment</button>
+    <script>
+    var socket = io.connect('https://vikingcodeschool-rttomlinson.c9users.io/')
+    socket.on('new count', function(count) {
+      $("#count").html(count)
+    })
+    $("#increment").click(function() {
+      socket.emit('increment', { my: 'data'});
+    })
+    $("#decrement").click(function() {
+      socket.emit('decrement')
+    })
+    </script>
   </body>
 </html>

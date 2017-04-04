@@ -4,15 +4,30 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-const io = require('socket.io')(server);
+var http = require('http');
+var app = express();
+
+//Redis stuff
+
+const redis = require('redis');
+const redisClient = redis.createClient();
+var linkShortener = require('./lib/linkShortener');
+
+//End Redis stuff
+
+
+/**
+ * Create HTTP server.
+ */
+
+var server = http.createServer(app);
+
 
 var index = require('./routes/index');
 
-var app = express();
 
 var debug = require('debug')('dynamic-url-shortener:server');
-var http = require('http');
-
+const io = require('socket.io')(server);
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
@@ -48,14 +63,26 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
+/////////////////////
 
+io.on('connection', client => {
+  
+  //When a user connects, emit an event to update all values passing the value to the clients
+  
+  
+  
+  console.log("New connection!");
+  //if user clicks a button, get the short url from the data
+  //look up the url in the redis database
+  //increment the count value for that url
+  //emit an event to all clients to update the value of count
+  client.on('increment', (data) => {
+    console.log(`data from client ${ data }`);
+  });
+  
+});
 
-
-/**
- * Create HTTP server.
- */
-
-var server = http.createServer(app);
+///////////////////////
 
 /**
  * Listen on provided port, on all network interfaces.
@@ -125,7 +152,4 @@ function onListening() {
   debug('Listening on ' + bind);
 }
 
-io.on('connection', client => {
-  console.log("New connection!")
-})
-
+module.exports = io;

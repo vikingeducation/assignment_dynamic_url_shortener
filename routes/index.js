@@ -1,7 +1,8 @@
-const redis = require('redis')
-const redisClient = redis.createClient()
-
+const redis = require('redis');
+const redisClient = redis.createClient();
 var linkShortener = require('../lib/linkShortener');
+
+
 var express = require('express');
 var router = express.Router();
 
@@ -33,3 +34,6 @@ router.post('/', function(req, res, next) {
 
 
 module.exports = router;
+
+
+
