@@ -23,7 +23,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 app.get("/", (req, res) => {
   getUrls().then(urls => {
-    objectToArray(urls, (data) => {
+    objectToArray(urls, data => {
       res.render("index", { data });
     });
   });
@@ -31,7 +31,6 @@ app.get("/", (req, res) => {
 
 app.get("/:hash", (req, res) => {
   let hash = req.params.hash;
-  updateCounter(hash, () => {});
   getUrl(hash).then(data => {
     res.redirect(`http://${data}`);
   });
@@ -45,13 +44,11 @@ app.post("/add", (req, res) => {
 });
 
 io.on("connection", client => {
-
-  client.on("increment", (hashName) => {
-    updateCounter(hashName, (number) => {
-      io.emit("new count", {hashName, number});
+  client.on("increment", hashName => {
+    updateCounter(hashName, number => {
+      io.emit("new count", { hashName, number });
     });
   });
-
 });
 
 server.listen(3000);

@@ -18,8 +18,8 @@
   var socket = io.connect('http://localhost:3000')
   socket.on('new count', function(infoObj) {
     console.log(infoObj.hashName);
-    console.log(infoObj.counter);
-    $(`.${infoObj.hashName}`).html(infoObj.counter);
+    console.log(infoObj.number);
+    $(`.${infoObj.hashName}`).html(infoObj.number);
   })
 
   $(".link").click(function(eventObj) {
