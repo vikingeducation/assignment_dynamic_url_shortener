@@ -4,21 +4,21 @@ var {
   flush,
   getKeys,
   linkShortener,
-  shortenedLinkInfo
+  getInfo,
+  incrementCount
 } = require("../lib/linkShortener");
-// var io = require("socket.io")(server);
 
 /* GET home page. */
 router.get("/", function(req, res, next) {
 
-  var p = getKeys();
   const urlInfo = [];
+  var p = getKeys();
   p.then(data => {
     data.forEach(key => {
-      var info = shortenedLinkInfo(key);
+      var info = getInfo(key);
       info.then(array => {
         urlInfo.push({
-          shortened: key,
+          short: key,
           original: array[0],
           count: array[1]
         });
@@ -28,15 +28,19 @@ router.get("/", function(req, res, next) {
   });
 });
 
-// io.on("connection", client => {
-  
-
-// });
+router.get('/:shortUrl', (req, res) => {
+  var shortUrl = req.params.shortUrl;
+  incrementCount(shortUrl);
+  getInfo(shortUrl).then(array => {
+    let url = array[0];
+    res.redirect(url);
+  })
+});
 
 router.post("/submit", function(req, res, next) {
   var url = req.body.url;
   var shortUrl = linkShortener(url);
-  var p = shortenedLinkInfo(shortUrl);
+  var p = getInfo(shortUrl);
   p.then(data => {
     // res.render("index", { shortUrl, data });
     res.redirect("/");
