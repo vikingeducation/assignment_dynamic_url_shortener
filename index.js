@@ -21,19 +21,22 @@ app.get('/', (req, res) => {
 app.get('/:hashcode', (req, res) => {
   //un-hash :hashcode, store as variable
   //res.redirect(unhashed hashcode);
+  let redirectURL = req.params.hashcode;
+  redisClient.get(redirectURL, (err, results) => {
+    console.log(results);
+    res.redirect(`http://www.${results}`);
+  });
 });
 app.post('/', (req, res) => {
   var userURL = req.body.userURL;
   var hashedURL = encode().value(req.body.userURL);
 
   redisClient.set(userURL, hashedURL);
-
+  redisClient.set(hashedURL, userURL);
   redisClient.get(userURL, (err, results) => {
-    console.log(err);
-
-    console.log(userURL);
     console.log(results);
   });
+  
 });
 
 io.on('connection', client => {
