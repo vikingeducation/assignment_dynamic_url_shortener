@@ -1,4 +1,3 @@
-var redisClient = require('../lib/redisClient');
 var linkShortener = require('../lib/linkShortener');
 
 
