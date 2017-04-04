@@ -36,10 +36,10 @@
         <p>{{key.creationTime}}</p>
       </td>
       <td>
-        <a href='/{{uniqueID}}' id="{{uniqueID}}">http://{{uniqueID}}</a>
+        <a href='/{{uniqueID}}'>http://{{uniqueID}}</a>
       </td>
       <td>
-          <p>{{key.count}}<p>
+          <p id="{{uniqueID}}">{{key.count}}</p>
       </td>
     </tr>
     {{/each}}
@@ -47,23 +47,11 @@
 </body>
 
 <script>
-var socket = io.connect('http://localhost:3002');
+var socket = io.connect('http://localhost:3000');
 
-socket.on('new count', function(count) {
-  $('#count').html(count);
+socket.on('new count', function(count, uniqueID) {
+  $('#SJLjjK-ax').html(count);
 });
 
-//increment when user hits specific link page
-$('#increment').click(function() {
-  socket.emit('increment');
-});
-
-$(`#{{uniqueID}}`).click(function() {
-  socket.emit('increment', {{uniqueID}});
-})
-
-$('#decrement').click(function() {
-  socket.emit('decrement');
-});
 </script>
 </html>

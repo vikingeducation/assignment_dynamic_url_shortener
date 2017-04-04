@@ -23,13 +23,17 @@ app.set('view engine', 'handlebars');
 
 //redisClient.flushall();
 
+io.on('connection', client => {
+
+});
+
+
 app.get('/', (req, res) => {
   var allKeys = [];
 
   redisClient.keys('*', (err, results) => {
     results.forEach(function(key) {
       redisClient.hgetall(key, (err, results) => {
-        console.log(results);
         allKeys.push(results);
       });
     });
@@ -41,13 +45,16 @@ app.get('/:uniqueID', (req, res) => {
   let hashedURL = req.params.uniqueID;
 
   redisClient.hget(hashedURL, 'count', (err, results) => {
-    redisClient.hincrby(hashedURL, 'count', 1, () => {
-      //emit the fact that incrementing has happened
-      //io.emit (messagename, updatedCount)
+    redisClient.hincrby(hashedURL, 'count', 1, (err, results) => {
+      
+      io.emit('new count', results, hashedURL.uniqueID);
+
       redisClient.hget(hashedURL, 'url', (err, results) => {
         console.log(results);
         res.redirect(`http://www.${results}`);
       });
+
+      
     });
   });
 });
@@ -77,23 +84,23 @@ app.post('/', (req, res) => {
   res.redirect('back');
 });
 
-io.on('connection', client => {
-  redisClient.get('count', (err, count) => {
-    client.emit('new count', count);
-  });
+// io.on('connection', client => {
+//   redisClient.get('count', (err, count) => {
+//     client.emit('new count', count);
+//   });
 
-  client.on('increment', uniqueID => {
-    redisClient.hincrby(uniqueID, 'count', 1, () => {
-      console.log('incremented ' + uniqueID);
-      io.emit('new count', count);
-    });
-  });
+//   client.on('increment', uniqueID => {
+//     redisClient.hincrby(uniqueID, 'count', 1, () => {
+//       console.log('incremented ' + uniqueID);
+//       io.emit('new count', count);
+//     });
+//   });
 
-  client.on('decrement', () => {
-    redisClient.decr('count', (err, count) => {
-      io.emit('new count', count);
-    });
-  });
-});
+//   client.on('decrement', () => {
+//     redisClient.decr('count', (err, count) => {
+//       io.emit('new count', count);
+//     });
+//   });
+// });
 
 server.listen(3000);
