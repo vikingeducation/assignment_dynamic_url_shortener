@@ -26,7 +26,7 @@ app.get('/', (req, res) => {
     // redisClient.get(urlPair.inputURL, (err, value) => {
     //   console.log(value);
     // })
-    res.sendFile(__dirname + "/index.html");
+    res.render("index");
 });
 
 app.post('/update', (req, res) => {
