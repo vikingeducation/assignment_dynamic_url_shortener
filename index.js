@@ -7,7 +7,9 @@ const io = require('socket.io')(server);
 const redisClient = require('redis').createClient();
 const hbs = require('express-handlebars');
 const encode = require('hashcode').hashCode;
+const bodyParser = require('body-parser');
 
+app.use(bodyParser.urlencoded({ extended: true }));
 app.set('view engine', 'hbs');
 
 //redisClient.setnx('count', 0);
@@ -17,22 +19,18 @@ app.get('/', (req, res) => {
 });
 
 app.post('/', (req, res) => {
-  var body = ''; 
-  req.on('data', function(data) {
-  body += data;
-  });
-  req.on('end', function() {
-    var hash = encode().value(body.userURL);
-    console.log(body.userURL);
-    console.log(hash);
-    console.log(encode().value("test"));
-  });
+  var userURL = req.body.userURL;
+  var hashedURL = encode().value(req.body.userURL);
 
-  
+  redisClient.set(userURL, hashedURL);
 
+  redisClient.get(userURL, (err, results) => {
+    console.log(err);
+
+    console.log(userURL);
+    console.log(results);
+  });
 });
-
-
 
 io.on('connection', client => {
   redisClient.get('count', (err, count) => {
