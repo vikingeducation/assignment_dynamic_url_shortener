@@ -4,9 +4,10 @@ var linkShortener = require('../lib/linkShortener');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  var array = linkShortener('www.google.com');
-  console.log(array);
-  res.render('index', { title: 'Express' });
+  var p = linkShortener('www.google.com');
+  p.then(data => {
+    res.render('index');
+  });
 });
 
 module.exports = router;
