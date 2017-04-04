@@ -9,8 +9,10 @@ var app = express();
 
 //Redis stuff
 
-const redis = require('redis');
-const redisClient = redis.createClient();
+//const ;
+const redis = require('redis')
+var redisClient = (process.env.REDIS_URL) ? redis.createClient(process.env.REDIS_URL) : redis.createClient();
+
 var linkShortener = require('./lib/linkShortener');
 
 //End Redis stuff
