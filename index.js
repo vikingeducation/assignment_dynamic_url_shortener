@@ -4,10 +4,13 @@ const server = require('http').createServer(app)
 const io = require('socket.io')(server)
 redisClient = require("redis").createClient();
 
+
+
 ///////////////////
 
 // redisClient.flushall();
 
+//console.log(shortid.generate());
 
 app.get('/', (req, res) => {
   redisClient.get("count", (err, value) => {
