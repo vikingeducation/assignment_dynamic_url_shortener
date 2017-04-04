@@ -6,8 +6,8 @@ const server = require('http').createServer(app);
 const io = require('socket.io')(server);
 const redisClient = require('redis').createClient();
 const expressHandlebars = require('express-handlebars');
-const encode = require('hashcode').hashCode;
 const bodyParser = require('body-parser');
+const encode = require('hashcode').hashCode;
 
 app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -20,12 +20,12 @@ app.use(express.static(__dirname + '/public'));
 app.engine('handlebars', hbs.engine);
 app.set('view engine', 'handlebars');
 
-//redisClient.flushall();
+redisClient.flushall();
 
 app.get('/', (req, res) => {
   var allKeys = [];
 
-  redisClient.keys('-*', (err, results) => {
+  redisClient.keys('*', (err, results) => {
     results.forEach(function(key) {
       redisClient.hgetall(key, (err, results) => {
         console.log(results);
@@ -45,22 +45,23 @@ app.get('/:hashcode', (req, res) => {
   });
 });
 
-//var redObj = {};
-
 app.post('/', (req, res) => {
-  //hash: { url: originalURL, count: x };
-  //hashID = hash + whatever
-  //var userURL = req.body.userURL;
   var hashedURL = encode().value(req.body.userURL);
+  var d = new Date();
+  var uniqueID = hashedURL + d.getTime();
 
   redisClient.hmset(
+    uniqueID,
+    'uniqueID',
+    uniqueID,
+    'hash',
     hashedURL,
     'url',
     req.body.userURL,
     'count',
     0,
     (err, results) => {
-      redisClient.hgetall(hashedURL, (err, results) => {
+      redisClient.hgetall(uniqueID, (err, results) => {
         console.log(results);
       });
     }

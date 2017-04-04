@@ -42,7 +42,8 @@
 {{/each}} -->
 
 {{#each allKeys as |key|}}
-<p>{{key}}</p>
+<p>{{key.uniqueID}}</p>
+<p>{{key.hash}}</p>
 <p>{{key.url}}</p>
 <p>{{key.count}}</p>
 {{/each}}
