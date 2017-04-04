@@ -5,18 +5,32 @@ var linkShortener = require('./lib/linkShortener');
 // also, we should store the provided link in a redis store
 // we'll need to be able to retrieve this link from the store at some point in the future
 
-var str = 'www.google.com';
+var str = 'www.google.com1';
 
-linkShortener.checkUrl(str,function(data){
-  console.log(data);
-})
 
-linkShortener.set(str);
 
-linkShortener.checkUrl(str,function(data){
-  console.log(data);
-})
 
-linkShortener.get(str, function(data){
-  console.log("The shortened URL is: "+ data)
-})
+
+
+
+linkShortener.checkUrl(str)
+.then(function onFulfilled(exists) {
+  console.log(`exists is ${ exists }`);
+  //if false
+  if (exists) {
+    //return the already shortened url
+    linkShortener.get(str, function(data){
+    console.log("The  shortened URL is: "+ data);
+    });
+  } else {
+    linkShortener.set(str);
+  }
+  
+});
+
+
+
+
+// linkShortener.get(str, function(data){
+//   console.log("The shortened URL is: "+ data)
+// })
