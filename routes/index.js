@@ -12,8 +12,14 @@ router.get('/', function(req, res, next) {
     //Some helper function that takes keys and returns an object or key/value pairs
     let urlPairs = [];
     data.forEach((key) => {
-      redisClient.get(key, (err, value) => {
-        urlPairs.push({ [key]: value });
+      redisClient.hgetall(key, (err, value) => {
+        urlPairs.push(
+        {
+          url: key,
+          short: value['short'],
+          created: value['created'],
+          clicks: value['clicks']
+        });
       });
     });
     res.render('index', { title: 'Express', urlPairs })
@@ -36,10 +42,6 @@ router.post('/', function(req, res, next) {
   linkShortener.checkUrl(userUrl)
   .then((exists) => {
     if (!exists) linkShortener.set(userUrl);
-  }).then((userUrl) => {
-    redisClient.get(userUrl, (err, value) => {
-      linkShortener.setPair(value, userUrl);
-    });
   }).then(() => {
     res.redirect('/');
   })

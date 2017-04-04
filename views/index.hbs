@@ -25,14 +25,12 @@
       </thead>
       <tbody>
         {{#each urlPairs as |pair| }}
-          {{#each pair}}
           <tr>
-            <td>{{@key}}</td>
-            <td>XX</td>
-            <td>{{this}}</td>
-            <td>YY</td>
+            <td>{{this.url}}</td>
+            <td>{{this.created}}</td>
+            <td>{{this.short}}</td>
+            <td>{{this.clicks}}</td>
           </tr>
-          {{/each}}
         {{/each}}
       </tbody>
     </table>
