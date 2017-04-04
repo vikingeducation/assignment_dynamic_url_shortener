@@ -25,29 +25,41 @@ app.get('/', (req, res) => {
   res.render("index");
 });
 
-app.get('/:shortLink', (req, res) => {
-  let shortLink = req.params.shortLink
-  console.log(shortLink);
-
-  let origUrl = getOriginalUrl(shortLink)
-  console.log(origUrl+"origUrl")
-  origUrl.then(
-    function(value) {
-      console.log(value);
-    })
-    .catch(function(err) {
-      console.error(err);
-    });
-
-  res.redirect('/');
-});
-
 
 app.post('/update', (req, res) => {
   let inputURL = req.body.baseURL;
   let urlPair = linkShortener(inputURL);
   addShortLink(urlPair.shortURL, urlPair.inputURL)
   res.redirect('/')
-})
+});
+
+
+app.get('/:shortLink', (req, res) => {
+  let shortLink = req.params.shortLink;
+
+  console.log(shortLink+" shortLink");
+
+  let origUrl = getOriginalUrl(shortLink);
+
+  console.log(origUrl+" origUrl LINE 44");
+
+  origUrl.then(
+    function(value) {
+      console.log(value,"original URL LINE 48 ");
+
+      value = "http\://" + value;
+
+      res.redirect(value);
+      //res.end(value);
+    })
+    .catch(function(err) {
+      console.error(err);
+    });
+
+  //res.redirect('/');
+});
+
+
+
 
 server.listen(3000);
