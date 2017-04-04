@@ -2,6 +2,7 @@
 	<div class="jumbotron">
 	  <h1>Simplify your links</h1>
 
+<!--  -->
 	  <form action="add" method="POST">
 		  <div class="form-group">
 		    <input name="url" type="text" class="form-control" id="url-name" placeholder="Your original URL here">
@@ -27,8 +28,8 @@
 	    		<tr>
 	    			<td><a href="http://{{urldata.value}}" target="_blank"> {{urldata.value}}</a></td>
 	    			<td>{{urldata.timestamp}}</td>
-	    			<td><a class="link" id="{{urldata.key}}" href="{{urldata.key}}" target="_blank">localhost:3000/{{urldata.key}}</a></td>
-	    			<td class="{{urldata.key}}">{{urldata.counter}}</td>
+	    			<td><a class="link" href="{{urldata.key}}" target="_blank">localhost:3000/{{urldata.key}}</a></td>
+	    			<td>{{urldata.counter}}</td>
 	    		</tr>
 	    	{{/each}}
 	    </tbody>

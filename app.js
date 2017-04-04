@@ -49,6 +49,9 @@ io.on("connection", client => {
       io.emit("new count", { hashName, number });
     });
   });
+	client.on('form submit' newUrl =>{
+
+	});
 });
 
 server.listen(3000);

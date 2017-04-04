@@ -27,5 +27,11 @@
     var hashName = $(clicked).attr('id');
     socket.emit('increment', hashName);
   })
+
+  $("button").click(function(eventObj) {
+    eventObj.preventDefault();
+    var newUrl = $("input").attr('value');
+    socket.emit('form submit', newUrl);
+  })
 </script>
 </html>
