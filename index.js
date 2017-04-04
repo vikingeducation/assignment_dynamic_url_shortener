@@ -3,8 +3,10 @@ const app = express()
 const server = require('http').createServer(app)
 const io = require('socket.io')(server)
 const bodyParser = require('body-parser')
-const linkShortener = require('./lib/link_shortener')
 const expressHandlebars = require("express-handlebars");
+const linkShortener = require('./lib/link_shortener')
+const addShortLink = require('./services/redis/addShortLink')
+const getOriginalUrl = require('./services/redis/getOriginalUrl')
 redisClient = require("redis").createClient();
 
 ///////////////////
@@ -18,25 +20,33 @@ const hbs = expressHandlebars.create({
 app.engine("handlebars", hbs.engine);
 app.set("view engine", "handlebars");
 
-// redisClient.flushall();
-
-//console.log(shortid.generate());
-
 app.get('/', (req, res) => {
-    // redisClient.get(urlPair.inputURL, (err, value) => {
-    //   console.log(value);
-    // })
-    res.render("index");
+
+  res.render("index");
 });
+
+app.get('/:shortLink', (req, res) => {
+  let shortLink = req.params.shortLink
+  console.log(shortLink);
+
+  let origUrl = getOriginalUrl(shortLink)
+  console.log(origUrl+"origUrl")
+  origUrl.then(
+    function(value) {
+      console.log(value);
+    })
+    .catch(function(err) {
+      console.error(err);
+    });
+
+  res.redirect('/');
+});
+
 
 app.post('/update', (req, res) => {
   let inputURL = req.body.baseURL;
   let urlPair = linkShortener(inputURL);
-
-  redisClient.setnx(urlPair.inputURL, urlPair.shortURL)
-  redisClient.get(urlPair.inputURL, (err, value) => {
-    console.log(value);
-  })
+  addShortLink(urlPair.shortURL, urlPair.inputURL)
   res.redirect('/')
 })
 
