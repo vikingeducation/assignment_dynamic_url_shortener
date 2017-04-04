@@ -6,9 +6,11 @@ var {
   linkShortener,
   shortenedLinkInfo
 } = require("../lib/linkShortener");
+// var io = require("socket.io")(server);
 
 /* GET home page. */
 router.get("/", function(req, res, next) {
+
   var p = getKeys();
   const urlInfo = [];
   p.then(data => {
@@ -25,6 +27,11 @@ router.get("/", function(req, res, next) {
     res.render("index", { urlInfo });
   });
 });
+
+// io.on("connection", client => {
+  
+
+// });
 
 router.post("/submit", function(req, res, next) {
   var url = req.body.url;

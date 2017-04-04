@@ -1,13 +1,23 @@
 var express = require('express');
+var app = express();
 var expressHbs = require('express-handlebars');
 var path = require('path');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+// var http = require('http');
+
+// var port = 3000;;
+// app.set('port', port);
+
+// var server = http.createServer(app);
 
 var index = require('./routes/index');
 
-var app = express();
+
+
+// var io = require("socket.io")(server);
+var redisClient = require("redis").createClient();
 
 // view engine setup
 app.engine('handlebars', expressHbs({
@@ -43,5 +53,7 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
+
+// server.listen(port);
 
 module.exports = app;
