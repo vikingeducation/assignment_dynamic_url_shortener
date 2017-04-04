@@ -14,7 +14,7 @@ function storeUrl(url, callback) {
     if (data) {
       redisClient.hsetnx("counterHash", shortUrl, 0, (err, data) => {
         redisClient.hsetnx("timeHash", shortUrl, timeStamp, (err, data) => {
-          callback();
+          callback(shortUrl);
         });
       });
     }
@@ -58,3 +58,6 @@ module.exports = {
   updateCounter,
   getCounterAndStamp
 };
+
+//redisClient.flushall();
+//storeUrl("www.google.com", () => {});

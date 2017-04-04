@@ -38,19 +38,26 @@ app.get("/:hash", (req, res) => {
 
 app.post("/add", (req, res) => {
   let url = req.body.url;
-  storeUrl(url, () => {
+  storeUrl(url, (url) => {
     res.redirect("/");
   });
 });
 
 io.on("connection", client => {
+
   client.on("increment", hashName => {
     updateCounter(hashName, number => {
       io.emit("new count", { hashName, number });
     });
   });
-	client.on('form submit' newUrl =>{
 
+	client.on('form submit', newUrl =>{
+    var url = newUrl;
+    storeUrl(url, (shortUrl) => {
+      getCounterAndStamp(shortUrl, (counterData, timeData) => {
+        io.emit("new url", {url, shortUrl, counterData, timeData});
+      })
+    }); 
 	});
 });
 

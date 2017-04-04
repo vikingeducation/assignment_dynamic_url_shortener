@@ -14,24 +14,27 @@
   </body>
 
   <script>
-  var lastClickedClass;
   var socket = io.connect('http://localhost:3000')
+
   socket.on('new count', function(infoObj) {
-    console.log(infoObj.hashName);
-    console.log(infoObj.number);
     $(`.${infoObj.hashName}`).html(infoObj.number);
+  })
+
+  socket.on('new url', function(urlInfoObj) {
+    $("tbody").append(("<tr><td><a href='http://" + urlInfoObj.newUrl + "' target='_blank'>" + urlInfoObj.newUrl + "</a></td><td>" + urlInfoObj.timeData + "</td><td><a class='link' href='" + urlInfoObj.shortUrl + "' target='_blank'>localhost:3000/" + urlInfoObj.shortUrl + "</a></td><td>" + urlInfoObj.counterData + "</td></tr>");
+    
   })
 
   $(".link").click(function(eventObj) {
     var clicked = eventObj.target;
     var hashName = $(clicked).attr('id');
     socket.emit('increment', hashName);
-  })
+  });
 
   $("button").click(function(eventObj) {
     eventObj.preventDefault();
-    var newUrl = $("input").attr('value');
+    var newUrl = $("input").val();
     socket.emit('form submit', newUrl);
-  })
+  });
 </script>
 </html>
