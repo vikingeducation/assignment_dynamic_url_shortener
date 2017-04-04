@@ -18,6 +18,10 @@ app.get('/', (req, res) => {
   res.sendFile(__dirname + '/index.html');
 });
 
+app.get('/:hashcode', (req, res) => {
+  //un-hash :hashcode, store as variable
+  //res.redirect(unhashed hashcode);
+});
 app.post('/', (req, res) => {
   var userURL = req.body.userURL;
   var hashedURL = encode().value(req.body.userURL);
