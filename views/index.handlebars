@@ -27,6 +27,12 @@
   <th>Short URL</th>
   <th>All clicks</th>
   <!-- Handlebars stuff here -->
+
+  {{#each urls as |url|}}
+  <div class="borderBox">
+    <p>{{url}}</p>
+  </div>
+  {{/each}}
 </table>
 
 </body>
