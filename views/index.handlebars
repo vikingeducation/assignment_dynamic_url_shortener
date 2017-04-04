@@ -23,8 +23,8 @@
 	    <tbody>
 	    	{{#each data as |urlpair|}}
 	    		<tr>
-	    			<td>{{urlpair.value}}</td>
-	    			<td>{{urlpair.key}}</td>
+	    			<td><a href="http://{{urlpair.value}}"> {{urlpair.value}}</a></td>
+	    			<td><a href="{{urlpair.key}}"> {{urlpair.key}}</a></td>
 	    		</tr>
 	    	{{/each}}
 	    </tbody>
