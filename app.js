@@ -3,15 +3,9 @@ const app = express();
 const server = require("http").createServer(app);
 const io = require("socket.io")(server);
 const { storeUrl, getUrls } = require("./link_shortener");
+const {objectToArray} = require("./helpers")
 
-//function takes url
-//hashes url
-//stores hash as key and url as value in redis
-//link_shortener will store and retieve
-//
-// getUrls().then(data => {
-//   console.log(data);
-// });
+
 
 const exphbs = require("express-handlebars");
 
@@ -20,8 +14,11 @@ app.set("view engine", "handlebars");
 
 app.get("/", (req, res) => {
   getUrls().then(data => {
-    console.log(data);
+    data = objectToArray(data);
+    res.render('index', {data});
   });
-  res.sendFile(__dirname + "/index.html");
 });
-server.listen(3002);
+
+app.post
+
+server.listen(3000);
