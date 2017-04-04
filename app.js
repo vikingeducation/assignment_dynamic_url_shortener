@@ -48,6 +48,15 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
+io.on('connection', client => {
+
+  client.on('increment', () => {
+    redisClient.hincrby(shortUrl, "count", 1, (err, count) => {
+      io.emit('increment', count);
+    });
+  });
+});
+
 server.listen(3000);
 
 module.exports = app;

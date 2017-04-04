@@ -36,7 +36,7 @@
         </div>
         <div class="col-xs-4">
           <a href="{{urlItem.short}}" target="_blank">
-            localhost:3000/{{urlItem.shortened}}
+            localhost:3000/{{urlItem.short}}
           </a>
         </div>
         <div class="col-xs-4">
@@ -45,5 +45,13 @@
       </div>
     </div>
   {{/each}}
+
+  <script type="text/javascript">
+    var socket = io.connect('http://localhost:3000');
+
+    socket.on('increment', data => {
+      
+    });
+  </script>
 
 </div>
