@@ -26,10 +26,11 @@ function updateCounter(hash) {
     console.log(number);
   });
 }
-function getCounterAndStamp(hash) {
-  return new Promise(resolve => {
-    redisClient.hget("counterHash", hash, (err, counterData) => {
-      redisClient.get;
+
+function getCounterAndStamp(hash, callback) {
+  redisClient.hget("counterHash", hash, (err, counterData) => {
+    redisClient.hget("timeHash", hash, (err, timeData) => {        
+      callback(counterData, timeData);
     });
   });
 }
@@ -54,7 +55,7 @@ module.exports = {
   storeUrl,
   getUrls,
   getUrl,
-  updateCounter
+  updateCounter,
+  getCounterAndStamp
 };
 
-redisClient.flushall();

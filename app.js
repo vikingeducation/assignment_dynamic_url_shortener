@@ -21,9 +21,10 @@ const bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({ extended: false }));
 
 app.get("/", (req, res) => {
-  getUrls().then(data => {
-    data = objectToArray(data);
-    res.render("index", { data });
+  getUrls().then(urls => {
+    objectToArray(urls, (data) => {
+      res.render("index", { data });
+    });
   });
 });
 

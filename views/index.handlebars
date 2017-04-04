@@ -18,13 +18,17 @@
 	  <table class="table">
 	    <thead>
 	    	<th>Original URL</th>
+	    	<th>Created</th>
 	    	<th>Short URL</th>
+	    	<th>All Clicks</th>
 	    </thead>
 	    <tbody>
-	    	{{#each data as |urlpair|}}
+	    	{{#each data as |urldata|}}
 	    		<tr>
-	    			<td><a href="http://{{urlpair.value}}"> {{urlpair.value}}</a></td>
-	    			<td><a href="{{urlpair.key}}">localhost:3000/{{urlpair.key}}</a></td>
+	    			<td><a href="http://{{urldata.value}}"> {{urldata.value}}</a></td>
+	    			<td>{{urldata.timestamp}}</td>
+	    			<td><a href="{{urldata.key}}">localhost:3000/{{urldata.key}}</a></td>
+	    			<td>{{urldata.counter}}</td>
 	    		</tr>
 	    	{{/each}}
 	    </tbody>
