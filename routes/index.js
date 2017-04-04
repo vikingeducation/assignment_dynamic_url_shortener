@@ -10,7 +10,6 @@ var {
 
 /* GET home page. */
 router.get("/", function(req, res, next) {
-
   var p = getKeys();
   const urlInfo = [];
   p.then(data => {
