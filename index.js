@@ -19,6 +19,9 @@ app.get('/', (req, res) => {
   })
 });
 
-//app.post for link shortener module
+app.post('/update', (req, res) => {
+  console.log(req.body)
+  res.redirect('/')
+})
 
 server.listen(3000);
