@@ -6,8 +6,16 @@ redisClient = require("redis").createClient();
 
 ///////////////////
 
+// redisClient.flushall();
+
+
 app.get('/', (req, res) => {
-  res.sendFile(__dirname + "/index.html");
+  redisClient.get("count", (err, value) => {
+    console.log(value);
+    res.sendFile(__dirname + "/index.html");
+  })
 });
+
+//app.post for link shortener module
 
 server.listen(3000);
