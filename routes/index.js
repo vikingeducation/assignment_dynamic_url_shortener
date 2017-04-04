@@ -14,7 +14,7 @@ router.get('/', function(req, res, next) {
     
     data.forEach((key) => {
         redisClient.get(key, (err, value) => {
-          urlPairs.push({ key: value });
+          urlPairs.push({ [key]: value });
           
         });
 
