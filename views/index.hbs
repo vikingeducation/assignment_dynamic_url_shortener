@@ -28,13 +28,14 @@
           <tr>
             <td>{{this.url}}</td>
             <td>{{this.created}}</td>
-            <td><a href="http://localhost:3000/{{this.short}}">http://localhost:3000/{{this.short}}</td>
-            <td id="clicks">{{this.clicks}}</td>
+            <td><a class="shortlink" href="http://localhost:3000/{{this.short}}">http://localhost:3000/{{this.short}}</td>
+            <td id="{{this.short}}">{{this.clicks}}</td>
           </tr>
         {{/each}}
       </tbody>
     </table>
   </div>
 </div>
+
 
 

@@ -64,22 +64,23 @@ app.use(function(err, req, res, next) {
 });
 
 /////////////////////
-
 io.on('connection', client => {
-  
   //When a user connects, emit an event to update all values passing the value to the clients
-  
-  
-  
   console.log("New connection!");
   //if user clicks a button, get the short url from the data
   //look up the url in the redis database
   //increment the count value for that url
   //emit an event to all clients to update the value of count
   client.on('increment', (data) => {
-    console.log(`data from client ${ data }`);
+    let href = data.href;
+    let uniqueID = href.split('/').pop();
+    redisClient.hincrby(uniqueID, 'clicks', 1);
+    linkShortener.hget(uniqueID, 'clicks')
+    .then((data) => {
+      io.emit("new count", {clicks: data, id: uniqueID});
+    });
   });
-  
+
 });
 
 ///////////////////////

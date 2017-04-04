@@ -17,8 +17,6 @@ router.get('/:uniqueID', function(req, res, next){
   let uniqueID = req.params.uniqueID;
   linkShortener.hget(uniqueID, 'url')
   .then((data) => {
-    //increment the click counter
-    redisClient.hincrby(uniqueID, 'clicks', 1);
     res.redirect(`http://${data}`);
   });
 });
