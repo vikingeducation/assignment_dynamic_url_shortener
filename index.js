@@ -21,17 +21,18 @@ app.engine('handlebars', hbs.engine);
 app.set('view engine', 'handlebars');
 
 app.get('/', (req, res) => {
-  res.sendFile(__dirname + '/views/index');
 
   let urls = [];
 
   redisClient.keys('*', (err, results) => {
     urls = results;
+
+    res.render('index', { urls });
     //console.log(results);
   });
   //Get redis keys, pass them through
   //  res.render('castles', { kingdomName, castles });
-  res.render('index', { urls });
+  
 });
 
 app.get('/:hashcode', (req, res) => {
@@ -42,12 +43,15 @@ app.get('/:hashcode', (req, res) => {
   });
 });
 
+var redObj = {};
+
 app.post('/', (req, res) => {
   var userURL = req.body.userURL;
   var hashedURL = encode().value(req.body.userURL);
-
-  redisClient.set(userURL, hashedURL);
-  redisClient.set(hashedURL, userURL);
+  var redObj = { userURL: hashedURL};
+  // redisClient.set(userURL, hashedURL);
+  // redisClient.set(hashedURL, userURL);
+  redisClient.set(userURL, redObj)
   redisClient.get(userURL, (err, results) => {
     console.log(results);
   });
