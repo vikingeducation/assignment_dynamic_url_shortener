@@ -22,20 +22,24 @@
 
 </form>
 
-<table>
+<!-- <table>
   <th>Original URL</th>
   <th>Created</th>
   <th>Short URL</th>
   <th>All clicks</th>
-  <!-- Handlebars stuff here -->
+</table> -->
 
-  {{#each urls as |url|}}
-  <div class="borderBox">
-    <p>{{url}}</p>
-  </div>
-  {{/each}}
-</table>
+{{#each urls as |url|}}
+<div class="borderBox">
+  <p>{{url}}</p>
+</div>
+{{/each}}
 
+{{#each hashes as |hash|}}
+<div class="borderBox">
+  <a href='/{{hash}}'>{{hash}}</p>
+</div>
+{{/each}}
 </body>
 
 <script>
