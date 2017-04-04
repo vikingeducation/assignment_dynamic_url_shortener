@@ -25,13 +25,16 @@ app.get('/', (req, res) => {
   res.render("index");
 });
 
-
 app.post('/update', (req, res) => {
   let inputURL = req.body.baseURL;
   let urlPair = linkShortener(inputURL);
   addShortLink(urlPair.shortURL, urlPair.inputURL)
+  redisClient.hgetall("urlshash", (err, results) => {
+    console.log(results)
+  });
   res.redirect('/')
 });
+
 
 
 app.get('/:shortLink', (req, res) => {
@@ -41,13 +44,11 @@ app.get('/:shortLink', (req, res) => {
 
   let origUrl = getOriginalUrl(shortLink);
 
-  console.log(origUrl+" origUrl LINE 44");
-
   origUrl.then(
     function(value) {
-      console.log(value,"original URL LINE 48 ");
+      console.log(value + "original URL LINE 48 ");
 
-      value = "http\://" + value;
+      // value = "http\://" + value;
 
       res.redirect(value);
       //res.end(value);
@@ -56,10 +57,8 @@ app.get('/:shortLink', (req, res) => {
       console.error(err);
     });
 
-  //res.redirect('/');
+  res.redirect('/');
 });
-
-
 
 
 server.listen(3000);
