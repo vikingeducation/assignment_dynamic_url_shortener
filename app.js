@@ -7,7 +7,8 @@ const {
   storeUrl,
   getUrls,
   getUrl,
-  updateCounter
+  updateCounter,
+  getCounterAndStamp
 } = require("./link_shortener");
 const { objectToArray } = require("./helpers");
 
@@ -30,7 +31,7 @@ app.get("/", (req, res) => {
 
 app.get("/:hash", (req, res) => {
   let hash = req.params.hash;
-  updateCounter(hash);
+  updateCounter(hash, () => {});
   getUrl(hash).then(data => {
     res.redirect(`http://${data}`);
   });
@@ -41,6 +42,16 @@ app.post("/add", (req, res) => {
   storeUrl(url, () => {
     res.redirect("/");
   });
+});
+
+io.on("connection", client => {
+
+  client.on("increment", (hashName) => {
+    updateCounter(hashName, (number) => {
+      io.emit("new count", {hashName, number});
+    });
+  });
+
 });
 
 server.listen(3000);

@@ -14,14 +14,18 @@
   </body>
 
   <script>
+  var lastClickedClass;
   var socket = io.connect('http://localhost:3000')
-  socket.on('new count', function(count) {
-    $("#count").html(count)
+  socket.on('new count', function(infoObj) {
+    console.log(infoObj.hashName);
+    console.log(infoObj.counter);
+    $(`.${infoObj.hashName}`).html(infoObj.counter);
   })
+
   $(".link").click(function(eventObj) {
     var clicked = eventObj.target;
-    console.log(clicked);
-    socket.emit('increment');
+    var hashName = $(clicked).attr('id');
+    socket.emit('increment', hashName);
   })
 </script>
 </html>

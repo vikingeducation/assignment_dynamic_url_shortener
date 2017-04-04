@@ -21,8 +21,10 @@ function storeUrl(url, callback) {
   });
 }
 
-function updateCounter(hash) {
-  redisClient.hincrby("counterHash", hash, 1, (err, number) => {});
+function updateCounter(hash, callback) {
+  redisClient.hincrby("counterHash", hash, 1, (err, number) => {
+    callback(number);
+  });
 }
 
 function getCounterAndStamp(hash, callback) {
