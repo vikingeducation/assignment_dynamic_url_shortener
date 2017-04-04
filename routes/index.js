@@ -1,9 +1,5 @@
 const redis = require('redis')
-if(process.env.REDIS_URL){
-  var redisClient = redis.createClient(process.env.REDIS_URL);
-} else{
-  var redisClient = redis.createClient();
-}
+var redisClient = (process.env.REDIS_URL) ? redis.createClient(process.env.REDIS_URL) : redis.createClient();
 var linkShortener = require('../lib/linkShortener');
 
 
@@ -28,6 +24,7 @@ router.get('/:uniqueID', function(req, res, next){
 
 router.post('/', function(req, res, next) {
   var userUrl = req.body.url;
+  console.log("\n\n\nUser url: ", userUrl)
   linkShortener.set(userUrl);
   res.redirect('/');
 });
