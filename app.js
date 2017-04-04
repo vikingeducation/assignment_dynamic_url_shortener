@@ -15,17 +15,8 @@ var linkShortener = require('./lib/linkShortener');
 
 //End Redis stuff
 
-
-/**
- * Create HTTP server.
- */
-
 var server = http.createServer(app);
-
-
 var index = require('./routes/index');
-
-
 var debug = require('debug')('dynamic-url-shortener:server');
 const io = require('socket.io')(server);
 // view engine setup
@@ -65,12 +56,7 @@ app.use(function(err, req, res, next) {
 
 /////////////////////
 io.on('connection', client => {
-  //When a user connects, emit an event to update all values passing the value to the clients
   console.log("New connection!");
-  //if user clicks a button, get the short url from the data
-  //look up the url in the redis database
-  //increment the count value for that url
-  //emit an event to all clients to update the value of count
   client.on('increment', (data) => {
     let href = data.href;
     let uniqueID = href.split('/').pop();
@@ -80,7 +66,6 @@ io.on('connection', client => {
       io.emit("new count", {clicks: data, id: uniqueID});
     });
   });
-
 });
 
 ///////////////////////

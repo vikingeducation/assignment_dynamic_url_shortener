@@ -7,9 +7,10 @@ var express = require('express');
 var router = express.Router();
 
 router.get('/', function(req, res, next) {
+  let baseUrl = req.headers.referer
   linkShortener.getUrlPairs()
   .then((urlPairs) => {
-      res.render('index', { title: 'Express', urlPairs });
+      res.render('index', { title: 'Express', urlPairs, baseUrl });
   });
 });
 
