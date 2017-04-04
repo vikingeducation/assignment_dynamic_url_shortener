@@ -18,13 +18,16 @@ router.get('/:uniqueID', function(req, res, next){
   let uniqueID = req.params.uniqueID;
   linkShortener.hget(uniqueID, 'url')
   .then((data) => {
+    console.log(`data ${data}`);
     res.redirect(`http://${data}`);
   });
 });
 
 router.post('/', function(req, res, next) {
   var userUrl = req.body.url;
-  linkShortener.set(userUrl);
+  //Scrub for just url
+  var urlNoProtocol = userUrl.replace(/^https?\:\/\//i, "");
+  linkShortener.set(urlNoProtocol);
   res.redirect('/');
 });
 
