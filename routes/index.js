@@ -10,11 +10,6 @@ var {
 
 /* GET home page. */
 router.get("/", function(req, res, next) {
-
-  var p = getKeys();
-
-
-
   const urlInfo = [];
   var p = getKeys();
   p.then(data => {
@@ -34,10 +29,9 @@ router.get("/", function(req, res, next) {
 
 router.get('/:shortUrl', (req, res) => {
   var shortUrl = req.params.shortUrl;
-  incrementCount(shortUrl);
   getInfo(shortUrl).then(array => {
     let url = array[0];
-    res.redirect(url);
+    res.redirect(`http://${url}`);
   })
 });
 
