@@ -1,0 +1,12 @@
+
+.right {
+  float:none;
+  display:table-cell;
+  vertical-align: top;
+}
+
+.left {
+  float:none;
+  display:table-cell;
+  vertical-align: top;
+}
