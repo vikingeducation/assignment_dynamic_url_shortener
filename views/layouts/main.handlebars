@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <title>Url Shortener</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+  </head>
+
+  <body>
+    {{{body}}}
+  </body>
+
+  <script>
+  var socket = io.connect('http://localhost:3000')
+
+  socket.on('new count', function(infoObj) {
+    $(`.${infoObj.hashName}`).html(infoObj.number);
+  })
+
+  socket.on('new url', function(urlInfoObj) {
+    $("tbody").append(("<tr><td><a href='http://" + urlInfoObj.newUrl + "' target='_blank'>" + urlInfoObj.newUrl + "</a></td><td>" + urlInfoObj.timeData + "</td><td><a class='link' href='" + urlInfoObj.shortUrl + "' target='_blank'>localhost:3000/" + urlInfoObj.shortUrl + "</a></td><td>" + urlInfoObj.counterData + "</td></tr>");
+    
+  })
+
+  $(".link").click(function(eventObj) {
+    var clicked = eventObj.target;
+    var hashName = $(clicked).attr('id');
+    socket.emit('increment', hashName);
+  });
+
+  $("button").click(function(eventObj) {
+    eventObj.preventDefault();
+    var newUrl = $("input").val();
+    socket.emit('form submit', newUrl);
+  });
+</script>
+</html>
