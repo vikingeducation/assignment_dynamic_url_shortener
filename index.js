@@ -23,10 +23,7 @@ app.set('view engine', 'handlebars');
 
 //redisClient.flushall();
 
-io.on('connection', client => {
-
-});
-
+io.on('connection', client => {});
 
 app.get('/', (req, res) => {
   var allKeys = [];
@@ -46,15 +43,12 @@ app.get('/:uniqueID', (req, res) => {
 
   redisClient.hget(hashedURL, 'count', (err, results) => {
     redisClient.hincrby(hashedURL, 'count', 1, (err, results) => {
-      
       io.emit('new count', results, hashedURL.uniqueID);
 
       redisClient.hget(hashedURL, 'url', (err, results) => {
         console.log(results);
         res.redirect(`http://www.${results}`);
       });
-
-      
     });
   });
 });
@@ -83,24 +77,5 @@ app.post('/', (req, res) => {
 
   res.redirect('back');
 });
-
-// io.on('connection', client => {
-//   redisClient.get('count', (err, count) => {
-//     client.emit('new count', count);
-//   });
-
-//   client.on('increment', uniqueID => {
-//     redisClient.hincrby(uniqueID, 'count', 1, () => {
-//       console.log('incremented ' + uniqueID);
-//       io.emit('new count', count);
-//     });
-//   });
-
-//   client.on('decrement', () => {
-//     redisClient.decr('count', (err, count) => {
-//       io.emit('new count', count);
-//     });
-//   });
-// });
 
 server.listen(3000);
