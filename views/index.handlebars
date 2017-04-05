@@ -1,0 +1,46 @@
+<div class="container">
+    <div class="jumbotron">
+      <div class="container">
+        <h1>Simplify Your URL</h1>
+      <form method="post" action="/update">
+        <div class="form-group">
+          <input type="text" name="baseURL" placeholder="Enter your URL here in http://www.yoursitename.com format" class="form-control">
+        </div>
+        <button type="submit" class="btn btn-success">Shorten My URL</button>
+      </form>
+      </div>
+    </div>
+  </div>
+
+
+
+  <!-- <form method="post" action="/update">
+    <label for="baseURL">URL Input</label>
+    <input type="text" name="baseURL">
+    <input type="submit">
+  </form> -->
+<div class="container">
+  <!-- <fieldset> -->
+    <table class="table table-striped table-bordered table-hover">
+      <!-- <caption>URL Shortener Stats</caption> -->
+      <thead>
+        <tr>
+          <th>Original URL</th>
+          <th>Short URL</th>
+          <th>Clicks</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>{{urlPair.inputURL}}</td>
+          <td>{{urlPair.shortURL}}</td>
+          <td>5</td>
+        </tr>
+          <td>{{urlPair.inputURL}}</td>
+          <td>{{urlPair.shortURL}}</td>
+          <td>10</td>
+        </tr>
+      </tbody>
+    </table>
+  <!-- </fieldset> -->
+</div>
