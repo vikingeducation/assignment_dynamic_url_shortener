@@ -19,6 +19,14 @@ router.get('/', function(req, res, next) {
   });
 });
 
+router.get('/:shortURL', function(req, res, next){
+  const shortURL = req.params.shortURL;
+  ls.addClick(shortURL);
+  ls.lengthenURL(shortURL).then(function(obj){
+    res.redirect(obj.longURL);
+  });
+});
+
 router.post('/', function(req, res, next) {
   ls.shortenURL(req.body.originalURL);
   res.redirect("back");
