@@ -37,7 +37,10 @@ function lengthenURL(url) {
 
 
 function addClick(url) {
-  redisClient.hincrby(url, "count", 1);
+
+    redisClient.hincrby(url, "count", 1);
+
+
 }
 
 module.exports = {

@@ -9,6 +9,8 @@ var index = require('./routes/index');
 
 
 var app = express();
+var server = require('http').Server(app);
+var io = require('socket.io')(server);
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -16,11 +18,16 @@ app.set('view engine', 'hbs');
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
+app.use(function(req, res, next){
+  res.io = io;
+  next();
+});
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use('/socket.io',express.static(path.join(__dirname, '/node_modules/socket.io-client/dist/')));
 
 app.use('/', index);
 
@@ -43,4 +50,4 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
-module.exports = app;
+module.exports = {app: app, server: server};
