@@ -1,0 +1,19 @@
+body {
+  padding: 50px;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+
+a {
+  color: #00B7FF;
+}
+
+.inputBox {
+  background-color: cornflowerblue;
+  color: white;
+  border-radius: 10px;
+  padding-bottom: 10px;
+}
+
+.btn-format {
+  color: cornflowerblue;
+}
