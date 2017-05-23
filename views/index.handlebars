@@ -21,14 +21,7 @@
       <th>Count</th>
     </tr>
   </thead>
-  <tbody>
-  {{#each links as |link|}}
-    <tr>
-      <td class="mdl-data-table__cell--non-numeric">{{this}}</td>
-      <td><a href="http://localhost:7001/r/{{@key}}">http://localhost:7001/r/{{@key}}</a></td>
-      <td>0</td>
-    </tr>
-  {{/each}}
+  <tbody id="links">
   </tbody>
 </table>
 
