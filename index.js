@@ -1,21 +1,21 @@
-// Three main paths
-// '/' where it just shows stuff
-// queries redis database for all registered urls
-// what redis data structure to use? probably hashh
-// displays them
-// '/create' which registers a new url with redis
-// '/r/:hash:' which accesses redis hash to find url, then redirects user to this url
-
-// then websockets does the querying in '/'
-// add websockets count separate from other things?
-// 
 const express = require('express')
 const app = express()
 const server = require('http').createServer(app)
-const handlebars = require('express-handlebars')
+const bodyParser = require('body-parser')
+
 const io = require('socket.io')(server)
-const redisClient = require('redis').createClient()
+
+
+const handlebars = require('express-handlebars')
 const port = 3030
+
+const { 
+  saveLink,
+  getLink,
+  getAllLinks
+} = require('./services/redis-store')
+
+app.use(bodyParser.urlencoded({ extended: false }))
 
 app.engine('handlebars', handlebars({ defaultLayout: 'main' }))
 app.set('view engine', 'handlebars')
@@ -24,7 +24,35 @@ app.use("/socket.io", express.static(__dirname + "node_modules/socket.io-client/
 app.use(express.static(__dirname + '/public'))
 
 app.get('/', (req, res) => {
-  res.render('index')
+  let p = getAllLinks()
+
+  p.then((links) => {
+    res.render('index', {
+      links
+    })
+  })
+})
+
+app.post('/update', (req, res) => {
+  let originalURL = req.body.originalURL
+
+  // returns promise
+  let p = saveLink(originalURL)
+
+  // When we do websockets counts, we set a second promise, then resolve with Promise.all
+  p.then((data) => {
+    res.redirect('back')
+  })
+})
+
+app.get('/r/:hash', (req, res) => {
+  let hash = req.params.hash
+  
+  let p = getLink(hash)
+
+  p.then((link) => {
+    res.redirect(link)
+  })
 })
 
 server.listen(port, () => {

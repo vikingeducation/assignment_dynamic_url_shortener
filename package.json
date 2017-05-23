@@ -18,6 +18,8 @@
   },
   "homepage": "https://github.com/christianflorez/assignment_dynamic_url_shortener#readme",
   "dependencies": {
+    "adler-32": "^1.0.0",
+    "body-parser": "^1.17.2",
     "express": "^4.15.3",
     "express-handlebars": "^3.0.0",
     "redis": "^2.7.1",
