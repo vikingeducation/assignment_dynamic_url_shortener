@@ -1,6 +1,7 @@
 const redis = require('redis')
 const redisClient = redis.createClient()
-const redisHash = "shortenedURLStest4"
+const redisHashedLinks = "shortenedURLsTest7"
+const redisClickCounts = "clickCountsTest7"
 
 const adler32 = require('adler-32')
 
@@ -17,12 +18,34 @@ const _formatURL = (url) => {
   return url
 }
 
+const _initializeClickCount = (hash) => {
+  let clickCount = "count-" + hash
+  redisClient.setnx("clickCount", 0)
+}
+
+// This does the following:
+// hsetnx clickCountsTest5 HASHEDURL 0
+const saveClickCounts = (originalURL) => {
+  originalURL = _formatURL(originalURL)  
+  let hashedURL = adler32.str(originalURL)
+
+  return new Promise((resolve, reject) => {
+    redisClient.hsetnx(redisClickCounts, hashedURL, 0, (err, data) => {
+      if (err) {
+        reject(err)
+      } else {
+        resolve(data)
+      }
+    })
+  })
+}
+
 const saveLink = (originalURL) => {
   originalURL = _formatURL(originalURL)  
   let hashedURL = adler32.str(originalURL)
 
   return new Promise((resolve, reject) => {
-    redisClient.hset(redisHash, hashedURL, originalURL, (err, data) => {
+    redisClient.hset(redisHashedLinks, hashedURL, originalURL, (err, data) => {
       if (err) {
         reject(err)
       } else {
@@ -34,7 +57,7 @@ const saveLink = (originalURL) => {
 
 const getLink = (hash) => {
   return new Promise((resolve, reject) => {
-    redisClient.hget(redisHash, hash, (err, link) => {
+    redisClient.hget(redisHashedLinks, hash, (err, link) => {
       if (err) {
         reject(err)
       } else {
@@ -46,7 +69,7 @@ const getLink = (hash) => {
 
 const getAllLinks = () => {
   return new Promise((resolve, reject) => {
-    redisClient.hgetall(redisHash, (err, links) => {
+    redisClient.hgetall(redisHashedLinks, (err, links) => {
       if (err) {
         reject(err)
       } else {
@@ -56,8 +79,35 @@ const getAllLinks = () => {
   })
 }
 
+const incrementClickCount = (hash) => {
+  return new Promise((resolve, reject) => {
+    redisClient.hincrby(redisClickCounts, hash, 1, (err, count) => {
+      if (err) {
+        reject(err)
+      } else {
+        resolve(count)
+      }
+    })
+  })
+}
+
+const getAllClickCounts = () => {
+  return new Promise((resolve, reject) => {
+    redisClient.hgetall(redisClickCounts, (err, counts) => {
+      if (err) {
+        reject(err)
+      } else {
+        resolve(counts)
+      }
+    })
+  })
+}
+
 module.exports = {
   saveLink,
   getLink,
-  getAllLinks
+  getAllLinks,
+  incrementClickCount,
+  getAllClickCounts,
+  saveClickCounts
 }

@@ -11,7 +11,10 @@ const port = 3030
 const { 
   saveLink,
   getLink,
-  getAllLinks
+  getAllLinks,
+  incrementClickCount,
+  saveClickCounts,
+  getAllClickCounts
 } = require('./services/redis-store')
 
 app.use(bodyParser.urlencoded({ extended: false }))
@@ -30,17 +33,17 @@ app.post('/update', (req, res) => {
   let originalURL = req.body.originalURL
 
   // returns promise
-  let p = saveLink(originalURL)
+  let p1 = saveLink(originalURL)
+  let p2 = saveClickCounts(originalURL)
+  let p3 = getAllLinks()
+  let p4 = getAllClickCounts()
 
-  // When we do websockets counts, we set a second promise, then resolve with Promise.all
-  p.then((data) => {
-
-    let p2 = getAllLinks()
-    p2.then(links => {
-      io.sockets.emit('new link', links)
-      res.redirect('back')
-    })
-  })
+  Promise.all([p1, p2, p3, p4]).then(values => { 
+    let links = values[2]
+    let counts = values[3]
+    io.sockets.emit('new link', links, counts)
+    res.redirect('back')
+  });
 })
 
 app.get('/r/:hash', (req, res) => {
@@ -54,55 +57,30 @@ app.get('/r/:hash', (req, res) => {
 })
 
 io.on('connection', client => {
-  let p = getAllLinks()
-  p.then(links => {
-    client.emit('new link', links)
+  let p1 = getAllLinks()
+  let p2 = getAllClickCounts()
+  
+  Promise.all([p1, p2]).then(values => {
+    let links = values[0]
+    let counts = values[1]
+    client.emit('new link', links, counts)
+  })
+
+  client.on('click', event => {
+    incrementClickCount(event)
+      .then(count=> {
+        let p1 = getAllLinks()
+        let p2 = getAllClickCounts()
+        
+        Promise.all([p1, p2]).then(values => {
+          let links = values[0]
+          let counts = values[1]
+          io.emit('new link', links, counts)
+        })
+      })
   })
 })
 
 server.listen(port, () => {
     console.log(`Currently listening on Port ${ port }`)
 })
-
-// Now what's next?
-// io.on connection, getAllLinks.then(link => client.emit("new link", links));
-//  on update
-// io.sockets.emit('new link', 3)
-// io.emit("new link")
-// then in our html:
-// we need to build table dynamically with jQuery. UGH but ok
-/* from index.js:
-io.on("connection", client => {
-  redisClient.get("count", (err, count) => {
-    client.emit("new count", count);
-  });
-
-  client.on("increment", () => {
-    redisClient.incr("count", (err, count) => {
-      io.emit("new count", count);
-    });
-  });
-
-  client.on("decrement", () => {
-    redisClient.decr("count", (err, count) => {
-      io.emit("new count", count);
-    });
-  });
-});
-*/
-
-/* from index.html
-var socket = io.connect('http://localhost:3002')
-
-socket.on('new count', function(count) {
-  $("#count").html(count)
-})
-
-$("#increment").click(function() {
-  socket.emit('increment')
-})
-
-$("#decrement").click(function() {
-  socket.emit('decrement')
-})
-*/
