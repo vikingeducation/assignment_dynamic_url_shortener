@@ -19,8 +19,14 @@
   "homepage": "https://github.com/christianflorez/assignment_dynamic_url_shortener#readme",
   "dependencies": {
     "express": "^4.15.3",
+    "express-handlebars": "^3.0.0",
     "redis": "^2.7.1",
     "socket.io": "^2.0.1",
     "socket.io-client": "^2.0.1"
+  },
+  "devDependencies": {
+    "browser-sync": "^2.18.12",
+    "gulp": "^3.9.1",
+    "gulp-nodemon": "^2.2.1"
   }
 }

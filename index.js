@@ -12,7 +12,21 @@
 const express = require('express')
 const app = express()
 const server = require('http').createServer(app)
+const handlebars = require('express-handlebars')
 const io = require('socket.io')(server)
 const redisClient = require('redis').createClient()
+const port = 3030
 
+app.engine('handlebars', handlebars({ defaultLayout: 'main' }))
+app.set('view engine', 'handlebars')
 
+app.use("/socket.io", express.static(__dirname + "node_modules/socket.io-client/dist/"))
+app.use(express.static(__dirname + '/public'))
+
+app.get('/', (req, res) => {
+  res.render('index')
+})
+
+server.listen(port, () => {
+    console.log(`Currently listening on Port ${ port }`)
+})
