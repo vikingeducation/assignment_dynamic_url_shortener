@@ -1,0 +1,28 @@
+<div class="mdl-cell mdl-cell--8-col mdl-cell--2-offset">
+  <form action="/update" method="post" id="url-shortener">
+    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+      <input class="mdl-textfield__input" type="text" name="originalURL">
+      <label class="mdl-textfield__label" for="originalURL">Your Original URL</label>
+    </div>
+    <br>
+    <button type="submit" form="url-shortener" value="submit" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+    Shorten URL
+    </button>
+  </form>
+  <br>
+  <hr>
+  <h2>Shortened URLs: </h2>
+
+  <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
+  <thead>
+    <tr>
+      <th class="mdl-data-table__cell--non-numeric">Original URL</th>
+      <th>Shortened URL</th>
+      <th>Count</th>
+    </tr>
+  </thead>
+  <tbody id="links">
+  </tbody>
+</table>
+
+</div>
