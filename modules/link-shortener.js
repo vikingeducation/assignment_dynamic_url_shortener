@@ -14,7 +14,6 @@ const linkShortner = {
 
     storeUrl: (fullURL) => {
         const randomText = randomString();
-        ShortURL[fullURL] = {};
 
         //Check if key already exists, for now only logging to console. But maybe return a boolean Value and show message on the html page
         client.exists(fullURL, (err, reply) => {
@@ -42,15 +41,14 @@ const linkShortner = {
         });
     },
 
+    //Increment count. using hincrby, increment the integer value of a hash field by a given number
     incrCount: (URL) => {
-        let count = ShortURL[URL].count++;
-        return count;
+        client.hincrby(URL, "count", 1, (err, count) => {
+            if (err) console.log(err);
+        });
+
     },
 
-    getAll: () => {
-        for (item in ShortURL){
-            console.log(ShortURL[item].shortUrl + "  " + ShortURL[item].count);
-        }
-    }
+    //Implement remove key from redis as well
 }
 module.exports = linkShortner;
