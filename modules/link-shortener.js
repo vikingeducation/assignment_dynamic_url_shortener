@@ -50,5 +50,12 @@ const linkShortner = {
     },
 
     //Implement remove key from redis as well
+    deleteURL: (URL) => {
+        client.del(URL, (err, reply) => {
+            if(err) throw err;
+
+            console.log(`${URL} has been deleted from storage`);
+        });
+    }
 }
 module.exports = linkShortner;
