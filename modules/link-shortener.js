@@ -56,6 +56,14 @@ const linkShortner = {
 
             console.log(`${URL} has been deleted from storage`);
         });
+    },
+
+    deleteAll: () => {
+      client.flushall( (err, reply) => {
+        if(err) throw err;
+
+        if(reply) console.log("Cleared");
+      });  
     }
 }
 module.exports = linkShortner;
