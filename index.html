@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Dynamic Url Shortener</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+    <script src="/socket.io/socket.io.js"></script>
+</head>
+
+<body>
+    <h1>Hello</h1>
+    <div>
+        <div class="shorten-header">
+            <div class="content">
+                <h1>Shorten URL</h1>
+                <div class="inputs">
+                    <input placeholder="Enter URL here to shorten" name="urlInput" id="urlInput">
+                    <button id="submit">Submit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let socket = io.connect('http://localhost:3000');
+
+        $("#submit").on("click", () => {
+
+            alert("Testing");
+            let url = $("#urlInput").val();
+            
+            socket.emit('addURL');
+        });
+    </script>
+
+
+
+</body>
+
+</html>
