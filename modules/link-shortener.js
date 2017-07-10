@@ -8,62 +8,95 @@ const randomString = function () {
         text += possible.charAt(Math.floor(Math.random() * possible.length));
     }
     return text;
-}
+};
 
-const linkShortner = {
 
-    storeUrl: (fullURL) => {
+let storeUrl = (fullURL) => {
+
+    return new Promise((resolve, reject) => {
+
         const randomText = randomString();
 
         //Check if key already exists, for now only logging to console. But maybe return a boolean Value and show message on the html page
         client.exists(fullURL, (err, reply) => {
             if (reply === 1) {
-                console.log("URL Already Exists!!");
+                reject("URL Already Exists");
+
             }
             else {
                 //add to redis the new URL key
-                client.hmset(fullURL, "shortUrl", `ragnar/${randomText}`, "count", 0);
+                client.hmset(fullURL, "shortUrl", `ragnar.${randomText}`, "count", 0, "fullURL", fullURL);
+                client.rpush("urlList", fullURL);
+                resolve("Saved to Redis");
             }
         });
+    });
 
-    },
+};
 
-    //Just get the URL object/hash from redis
-    getUrlObj: (URL) => {
+//Just get the URL object/hash from redis
+let getUrlObj = (URL) => {
+
+    return new Promise((resolve, reject) => {
+
         client.hgetall(URL, function (err, obj) {
-            console.log(obj);
+            resolve(obj);
         });
-    },
+    });
+};
 
-    getCount: (URL) => {
-        client.hgetall(URL, function (err, obj) {
-            console.log(obj.count);
+let getCount = (URL) => {
+    client.hgetall(URL, function (err, obj) {
+        return obj.count;
+    });
+};
+
+let getAllURLs = () => {
+
+    return new Promise((resolve, reject) => {
+
+        client.lrange('urlList', 0, -1, function (err, reply) {
+
+            if (err) reject(err);
+            resolve(reply);
         });
-    },
+    });
+};
 
-    //Increment count. using hincrby, increment the integer value of a hash field by a given number
-    incrCount: (URL) => {
+//Increment count. using hincrby, increment the integer value of a hash field by a given number
+let incrCount = (URL) => {
+    return new Promise((resolve, reject) => {
+
         client.hincrby(URL, "count", 1, (err, count) => {
             if (err) console.log(err);
+
+            resolve(`Incremet ${URL} to ${count}`);
         });
+    });
+};
 
-    },
+//Implement remove key from redis as well
+let deleteURL = (URL) => {
+    client.del(URL, (err, reply) => {
+        if (err) throw err;
 
-    //Implement remove key from redis as well
-    deleteURL: (URL) => {
-        client.del(URL, (err, reply) => {
-            if(err) throw err;
+        console.log(`${URL} has been deleted from storage`);
+    });
+};
 
-            console.log(`${URL} has been deleted from storage`);
-        });
-    },
+let deleteAll = () => {
+    client.flushall((err, reply) => {
+        if (err) throw err;
 
-    deleteAll: () => {
-      client.flushall( (err, reply) => {
-        if(err) throw err;
+        if (reply) console.log("Cleared");
+    });
+};
 
-        if(reply) console.log("Cleared");
-      });  
-    }
-}
-module.exports = linkShortner;
+module.exports = {
+    storeUrl,
+    getUrlObj,
+    getAllURLs,
+    deleteAll,
+    deleteURL,
+    incrCount,
+};
