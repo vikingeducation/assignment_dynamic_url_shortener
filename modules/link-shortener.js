@@ -10,7 +10,6 @@ const randomString = function () {
     return text;
 };
 
-
 let storeUrl = (fullURL) => {
 
     return new Promise((resolve, reject) => {
@@ -25,7 +24,7 @@ let storeUrl = (fullURL) => {
             }
             else {
                 //add to redis the new URL key
-                client.hmset(fullURL, "shortUrl", `ragnar.${randomText}`, "count", 0, "fullURL", fullURL);
+                client.hmset(fullURL, "shortUrl", `ragnar-${randomText}`, "count", 0, "fullURL", fullURL);
                 client.rpush("urlList", fullURL);
                 resolve("Saved to Redis");
             }

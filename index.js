@@ -5,6 +5,9 @@ const app = express();
 const server = require('http').createServer(app);
 const io = require('socket.io')(server);
 
+let socketClient;
+
+
 app.use(
     "/socket.io",
     express.static(__dirname + "node_modules/socket.io-client/dist/")
@@ -18,25 +21,26 @@ app.engine('handlebars', exphbs({
 }));
 app.set('view engine', 'handlebars');
 
+//setup style css
+app.use(express.static(__dirname + '/public'));
 
-
+//Load all the data from redis on first page load
 app.get('/', (req, res) => {
-
-    let urlList = [];
-
     getAllURLs()
 
         .then((data) => {
 
-            data.forEach(function (element) {
-                urlList.push(getUrlObj(element));
+           let urlList = data.map(element => (getUrlObj(element))); //arra.map is cool
+
+            return Promise.all(urlList);//return all promises so able to chain another .then
+        })
+
+        .then((urlArray) => {
+            console.log(urlArray);
+            res.render('index', {
+                urls: urlArray
             });
-
-            Promise.all(urlList)
-
-                .then((urlArray) => {
-                    res.render('index', urlArray);
-                });
+//            res.render('index', urlArray);
         })
 
         .catch((reject) => {
@@ -44,29 +48,11 @@ app.get('/', (req, res) => {
         });
 });
 
-app.get('/r/:shortURL', (req, res) => {
-    const shortURL = req.params.shortURL;
-
-    incrCount(shortURL).then((result) => {
-        return getUrlObj(shortURL);
-    })
-
-        .then((result) => {
-            io.emit('incrCount', result);
-
-            res.redirect(`http://${shortURL}`);
-        });
-
-});
-
-
-
 io.on('connection', client => {
 
     let urlObj = {};
-    
-    io.emit('incrCount', result);
-
+    //When submit is clicked, addURL event is handled here, after adding to redis, emit event to actually add
+    //the link to the html itself to display for user
     client.on('addURL', (url) => {
 
         storeUrl(url)
@@ -84,7 +70,37 @@ io.on('connection', client => {
                 console.log(err);
             });
     });
+
+    //on delete event handler, clear redis
+    client.on('removeAll', () =>{
+        deleteAll();
+        console.log('All data in redis has been deleted');
+    });
+
+    //assign the client globally, so can be used in express method get later on
+    socketClient = client;
+
 });
+//increment counter and emit event to client side javascript via the global socket client assigned in io.on connection method.
+app.get('/r/:shortURL', (req, res) => {
+    const shortURL = req.params.shortURL;
+
+    incrCount(shortURL)
+    
+    .then((result) => {
+        return getUrlObj(shortURL);
+    })
+
+    .then((result) => {
+
+        if(socketClient){
+            io.emit("incrCount", result);
+        }
+        res.redirect(`http://${shortURL}`);
+    });
+
+});
+
 
 
 server.listen(3000);

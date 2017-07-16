@@ -1,0 +1,29 @@
+.all-content{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.shorten-header {
+    background-color: rgb(54,110,209);
+    width: 100%;
+}
+
+.shorten-header h1 {
+    color: white
+}
+
+.content{
+    padding: 20px;
+}
+
+.url-content{
+    width: 75%;
+    box-shadow: 10px 10px 5px lightgray;
+    margin-top: 50px;
+}
+
+.remove-btn{
+    margin-top: 30px;
+}

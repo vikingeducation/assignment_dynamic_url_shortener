@@ -1,21 +1,30 @@
-<div>
+<div class="all-content">
     <div class="shorten-header">
         <div class="content">
             <h1>Shorten URL</h1>
-            <div class="inputs">
-                <input placeholder="Enter URL here to shorten" name="urlInput" id="urlInput">
-                <button id="submit">Submit</button>
+            <div class="inputs input-group">
+                <input class="form-control" placeholder="Enter URL here to shorten" name="urlInput" id="urlInput">
+                <span class="input-group-btn"><button class="btn btn-secondary" type="button" id="submit">Submit</button></span>
             </div>
         </div>
     </div>
-    <div>
-        <table id="urlTable" class="urlTable">
-            {{#each this}}
+    <div class="url-content">
+        <table id="urlTable" class="urlTable table table-hover">
+            <thead>
+                <tr>
+                    <th>Shorten URL</th>
+                    <th>All Clicks</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each urls}}
                 <tr>
                     <td><a target="_blank" href="/r/{{this.fullURL}}">{{this.shortUrl}}</a></td>
                     <td id="{{this.shortUrl}}-count">{{this.count}}</td>
                 </tr>
-            {{/each}}
+                {{/each}}
+            </tbody>
         </table>
     </div>
+        <button type="button" id="delete" class="remove-btn btn btn-danger">Delete All</button>
 </div>
