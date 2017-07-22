@@ -1,17 +1,18 @@
 const redis = require('redis');
 const redisClient = redis.createClient();
+// const url = require('url');
 
 const setShortenedLink = url => {
   let shortenedLink = shortenLink(url);
-  // redisClient.set(url, shortenedLink, redis.print);
-  redisClient.hset('urls', url, shortenedLink);
-  // console.log(url + ", " + shortenedLink);
+  // redisClient.hset('urls', url, shortenedLink);
+  redisClient.hset('urls', shortenedLink, url);
+  redisClient.hset('counts', shortenedLink, 0);
 };
 
-//promise based implementation
-const getShortenedLink = url => {
+// promise based implementation
+const getURL = link => {
   return new Promise((resolve, reject) => {
-    redisClient.hget('urls', url, (err, value) => {
+    redisClient.hget('urls', link, (err, value) => {
       if (err) {
         reject(err);
       } else {
@@ -21,13 +22,28 @@ const getShortenedLink = url => {
   });
 };
 
+const incrementCount = url => {
+  redisClient.hincrby('counts', url, 1);
+};
+
 const getAllURLs = () => {
   return new Promise((resolve, reject) => {
     redisClient.hgetall('urls', (err, data) => {
       if (err) {
         reject(err);
       } else {
-        // console.log(data);
+        resolve(data);
+      }
+    });
+  });
+};
+
+const getAllCounts = () => {
+  return new Promise((resolve, reject) => {
+    redisClient.hgetall('counts', (err, data) => {
+      if (err) {
+        reject(err);
+      } else {
         resolve(data);
       }
     });
@@ -37,7 +53,7 @@ const getAllURLs = () => {
 //accepts url and returns abbreviated url
 const shortenLink = url => {
   var shortenedURL = url.split('').filter((char, index) => {
-    if (index % 3 === 0) {
+    if (index % 3 === 0 && char !== '/') {
       return char;
     }
   });
@@ -65,6 +81,8 @@ const shortenLink = url => {
 
 module.exports = {
   setShortenedLink,
-  getShortenedLink,
-  getAllURLs
+  getURL,
+  getAllURLs,
+  getAllCounts,
+  incrementCount
 };

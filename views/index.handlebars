@@ -26,11 +26,15 @@
           </tr>
         </thead>
         <tbody>
-          {{#each urls}}
+          {{#each urls as |value key|}}
           <tr>
-            <td>{{@key}}</td>
-            <td>{{this}}</td>
-            <td></td>
+            <td>
+              {{value}}
+            </td>
+            <td>
+              <a href='{{key}}'>localhost:3000/{{key}}</a>
+            </td>
+            <td>{{lookup ../counts key}}</td>
           </tr>
           {{/each}}
         </tbody>

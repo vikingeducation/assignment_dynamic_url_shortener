@@ -3,8 +3,10 @@ const expressHandlebars = require('express-handlebars');
 const bodyParser = require('body-parser');
 const {
   setShortenedLink,
-  getShortenedLink,
-  getAllURLs
+  getURL,
+  getAllURLs,
+  getAllCounts,
+  incrementCount
 } = require('./link-shortener');
 
 const app = express();
@@ -20,12 +22,10 @@ app.use(express.static(__dirname + '/public'));
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.get('/', (req, res) => {
-  // let urls = getAllURLs();
-  // console.log(urls);
-  // res.render('index', { urls });
   getAllURLs().then(urls => {
-    console.log(urls);
-    res.render('index', { urls: urls });
+    getAllCounts().then(counts => {
+      res.render('index', { urls: urls, counts: counts });
+    });
   });
 });
 
@@ -33,6 +33,14 @@ app.post('/', (req, res) => {
   let url = req.body.link;
   setShortenedLink(url);
   res.redirect('back');
+});
+
+app.get('/:link', (req, res) => {
+  incrementCount(req.params.link);
+  getURL(req.params.link).then(url => {
+    console.log(url);
+    res.redirect(url);
+  });
 });
 
 app.listen(3000, () => {
