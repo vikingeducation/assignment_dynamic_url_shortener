@@ -2,7 +2,7 @@
   <div class="row">
     <div class="col-sm-8 col-sm-offset-1">
 
-      <h1>VCS Link Shortener</h1>
+      <h1 id="heading">VCS Link Shortener</h1>
 
       <form action="/" method="post">
         <div class="form-group">
@@ -32,7 +32,7 @@
               {{value}}
             </td>
             <td>
-              <a href='{{key}}'>localhost:3000/{{key}}</a>
+              <a href='{{key}}' target='_blank'>localhost:3000/{{key}}</a>
             </td>
             <td>{{lookup ../counts key}}</td>
           </tr>
@@ -42,3 +42,12 @@
     </div>
   </div>
 </div>
+
+<script>
+  // var socket = io.connect('http://localhost:3000');
+  var socket = io.connect();
+
+  // socket.on('increment count', function() {
+  //   $('#heading').html("SOCKET WORKED");
+  // });
+</script>

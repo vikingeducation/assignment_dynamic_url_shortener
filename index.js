@@ -1,4 +1,8 @@
 const express = require('express');
+const app = express();
+const server = require('http').createServer(app);
+const io = require('socket.io')(server);
+
 const expressHandlebars = require('express-handlebars');
 const bodyParser = require('body-parser');
 const {
@@ -9,17 +13,25 @@ const {
   incrementCount
 } = require('./link-shortener');
 
-const app = express();
-
 const hbs = expressHandlebars.create({
   defaultLayout: 'main'
 });
 
 app.engine('handlebars', hbs.engine);
 app.set('view engine', 'handlebars');
-
+//
+// app.use(
+//   '/socket.io',
+//   express.static(__dirname + '/node_modules/socket.io-client/dist/')
+// );
+app.use(express.static(__dirname + '/node_modules/socket.io-client/dist/'));
 app.use(express.static(__dirname + '/public'));
 app.use(bodyParser.urlencoded({ extended: true }));
+
+io.on('connection', client => {
+  console.log('New connection!');
+  // client.emit('increment count');
+});
 
 app.get('/', (req, res) => {
   getAllURLs().then(urls => {
@@ -39,6 +51,7 @@ app.get('/:link', (req, res) => {
   incrementCount(req.params.link);
   getURL(req.params.link).then(url => {
     console.log(url);
+
     res.redirect(url);
   });
 });
