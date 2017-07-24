@@ -34,7 +34,7 @@
             <td>
               <a href='{{key}}' target='_blank'>localhost:3000/{{key}}</a>
             </td>
-            <td>{{lookup ../counts key}}</td>
+            <td id='{{key}}'>{{lookup ../counts key}}</td>
           </tr>
           {{/each}}
         </tbody>
@@ -47,7 +47,10 @@
   var socket = io.connect('http://localhost:3000');
   // var socket = io.connect();
 
-  socket.on('increment count', function() {
-    $('#heading').html("SOCKET WORKED");
+  socket.on('increment count', function(url, count) {
+    var urlID = '#'.concat(url);
+    console.log(urlID);
+    // $('#heading').html(url);
+    $(urlID).html(count);
   });
 </script>

@@ -23,7 +23,15 @@ const getURL = link => {
 };
 
 const incrementCount = url => {
-  redisClient.hincrby('counts', url, 1);
+  return new Promise((resolve, reject) => {
+    redisClient.hincrby('counts', url, 1, (err, count) => {
+      if (err) {
+        rejefct(err);
+      } else {
+        resolve(count);
+      }
+    });
+  });
 };
 
 const getAllURLs = () => {

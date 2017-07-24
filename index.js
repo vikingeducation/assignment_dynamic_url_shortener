@@ -43,11 +43,13 @@ app.post('/', (req, res) => {
 });
 
 app.get('/:link', (req, res) => {
-  incrementCount(req.params.link);
-  getURL(req.params.link).then(url => {
-    console.log(url);
-    io.emit('increment count', { for: 'everyone' });
-    // res.redirect(url);
+  incrementCount(req.params.link).then(newCount => {
+    console.log(newCount);
+    getURL(req.params.link).then(url => {
+      console.log(url);
+      io.emit('increment count', req.params.link, newCount);
+      res.redirect(url);
+    });
   });
 });
 
