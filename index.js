@@ -13,24 +13,18 @@ const {
   incrementCount
 } = require('./link-shortener');
 
-const hbs = expressHandlebars.create({
-  defaultLayout: 'main'
-});
-
-app.engine('handlebars', hbs.engine);
+app.engine('handlebars', expressHandlebars({ defaultLayout: 'main' }));
 app.set('view engine', 'handlebars');
-//
-// app.use(
-//   '/socket.io',
-//   express.static(__dirname + '/node_modules/socket.io-client/dist/')
-// );
-app.use(express.static(__dirname + '/node_modules/socket.io-client/dist/'));
+
+app.use(
+  '/socket.io',
+  express.static(__dirname + '/node_modules/socket.io-client/dist/')
+);
 app.use(express.static(__dirname + '/public'));
 app.use(bodyParser.urlencoded({ extended: true }));
 
 io.on('connection', client => {
-  console.log('New connection!');
-  // client.emit('increment count');
+  console.log('new connection');
 });
 
 app.get('/', (req, res) => {
@@ -51,11 +45,10 @@ app.get('/:link', (req, res) => {
   incrementCount(req.params.link);
   getURL(req.params.link).then(url => {
     console.log(url);
-
     res.redirect(url);
   });
 });
 
-app.listen(3000, () => {
+server.listen(3000, () => {
   console.log('Listening on port 3000');
 });
