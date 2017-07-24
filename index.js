@@ -38,6 +38,7 @@ app.get('/', (req, res) => {
 app.post('/', (req, res) => {
   let url = req.body.link;
   setShortenedLink(url);
+
   res.redirect('back');
 });
 
@@ -45,7 +46,8 @@ app.get('/:link', (req, res) => {
   incrementCount(req.params.link);
   getURL(req.params.link).then(url => {
     console.log(url);
-    res.redirect(url);
+    io.emit('increment count', { for: 'everyone' });
+    // res.redirect(url);
   });
 });
 
