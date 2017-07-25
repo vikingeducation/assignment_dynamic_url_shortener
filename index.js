@@ -21,10 +21,11 @@ app.engine("handlebars", hbs({ defaultLayout: "main" }));
 app.set("view engine", "handlebars");
 
 app.get("/", (req, res) => {
-  console.log(req.url);
   //set savedURL as the redis holding key/value
-  res.render("index", { notUrl: savedURLArray });
-});
+  // urlShortener.retrieveURLs((currentKeys) => {
+  	res.render("index");
+  });
+// });
 app.get("/key/:shortUrl", (req, res) => {
   if (savedURL[req.params.shortUrl] != undefined) {
     res.redirect(savedURL[req.params.shortUrl]);
