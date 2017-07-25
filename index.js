@@ -10,11 +10,12 @@ var server = require("http").createServer(app);
 var io = require("socket.io")(server);
 
 var port = 4000;
-io.on("connection", () => {
-  io.on("newURL", function(url) {
+
+io.on("connection", (client) => {
+  client.on("newURL", function(url) {
     console.log("am I running");
     urlShortener.shortenURL(url, () => {
-      // /res.redirect("/");
+    	io.emit("updateURL", url);
     });
   });
 });
@@ -33,8 +34,6 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.engine("handlebars", hbs({ defaultLayout: "main" }));
 app.set("view engine", "handlebars");
 
-io.on("connection", client => {});
-
 app.get("/", (req, res) => {
   //set savedURL as the redis holding key/value
   //reload after post
@@ -45,8 +44,6 @@ app.get("/", (req, res) => {
         count: currentKeys[key].count
       };
     });
-
-    console.log(req.hostname);
     res.render("index", { urls: urlStuff });
   });
 });
