@@ -9,6 +9,7 @@ const bodyParser = require("body-parser");
 const validUrl = require("valid-url");
 
 
+
 app.engine("handlebars", hbs({ defaultLayout: "main" }));
 app.set("view engine", "handlebars");
 
@@ -52,9 +53,22 @@ io.on('connection', client => {
     ]
 
     if (validUrl.isUri(name)) {
-      lib.redisTools.storeData(objStorage);
+      lib.redisTools.storeData(objStorage)
+        .then(data => {
+          // console.log(data, 'what do we get in index.js')
+          console.log('--------------------------------------------------')
+          lib.redisTools.getData(id)
+            .then(result => {
+              console.log('result????????')
+              console.log(result);
+            })
+        })
 
-      lib.redisTools.getData(id);
+
+      
+
+
+
     } else {
       console.error("error")
     }
