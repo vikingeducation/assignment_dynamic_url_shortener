@@ -1,20 +1,12 @@
 {{>form}}
+<div id="row-container">
   {{#each urls as |url|}}
-  <a id="{{url.short}}" href="{{url.short}}">
-    <div class="panel panel-primary">
-      <div class="panel-heading">{{url.short}}</div>
-      <div class="panel-body">
-        {{url.long}}
-      </div>
-      <div class="panel-footer">
-        <div class='row'>
-          <div class='col-md-11'>Total page visits: {{url.count}}</div>
-          <div class='col-md-1'>
-            <button type='submit' class='btn btn-primary'>Delete</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </a>
-
+    <a id="{{url.short}}" data-long="{{url.long}}" href="{{url.short}}">
+      {{>row url=url}}
+    </a>
   {{/each}}
+</div>
+
+<a id="template" class="hidden">
+  {{>row}}
+</a>
