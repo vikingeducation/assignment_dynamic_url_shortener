@@ -24,7 +24,7 @@ function read_hash(hash_name) {
   });
   return p;
 }
-//increment a value in a hash
+// increment a value in a hash
 function incr_hash(hash_name, key, amount) {
   var p = new Promise(resolve => {
     redisClient.hincrby(hash_name, key, amount, (err, data) => {
