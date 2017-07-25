@@ -3,8 +3,17 @@ const shortener = require('./lib/shortener');
 
 router.get('/', (req, res) => {
   // get all counts
-  
+  let idArrayPromise = shortener.getCount();
+
   // display page
+  idArrayPromise
+    .then(idArray => {
+      res.render('index', { idArray: 'idArray' });
+    })
+    .catch(err => {
+      console.error(err.stack);
+      res.render('index');
+    });
 });
 
 router.post('/', (req, res) => {
@@ -17,11 +26,12 @@ router.post('/', (req, res) => {
 
 router.get('/:id', (req, res) => {
   // increment the counter
-  let updatePromise = shortener.updateUrl(req.params.id);
+  let id = req.params.id;
+  let updatePromise = shortener.updateUrl(id);
   // get the actual url from our data store and redirect the user to it
   updatePromise
     .then(url => {
-      res.redirect(url);
+      res.redirect(url[id]);
     })
     .catch(err => {
       // redirect home on error
