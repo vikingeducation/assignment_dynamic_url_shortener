@@ -5,4 +5,9 @@ $(document).ready(() => {
     var data = $("h1").html();
     socket.emit("newUrl", data);
   });
+  $("a").click(e => {
+    e.preventDefault();
+    var data = $("a").attr("href");
+    socket.emit("newUrl", data);
+  });
 });
