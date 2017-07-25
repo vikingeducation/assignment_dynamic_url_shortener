@@ -1,20 +1,19 @@
 const router = require('express').Router();
 const shortener = require('./lib/shortener');
 
-
 router.get('/', (req, res) => {
   // get all counts
-  let idArrayPromise = shortener.getCount();
+  let idArrayPromise = shortener.getAllCounts();
 
   // display page
   idArrayPromise
     .then(idArray => {
       idArray = idArray.map(urlObject => {
-        return { 
+        return {
           id: Object.keys(urlObject)[0],
           count: Object.values(urlObject)[0]
-          }
-      })
+        };
+      });
       res.render('index', { idArray: idArray });
     })
     .catch(err => {
@@ -38,7 +37,7 @@ router.get('/:id', (req, res) => {
   // get the actual url from our data store and redirect the user to it
   updatePromise
     .then(url => {
-      res.redirect(url[id]);
+      res.redirect(url);
     })
     .catch(err => {
       // redirect home on error
@@ -49,10 +48,7 @@ router.get('/:id', (req, res) => {
 
 module.exports = router;
 
-
 {
-  id: id
-  count: count
-
-
+  id: id;
+  count: count;
 }
