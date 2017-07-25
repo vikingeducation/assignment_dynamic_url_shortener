@@ -1,10 +1,25 @@
 <form action="/" method="POST">
 	<input id="urlToShorten" name="urlToShorten" type="text">
 	<button>Shorten URL</button>
-	  {{#each urls as |url|}}
-	  	<div>
-	  		<a href="/key/{{url.key}}">{{url.key}}</a>
-	  		<p>{{url.count}}</p>
-	  	</div>
-	  {{/each}}
 </form>
+
+<div id="counter">
+	{{#each urls as |url|}}
+		<div>
+			<a href="/key/{{url.key}}">{{url.key}}</a>
+			<p id="{{url.key}}"class="counter">{{url.count}}</p>
+		</div>
+	{{/each}}
+</div>
+
+<script>
+var socket = io.connect("http://localhost:4000");
+
+// socket.on("count", (data) => {
+// 	$("#counter")
+// });
+
+$(".counter").on("click", function() {
+	
+});
+</script>
