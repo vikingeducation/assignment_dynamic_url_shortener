@@ -17,6 +17,7 @@
     <thead>
       <tr>
         <th> Shortened URL </th>
+        <th> Original URL </th>
         <th> Click Count </th>
       </tr>
     </thead>
@@ -25,6 +26,9 @@
         <tr>
           <td>
             <a href="{{url.url}}">{{url.url}}</a>
+          </td>
+          <td>
+            <a href="{{url.originalUrl}}">{{url.originalUrl}}</a>
           </td>
           <td>
             {{url.count}}

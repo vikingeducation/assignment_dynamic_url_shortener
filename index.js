@@ -5,12 +5,14 @@ const bodyParser = require('body-parser');
 const express = require('express');
 const exphbs = require('express-handlebars');
 
+const io = require('socket.io')(server)
+
 let app = express();
 
 app.engine('handlebars', exphbs({ defaultLayout: 'main' }));
 app.set('view engine', 'handlebars');
 
-app.use(express.static(`${__dirname}/public`));
+app.use('/socket.io', express.static(`${__dirname}/public`));
 
 app.engine('handlebars', exphbs({ defaultLayout: 'main' }));
 app.set('view engine', 'handlebars');

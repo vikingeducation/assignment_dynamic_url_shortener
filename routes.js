@@ -4,19 +4,21 @@ const env = require('./env');
 
 router.get('/', (req, res) => {
   // get all counts
-  let idArrayPromise = shortener.getAllCounts();
+  let idArrayPromise = shortener.getAllCountsAndUrls();
 
   // display page
   idArrayPromise
-    .then(idObject => {
+    .then(([countsObject, urlsObject]) => {
       let urls = [];
-      for (let id in idObject) {
+      for (let id in countsObject) {
         let fqu = `http://${req.hostname}:${env.port}/${id}`;
         urls.push({
           url: fqu,
-          count: idObject[id]
+          count: countsObject[id],
+          originalUrl: urlsObject[id]
         });
       }
+
       res.render('index', { urls: urls });
     })
     .catch(err => {
@@ -41,8 +43,10 @@ router.get('/:id', (req, res) => {
   // get the actual url from our data store and redirect the user to it
   updatePromise
     .then(url => {
-      console.log(url);
-      // res.redirect(url);
+      if (!url.slice(0, 4) === 'http') {
+        url = "http://" + url
+      }
+      res.redirect(url);
     })
     .catch(err => {
       // redirect home on error
