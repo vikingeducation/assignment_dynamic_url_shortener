@@ -1,7 +1,6 @@
 const chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-const redis = require("redis");
-const redisClient = redis.createClient();
 
+//make a tiny url for a given normal url
 function handleUrl(url) {
   return new Promise(resolve => {
     const newUrl = "teenyUrl/" + getRandomString();
@@ -22,6 +21,7 @@ function writeRedis(newUrl, url) {
   });
 }
 
+//helper function
 function getRandomString() {
   var string = "";
   for (let i = 0; i < 6; i++) {
