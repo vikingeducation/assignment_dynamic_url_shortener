@@ -1,19 +1,6 @@
 const redis = require("redis");
 const redisClient = redis.createClient();
 
-//set up hash
-/*writeRedis(newUrl, url).then(() => {
-  return newUrl;
-});
-
-function writeRedis(newUrl, url) {
-  return new Promise(resolve => {
-    console.log(newUrl);
-    redisClient.hmset(newUrl, ["originalUrl", url]);
-    redisClient.hincrby(newUrl, "visitor-count", 1);
-    resolve();
-  });
-}*/
 /* TESTING */
 //make a new hash
 function make_hash_key_value(hash_name, key, field) {
