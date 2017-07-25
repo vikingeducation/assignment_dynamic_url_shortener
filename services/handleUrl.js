@@ -13,8 +13,11 @@ function handleUrl(url) {
 
 function writeRedis(newUrl, url) {
   return new Promise(resolve => {
-    redisClient.hmset(newUrl, { originalUrl: url });
-    redisClient.hincrby(newUrl, "visitor-count", 1);
+    redisClient.hmset(newUrl, {
+      newUrl: newUrl,
+      originalUrl: url,
+      visitorCount: 0
+    });
     resolve();
   });
 }
