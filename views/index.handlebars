@@ -1,11 +1,23 @@
-<form class="submission">
-  <div class="form-group">
-    <label for="url-shortener">URL Shortener</label>
-    <input name="url" type="url" class="form-control urlSpecial" id="url-shortener" placeholder="Enter url">
-  </div>
+<div class="container">
+  <form class="submission">
+    <div class="form-group">
+      <label for="url-shortener">URL Shortener</label>
+      <input name="url" type="url" class="form-control urlSpecial" id="url-shortener" placeholder="Enter url">
+    </div>
 
-  <button type="submit" class="btn btn-primary makeUrl">Submit</button>
-</form>
+    <button type="submit" class="btn btn-primary makeUrl">Submit</button>
+  </form>
 
-<h1>{{id}}</h1>
-<h1>{{url}}</h1>
+  <h2></h2>
+  <table class="table table-condensed">
+    <thead>
+      <tr>
+        <th>Original URL</th>
+        <th>Short URL</th>
+        <th>All Clicks</th>
+      </tr>
+    </thead>
+    <tbody>
+    </tbody>
+  </table>
+</div>

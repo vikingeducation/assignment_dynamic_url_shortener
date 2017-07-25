@@ -12,3 +12,14 @@ $(".submission").on("click", ".makeUrl", (e) => {
   socket.emit("url", { name: url });
   alert('Link submitted!')
 })
+
+socket.on("newId", (data) => {
+
+})
+
+$("tbody").append(
+  $(`<tr>
+    <td><a href=${data.urlLong}>${data.urlLong}</a></td>
+    <td><a href=${data.urlLong}>${data.urlShort}</a></td>
+    <td>0</td>
+  </tr>`))

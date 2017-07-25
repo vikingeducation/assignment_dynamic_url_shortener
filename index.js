@@ -22,18 +22,6 @@ app.get('/', (req, res) => {
   res.render("index");
 })
 
-// app.post("/", (req, res) => {
-//   let url = req.body.url;
-//   let id = lib.shortener.linkShortener();
-//   redisClient.set(id, url, () => {
-//     console.log("This is working!");
-//     res.render("index", { id, url});
-//   })
-// })
-
-// client.on("incr", (count) => {
-//
-// })
 let baseUrl = process.env.BASE_URL || "http://localhost:3000";
 
 io.on('connection', client => {
@@ -47,6 +35,7 @@ io.on('connection', client => {
     let { name } = url;
 
     let objStorage = {
+      id: id,
       urlLong: name,
       urlShort: `${baseUrl}/${id}`,
       count: 0
@@ -55,14 +44,24 @@ io.on('connection', client => {
     if (validUrl.isUri(name)) {
       lib.redisTools.storeData(id, objStorage)
         .then(() => lib.redisTools.getData(id))
-        // .then 
-
-
+        .then((data) => {
+          client.emit("newId", data);
+        })
 
     } else {
       console.error("error")
     }
   })
+})
+
+app.all('/:id', (req, res) => {
+  const id = req.params.id.trim();
+  console.log(`id: ${id}`);
+  lib.redisTools.getData(id)
+  .then((data) => {
+    res.redirect(data["urlLong"]);
+  })
+  .catch((err) => console.log(err))
 })
 
 server.listen(3000, () => {
