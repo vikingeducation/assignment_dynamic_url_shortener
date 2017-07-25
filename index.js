@@ -1,17 +1,8 @@
 const app = require('express')();
+const router = require('./routes');
+const bodyParser = require('body-parser');
 
-// Set the default value
-redisClient.setnx('count', 0);
-
-app.get('/', (req, res) => {
-  // get all counts
-  // display page
-});
-
-app.get('/:urlId', (req, res) => {
-  // increment the counter
-  // get the actual url from our data store
-  // redirect the user to it
-});
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use('/', router);
 
 app.listen(3000);
