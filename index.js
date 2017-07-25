@@ -23,6 +23,10 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.engine("handlebars", hbs({ defaultLayout: "main" }));
 app.set("view engine", "handlebars");
 
+io.on("connection", (client) => {
+
+});
+
 app.get("/", (req, res) => {
   //set savedURL as the redis holding key/value
   //reload after post
@@ -31,6 +35,8 @@ app.get("/", (req, res) => {
   		return {"key": key,
   		"count": currentKeys[key].count}
   	});
+
+  	console.log(req.hostname);
     res.render("index", { urls: urlStuff });
   });
 });
