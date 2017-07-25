@@ -45,27 +45,17 @@ io.on('connection', client => {
 
     let id = lib.shortener.linkShortener();
     let { name } = url;
-    let objStorage = [
-      id,
-      name,
-      `${baseUrl}/${id}`,
-      0
-    ]
+
+    let objStorage = {
+      urlLong: name,
+      urlShort: `${baseUrl}/${id}`,
+      count: 0
+    }
 
     if (validUrl.isUri(name)) {
-      lib.redisTools.storeData(objStorage)
-        .then(data => {
-          // console.log(data, 'what do we get in index.js')
-          console.log('--------------------------------------------------')
-          lib.redisTools.getData(id)
-            .then(result => {
-              console.log('result????????')
-              console.log(result);
-            })
-        })
-
-
-      
+      lib.redisTools.storeData(id, objStorage)
+        .then(() => lib.redisTools.getData(id))
+        // .then 
 
 
 
