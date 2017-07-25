@@ -61,7 +61,8 @@ function _handleCreation(data) {
 				});
 			} else {
 				console.err('WAAAAAAAH');
-			}short
+			}
+		});
 	} else {
 		console.err('OH NO AN ERROR!');
 	}
