@@ -6,6 +6,7 @@ const io = require("socket.io")(server);
 const redisClient = require("redis").createClient();
 const hbs = require("express-handlebars");
 const bodyParser = require("body-parser");
+const validUrl = require("valid-url");
 
 
 app.engine("handlebars", hbs({ defaultLayout: "main" }));
@@ -34,6 +35,8 @@ app.post("/", (req, res) => {
 
 
 
+
+
 // client.on("incr", (count) => {
 //
 // })
@@ -46,10 +49,19 @@ io.on('anEvent', client => {
   // })
 })
 
+
+
 io.on('connection', client => {
 	client.on('event', (err, data) => {
 		console.log('we heard the event')
 	})
+
+  client.on("url", (url) => {
+    let { name } = url;
+
+    validUrl.isUri(name)
+
+  })
 })
 
 server.listen(3000, () => {
