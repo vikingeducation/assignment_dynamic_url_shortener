@@ -5,7 +5,15 @@
 	</div>
 	<div class="panel-footer">
 		<div class='row'>
-			<div class='col-md-11'>Total page visits: <span id="count">{{url.count}}</span></div>
+			<div class='col-md-11'>Total page visits:
+				<span id="count">
+					{{#if url.count}}
+						{{url.count}}
+					{{else}}
+						0
+					{{/if}}
+				</span>
+			</div>
 			<div class='col-md-1'>
 				<button type='submit' class='btn btn-primary'>Delete</button>
 			</div>
