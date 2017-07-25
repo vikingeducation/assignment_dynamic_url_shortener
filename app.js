@@ -18,7 +18,9 @@ make_hash("awesomeNewUrl", {
 });
 read_hash("awesomeNewUrl");
 incr_hash("awesomeNewUrl", "clicks", "10");
-read_hash("awesomeNewUrl");
+read_hash("awesomeNewUrl").then(data => {
+  console.log(data);
+});
 
 app.use(
   "/socket.io",
@@ -35,9 +37,16 @@ io.on("connection", client => {
 
   client.on("newUrl", url => {
     var newUrl = handleUrl(url);
-    redisClient.get(newUrl + " originalUrl visitorCount", (err, urlData) => {
-      console.log(urlData);
-      io.emit("urlAdded", urlData);
+
+    //add a new hash to the redis database with the name newUrl
+    make_hash(newUrl, {
+      originalUrl: url,
+      newUrl: newUrl,
+      clicks: 0
+    });
+    //read the database , cause why not
+    read_hash(newUrl).then(data => {
+      console.log(data);
     });
   });
 });

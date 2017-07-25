@@ -1,23 +1,12 @@
 const chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-const redis = require("redis");
-const redisClient = redis.createClient();
 
+//make a tiny url for a given normal url
 function handleUrl(url) {
   const newUrl = "teenyUrl/" + getRandomString();
-  writeRedis(newUrl, url).then(() => {
-    return newUrl;
-  });
+  return newUrl;
 }
 
-function writeRedis(newUrl, url) {
-  return new Promise(resolve => {
-    console.log(newUrl);
-    redisClient.hmset(newUrl, ["originalUrl", url]);
-    redisClient.hincrby(newUrl, "visitor-count", 1);
-    resolve();
-  });
-}
-
+//helper function
 function getRandomString() {
   var string = "";
   for (let i = 0; i < 6; i++) {
