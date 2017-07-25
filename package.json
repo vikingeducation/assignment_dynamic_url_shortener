@@ -1,0 +1,24 @@
+{
+  "name": "assignment_dynamic_url_shortener",
+  "version": "1.0.0",
+  "description": "Dan",
+  "main": "index.js",
+  "dependencies": {
+    "redis": "^2.7.1",
+    "shortid": "^2.2.8"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Avonyel/assignment_dynamic_url_shortener.git"
+  },
+  "author": "Dan and Stephanie",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Avonyel/assignment_dynamic_url_shortener/issues"
+  },
+  "homepage": "https://github.com/Avonyel/assignment_dynamic_url_shortener#readme"
+}
