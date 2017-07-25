@@ -2,6 +2,9 @@
 	<input id="urlToShorten" name="urlToShorten" type="text">
 	<button>Shorten URL</button>
 	  {{#each urls as |url|}}
-	  	<a href="/key/{{url}}">{{url}}</a>
+	  	<div>
+	  		<a href="/key/{{url.key}}">{{url.key}}</a>
+	  		<p>{{url.count}}</p>
+	  	</div>
 	  {{/each}}
 </form>

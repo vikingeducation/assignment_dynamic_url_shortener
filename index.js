@@ -6,15 +6,18 @@ var urlShortener = require("./lib/urlshortener");
 
 var app = express();
 
-var port = 4000;
-var host = "localhost";
+var server = require("http").createServer(app);
+var io = require("socket.io")(server);
 
-var savedURL = { test: "https://www.google.com/" };
-var savedURLArray = ["a", "b"];
-app.listen(port, () => {
+var port = 4000;
+
+// var savedURL = { test: "https://www.google.com/" };
+// var savedURLArray = ["a", "b"];
+server.listen(port, () => {
   console.log("Serving!" + port);
 });
 
+app.use('/socket.io',express.static(__dirname + 'node_modules/socket.io-client/dist/'))
 app.use(bodyParser.urlencoded({ extended: false }));
 
 app.engine("handlebars", hbs({ defaultLayout: "main" }));
@@ -24,18 +27,23 @@ app.get("/", (req, res) => {
   //set savedURL as the redis holding key/value
   //reload after post
   urlShortener.retrieveURLs(currentKeys => {
-    res.render("index", { urls: Object.keys(currentKeys) });
+  	var urlStuff = Object.keys(currentKeys).map((key) => {
+  		return {"key": key,
+  		"count": currentKeys[key].count}
+  	});
+    res.render("index", { urls: urlStuff });
   });
 });
 
 app.get("/key/:shortUrl", (req, res) => {
-  console.log(urlShortener.GetNewUrl(req.params.shortUrl));
+  urlShortener.GetNewUrl(req.params.shortUrl, (url) => {
+  	res.redirect(url);
+  });
   //works //res.redirect(urlShortener.GetNewUrl(req.params.shortUrl));
 });
 
 app.post("/", (req, res) => {
-  urlShortener.shortenURL(req.body.urlToShorten, url => {
-    console.log(url);
+  urlShortener.shortenURL(req.body.urlToShorten, () => {
     res.redirect("/");
   });
 });
