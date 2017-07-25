@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const shortener = require('./lib/shortener');
 
+
 router.get('/', (req, res) => {
   // get all counts
   let idArrayPromise = shortener.getCount();
@@ -8,7 +9,13 @@ router.get('/', (req, res) => {
   // display page
   idArrayPromise
     .then(idArray => {
-      res.render('index', { idArray: 'idArray' });
+      idArray = idArray.map(urlObject => {
+        return { 
+          id: Object.keys(urlObject)[0],
+          count: Object.values(urlObject)[0]
+          }
+      })
+      res.render('index', { idArray: idArray });
     })
     .catch(err => {
       console.error(err.stack);
@@ -41,3 +48,11 @@ router.get('/:id', (req, res) => {
 });
 
 module.exports = router;
+
+
+{
+  id: id
+  count: count
+
+
+}
