@@ -5,9 +5,10 @@ const bodyParser = require('body-parser');
 const express = require('express');
 const exphbs = require('express-handlebars');
 
-const io = require('socket.io')(server)
-
 let app = express();
+const server = require('http').createServer(app);
+
+let socket = require('./socket')(server);
 
 app.engine('handlebars', exphbs({ defaultLayout: 'main' }));
 app.set('view engine', 'handlebars');
