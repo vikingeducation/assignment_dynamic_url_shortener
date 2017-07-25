@@ -3,16 +3,17 @@ const redis = require("redis");
 const redisClient = redis.createClient();
 
 function handleUrl(url) {
-  const newUrl = "teenyUrl/" + getRandomString();
-  writeRedis(newUrl, url).then(() => {
-    return newUrl;
+  return new Promise(resolve => {
+    const newUrl = "teenyUrl/" + getRandomString();
+    writeRedis(newUrl, url).then(() => {
+      resolve(newUrl);
+    });
   });
 }
 
 function writeRedis(newUrl, url) {
   return new Promise(resolve => {
-    console.log(newUrl);
-    redisClient.hmset(newUrl, ["originalUrl", url]);
+    redisClient.hmset(newUrl, { originalUrl: url });
     redisClient.hincrby(newUrl, "visitor-count", 1);
     resolve();
   });

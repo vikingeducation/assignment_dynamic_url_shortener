@@ -20,10 +20,10 @@ io.on("connection", client => {
   console.log("new connection!");
 
   client.on("newUrl", url => {
-    var newUrl = handleUrl(url);
-    redisClient.get(newUrl + " originalUrl visitorCount", (err, urlData) => {
-      console.log(urlData);
-      io.emit("urlAdded", urlData);
+    handleUrl(url).then(resolve => {
+      redisClient.hgetall(resolve, (err, urlData) => {
+        io.emit("urlAdded", urlData);
+      });
     });
   });
 });
