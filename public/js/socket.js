@@ -10,4 +10,5 @@ $(".submission").on("click", ".makeUrl", (e) => {
   e.preventDefault();
   const url = $(".urlSpecial").val();
   socket.emit("url", { name: url });
+  alert('Link submitted!')
 })

@@ -18,37 +18,21 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 
 app.get('/', (req, res) => {
-  io.emit("anEvent");
   res.render("index");
 })
 
-
-app.post("/", (req, res) => {
-  let url = req.body.url;
-  let id = lib.shortener.linkShortener();
-  redisClient.set(id, url, () => {
-    console.log("This is working!");
-    res.render("index", { id, url});
-  })
-})
-
-
-
-
-
+// app.post("/", (req, res) => {
+//   let url = req.body.url;
+//   let id = lib.shortener.linkShortener();
+//   redisClient.set(id, url, () => {
+//     console.log("This is working!");
+//     res.render("index", { id, url});
+//   })
+// })
 
 // client.on("incr", (count) => {
 //
 // })
-
-io.on('anEvent', client => {
-  console.log("New connection!");
-
-  // client.emit('greeting', (data) => {
-  // 	console.log('backend emitted greeting')
-  // })
-})
-
 
 
 io.on('connection', client => {
@@ -58,9 +42,17 @@ io.on('connection', client => {
 
   client.on("url", (url) => {
     let { name } = url;
+    let id = lib.shortener.linkShortener();
 
-    validUrl.isUri(name)
+    if (validUrl.isUri(name)) {
+      name = JSON.stringify(name)
+      console.log("url is valid")
+      lib.redisTools.storeData(id, name);
 
+      lib.redisTools.getData(id);
+    } else {
+      console.error("error")
+    }
   })
 })
 
