@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/Alex-Willenbrink/assignment_dynamic_url_shortener#readme",
   "dependencies": {
+    "body-parser": "^1.17.2",
     "express": "^4.15.3",
     "express-handlebars": "^3.0.0",
     "redis": "^2.7.1",
