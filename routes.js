@@ -14,7 +14,7 @@ router.get('/', (req, res) => {
           count: Object.values(urlObject)[0]
         };
       });
-      res.render('index', { idArray: idArray });
+      res.render('index', { urls: idArray });
     })
     .catch(err => {
       console.error(err.stack);
