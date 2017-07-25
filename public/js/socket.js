@@ -20,13 +20,19 @@ socket.on("inputError", () => {
 	alert('Invalid Input!!! :(')
 })
 
+socket.on("count", (data) => {
+  increment(data);
+})
+
 function addTableData(data) {
 	$("tbody").append(
 	  $(`<tr>
 	    <td><a href=${data.urlLong}>${data.urlLong}</a></td>
 	    <td><a href=${data.urlShort}>${data.urlShort}</a></td>
-	    <td>0</td>
+	    <td class=${data.id}>${data.count}</td>
 	  </tr>`))
 }
 
-
+function increment(data) {
+  $(`.${data.id}`).text(data.count);
+}

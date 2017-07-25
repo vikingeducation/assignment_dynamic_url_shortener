@@ -26,6 +26,7 @@ function update(client) {
       keys.forEach(key => {
         lib.redisTools.getData(key)
           .then(data => {
+            console.log("fjfjf", data);
              client.emit("newId", data);
           })
       })
@@ -65,11 +66,17 @@ io.on('connection', client => {
 app.all('/:id', (req, res) => {
   const id = req.params.id.trim();
   console.log(`id: ${id}`);
-
-
   lib.redisTools.getData(id)
   .then((data) => {
-    res.redirect(data["urlLong"]);
+    data["count"] = (parseInt(data["count"]) + 1).toString();
+
+    lib.redisTools.storeData(data["id"], data)
+    .then(() => {
+      console.log(data);
+      socket.emit("count", data);
+    })
+    res.redirect(data["urlLong"])
+
   })
   .catch((err) => console.log(err))
 })
