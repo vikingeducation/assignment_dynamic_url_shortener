@@ -97,5 +97,5 @@ function onListening() {
 	debug('Listening on ' + bind);
 
 	// Check if initial key for hash exists.
-	redisWrapper.init().then(console.log);
+	//redisWrapper.init().then(console.log);
 }
