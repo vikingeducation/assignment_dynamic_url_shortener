@@ -7,14 +7,29 @@ const redisWrapper = require('../lib/redis_wrapper');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
+
+	// Fetch all urls from the database.
+	redisWrapper.getAllLinks().then(_parseLinks).then((links)=> {
+		res.render('index', {
+			title: 'Dynamic URL Shortener',
+			urls: links
+		});
+	});
+});
+
+router.get('/*', (req, res) => {
 	// Pull params out for routing.
 	let path = url.parse(req.path).pathname.slice(1);
+	console.log(path)
 	if (path.length > 0) {
-		// Fetch all urls from the database.
-		redisWrapper.getAllLinks().then(_parseLinks);
-	} else {
+		redisWrapper.loadLink(path).then((result)=>{
+			console.log(result)
+			if (result !== 'Not Found'){
+				res.redirect(result)
+			}
+		})
 	}
-});
+})
 
 function _parseLinks(urlObject) {
 	// Convert urls into array of objects.
@@ -24,11 +39,6 @@ function _parseLinks(urlObject) {
 		urls.push({
 			short: short,
 			long: long
-		});
-
-		res.render('index', {
-			title: 'Dynamic URL Shortener',
-			urls: urls
 		});
 	}
 }
