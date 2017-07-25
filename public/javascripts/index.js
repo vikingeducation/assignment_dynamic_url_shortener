@@ -10,4 +10,8 @@ $(document).ready(() => {
     var data = $("a").attr("href");
     socket.emit("newUrl", data);
   });
+
+  socket.on("urlAdded", urlData => {
+    console.log(urlData);
+  });
 });

@@ -2,6 +2,9 @@ const express = require("express");
 const app = express();
 const server = require("http").createServer(app);
 const io = require("socket.io")(server);
+const redis = require("redis");
+const redisClient = redis.createClient();
+const { handleUrl } = require("./services/handleUrl.js");
 
 app.use(
   "/socket.io",
@@ -16,8 +19,12 @@ app.get("/", (req, res) => {
 io.on("connection", client => {
   console.log("new connection!");
 
-  client.on("newUrl", data => {
-    console.log(data);
+  client.on("newUrl", url => {
+    var newUrl = handleUrl(url);
+    redisClient.get(newUrl + " originalUrl visitorCount", (err, urlData) => {
+      console.log(urlData);
+      io.emit("urlAdded", urlData);
+    });
   });
 });
 
