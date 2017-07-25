@@ -1,4 +1,5 @@
 <form action="/" method="POST">
 	<input id="urlToShorten" name="urlToShorten" type="text">
 	<button>Shorten URL</button>
+	  {{#each notUrl as |newUrl|}}  <a href={{notUrl.key}}> newUrl </a>{{/each}}
 </form>

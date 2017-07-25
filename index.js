@@ -10,19 +10,20 @@ var port = 4000;
 var host = "localhost";
 
 var savedURL = { test: "https://www.google.com/" };
-
+var savedURLArray = ["a", "b"];
 app.listen(port, () => {
   console.log("Serving!" + port);
 });
 
 app.use(bodyParser.urlencoded({ extended: false }));
 
-app.engine('handlebars', hbs({defaultLayout: 'main'}));
-app.set('view engine', 'handlebars');
+app.engine("handlebars", hbs({ defaultLayout: "main" }));
+app.set("view engine", "handlebars");
 
 app.get("/", (req, res) => {
   console.log(req.url);
-  res.render("index")
+  //set savedURL as the redis holding key/value
+  res.render("index", { notUrl: savedURLArray });
 });
 app.get("/key/:shortUrl", (req, res) => {
   if (savedURL[req.params.shortUrl] != undefined) {
@@ -34,8 +35,8 @@ app.get("/key/:shortUrl", (req, res) => {
 });
 
 app.post("/", (req, res) => {
-	urlShortener.shortenURL(req.body.urlToShorten, (url) => {
-		console.log(url);
-		res.redirect("/");
-	});
+  urlShortener.shortenURL(req.body.urlToShorten, url => {
+    console.log(url);
+    res.redirect("/");
+  });
 });
