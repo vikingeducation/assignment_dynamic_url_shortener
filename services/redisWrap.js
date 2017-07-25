@@ -1,13 +1,14 @@
 const redis = require("redis");
 const redisClient = redis.createClient();
+var io = require("../app.js");
 
 /* TESTING */
 
 //make a new hash
 //client.hmset(hash, obj[, callback]) other signature
-function makeHash(hash_name, obj) {
+function makeHash(hashName, obj) {
   var p = new Promise(resolve => {
-    redisClient.hmset(hash_name, obj, (err, data) => {
+    redisClient.hmset(hashName, obj, (err, data) => {
       resolve(data);
     });
   });
@@ -15,9 +16,9 @@ function makeHash(hash_name, obj) {
 }
 
 //read an entire  hash
-function readHash(hash_name) {
+function readHash(hashName) {
   var p = new Promise(resolve => {
-    redisClient.hgetall(hash_name, (err, data) => {
+    redisClient.hgetall(hashName, (err, data) => {
       //console.log(data);
       resolve(data);
     });
@@ -25,10 +26,9 @@ function readHash(hash_name) {
   return p;
 }
 //increment a value in a hash
-function incrHash(hash_name, key, amount) {
+function incrHash(hashName, key, amount) {
   var p = new Promise(resolve => {
-    redisClient.hincrby(hash_name, key, amount, (err, data) => {
-      console.log(`increment data ${data}`);
+    redisClient.hincrby(hashName, key, amount, (err, data) => {
       resolve(data);
     });
   });

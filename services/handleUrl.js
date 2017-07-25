@@ -2,23 +2,8 @@ const chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 
 //make a tiny url for a given normal url
 function handleUrl(url) {
-  return new Promise(resolve => {
-    const newUrl = "teenyUrl/" + getRandomString();
-    writeRedis(newUrl, url).then(() => {
-      resolve(newUrl);
-    });
-  });
-}
-
-function writeRedis(newUrl, url) {
-  return new Promise(resolve => {
-    redisClient.hmset(newUrl, {
-      newUrl: newUrl,
-      originalUrl: url,
-      visitorCount: 0
-    });
-    resolve();
-  });
+  const newUrl = "http://107d8cd0.ngrok.io/t/" + getRandomString();
+  return newUrl;
 }
 
 //helper function
