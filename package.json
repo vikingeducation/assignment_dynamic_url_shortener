@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/IDHalverson/assignment_dynamic_url_shortener#readme",
   "dependencies": {
+    "express": "^4.15.3",
     "redis": "^2.7.1",
     "socket.io-client": "^2.0.3"
   }

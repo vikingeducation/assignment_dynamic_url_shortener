@@ -7,6 +7,11 @@ const redisClient = redis.createClient();
 const { handleUrl } = require("./services/handleUrl.js");
 const { makeHash, readHash, incrHash } = require("./services/redisWrap.js");
 
+//Eric's ngrok
+const host = "http://86cabba8.ngrok.io/t/";
+//Ian's ngrok
+//const host = "http://107d8cd0.ngrok.io/t/"
+
 app.use(
   "/socket.io",
   express.static(__dirname + "node_modules/socket.io-client/dist/")
@@ -18,10 +23,10 @@ app.get("/", (req, res) => {
 });
 
 app.get("/t/:shortUrl", (req, res) => {
-  var url = "http://107d8cd0.ngrok.io/t/" + req.params.shortUrl;
-  readHash(url).then(urlData => {
-    incrHash(url, "clicks", 1).then(clicks => {
-      io.emit("clicks", clicks);
+  var url = host + req.params.shortUrl;
+  incrHash(url, "clicks", 1).then(() => {
+    readHash(url).then(urlData => {
+      io.emit("clicks", urlData);
       res.redirect(urlData.originalUrl);
     });
   });
@@ -39,7 +44,10 @@ io.on("connection", client => {
       clicks: 0
     });
     //read the database , cause why not
-    readHash(newUrl).then(data => {});
+    readHash(newUrl).then(data => {
+      //console.log(`original URL ? ${data}`);
+      io.emit("urlAdded", data);
+    });
   });
 });
 
