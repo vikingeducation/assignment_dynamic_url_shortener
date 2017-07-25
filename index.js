@@ -33,7 +33,7 @@ app.get('/', (req, res) => {
 // client.on("incr", (count) => {
 //
 // })
-
+let baseUrl = process.env.BASE_URL || "http://localhost:3000";
 
 io.on('connection', client => {
 	client.on('event', (err, data) => {
@@ -41,13 +41,18 @@ io.on('connection', client => {
 	})
 
   client.on("url", (url) => {
-    let { name } = url;
+
     let id = lib.shortener.linkShortener();
+    let { name } = url;
+    let objStorage = [
+      id,
+      name,
+      `${baseUrl}/${id}`,
+      0
+    ]
 
     if (validUrl.isUri(name)) {
-      name = JSON.stringify(name)
-      console.log("url is valid")
-      lib.redisTools.storeData(id, name);
+      lib.redisTools.storeData(objStorage);
 
       lib.redisTools.getData(id);
     } else {
