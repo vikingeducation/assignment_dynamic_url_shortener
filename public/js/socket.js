@@ -10,16 +10,23 @@ $(".submission").on("click", ".makeUrl", (e) => {
   e.preventDefault();
   const url = $(".urlSpecial").val();
   socket.emit("url", { name: url });
-  alert('Link submitted!')
 })
 
 socket.on("newId", (data) => {
-
+	addTableData(data);
 })
 
-$("tbody").append(
-  $(`<tr>
-    <td><a href=${data.urlLong}>${data.urlLong}</a></td>
-    <td><a href=${data.urlLong}>${data.urlShort}</a></td>
-    <td>0</td>
-  </tr>`))
+socket.on("inputError", () => {
+	alert('Invalid Input!!! :(')
+})
+
+function addTableData(data) {
+	$("tbody").append(
+	  $(`<tr>
+	    <td><a href=${data.urlLong}>${data.urlLong}</a></td>
+	    <td><a href=${data.urlShort}>${data.urlShort}</a></td>
+	    <td>0</td>
+	  </tr>`))
+}
+
+

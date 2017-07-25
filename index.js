@@ -8,8 +8,6 @@ const hbs = require("express-handlebars");
 const bodyParser = require("body-parser");
 const validUrl = require("valid-url");
 
-
-
 app.engine("handlebars", hbs({ defaultLayout: "main" }));
 app.set("view engine", "handlebars");
 
@@ -22,12 +20,22 @@ app.get('/', (req, res) => {
   res.render("index");
 })
 
+function update(client) {
+  lib.redisTools.getAllKeys()
+    .then(keys => {
+      keys.forEach(key => {
+        lib.redisTools.getData(key)
+          .then(data => {
+             client.emit("newId", data);
+          })
+      })
+    })
+}
+
 let baseUrl = process.env.BASE_URL || "http://localhost:3000";
 
 io.on('connection', client => {
-	client.on('event', (err, data) => {
-		console.log('we heard the event')
-	})
+	update(client);
 
   client.on("url", (url) => {
 
@@ -49,7 +57,7 @@ io.on('connection', client => {
         })
 
     } else {
-      console.error("error")
+      client.emit("inputError");
     }
   })
 })
@@ -57,6 +65,8 @@ io.on('connection', client => {
 app.all('/:id', (req, res) => {
   const id = req.params.id.trim();
   console.log(`id: ${id}`);
+
+
   lib.redisTools.getData(id)
   .then((data) => {
     res.redirect(data["urlLong"]);
