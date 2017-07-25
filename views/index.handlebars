@@ -1,7 +1,11 @@
 {{>form}}
+  {{#each urls as |url|}}
 
-<ul>
-  <li>
-    
-  </li>
-</ul>
+    <div class="panel panel-primary">
+      <div class="panel-heading">{{url.short}}</div>
+      <div class="panel-body">
+        {{url.long}}
+      </div>
+    </div>
+
+  {{/each}}

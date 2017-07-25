@@ -8,6 +8,8 @@ var app = require('../app');
 var debug = require('debug')('assignment-dynamic-url-shortener:server');
 var http = require('http');
 
+const redisWrapper = require('../lib/redis_wrapper');
+
 /**
  * Get port from environment and store in Express.
  */
@@ -23,11 +25,16 @@ var server = http.createServer(app);
 
 const io = require('socket.io')(server);
 
-const shorten = require('../lib/link_shortener');
-const redisWrapper = require('../lib/redis_wrapper');
-
 /**
- * Listen on provided port, on all network interfaces.
+ * Listen on prosole.error(bind + ' is already in use');
+			process.exit(1);
+			break;
+		default:
+			throw error;
+	}
+}
+ided port, on all net
+ work interfaces.
  */
 
 server.listen(port);
@@ -88,4 +95,7 @@ function onListening() {
 	var addr = server.address();
 	var bind = typeof addr === 'string' ? 'pipe ' + addr : 'port ' + addr.port;
 	debug('Listening on ' + bind);
+
+	// Check if initial key for hash exists.
+	redisWrapper.init().then(console.log);
 }
