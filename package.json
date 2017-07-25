@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/thebopshoobop/assignment_dynamic_url_shortener/issues"
   },
-  "homepage": "https://github.com/thebopshoobop/assignment_dynamic_url_shortener#readme"
+  "homepage": "https://github.com/thebopshoobop/assignment_dynamic_url_shortener#readme",
+  "dependencies": {
+    "shortid": "^2.2.8"
+  }
 }
