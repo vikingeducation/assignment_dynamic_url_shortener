@@ -25,6 +25,7 @@ function readHash(hashName) {
   });
   return p;
 }
+
 //increment a value in a hash
 function incrHash(hashName, key, amount) {
   var p = new Promise(resolve => {
