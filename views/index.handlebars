@@ -1,19 +1,17 @@
-<section class='col-md-6'>
-  <form method='post' action='/'>
-    <section class='form-group'>
-      <label name='url'>
+<section class="col-md-6">
+  <form>
+    <section class="form-group">
+      <label name="url">
         Shorten a link!
       </label>
-
-
-        <input type='url' name='url' placeholder='Your url here'>
+      <input id="url" type="url" name="url" value="http://">
     </section>
-    <button type='submit' name='submit'>Shorten</button>
+    <button id="url-button" name="submit">Shorten</button>
   </form>
 </section>
 
-<section class='col-md-6'>
-  <table class='table table-striped'>
+<section class="col-md-6">
+  <table class="table table-striped">
     <thead>
       <tr>
         <th> Shortened URL </th>
@@ -23,17 +21,17 @@
     </thead>
     <tbody>
       {{#each urls as |url|}}
-        <tr>
-          <td>
-            <a href="{{url.url}}">{{url.url}}</a>
-          </td>
-          <td>
-            <a href="{{url.originalUrl}}">{{url.originalUrl}}</a>
-          </td>
-          <td>
-            {{url.count}}
-          </td>
-        </tr>
+      <tr id="{{url.id}}">
+        <td>
+          <a href="{{url.url}}">{{url.url}}</a>
+        </td>
+        <td>
+          <a href="{{url.originalUrl}}">{{url.originalUrl}}</a>
+        </td>
+        <td class="count">
+          {{url.count}}
+        </td>
+      </tr>
       {{/each}}
     </tbody>
   </table>
