@@ -1,0 +1,38 @@
+<section class="col-md-6">
+  <form>
+    <section class="form-group">
+      <label name="url">
+        Shorten a link!
+      </label>
+      <input id="url" type="url" name="url" value="http://">
+    </section>
+    <button id="url-button" name="submit">Shorten</button>
+  </form>
+</section>
+
+<section class="col-md-6">
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th> Shortened URL </th>
+        <th> Original URL </th>
+        <th> Click Count </th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each urls as |url|}}
+      <tr id="{{url.id}}">
+        <td>
+          <a href="{{url.url}}">{{url.url}}</a>
+        </td>
+        <td>
+          <a href="{{url.originalUrl}}">{{url.originalUrl}}</a>
+        </td>
+        <td class="count">
+          {{url.count}}
+        </td>
+      </tr>
+      {{/each}}
+    </tbody>
+  </table>
+</section>
