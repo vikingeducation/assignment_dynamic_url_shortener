@@ -1,4 +1,4 @@
-const router = require('./routes');
+const router = require('./lib/controllers/routes');
 const env = require('./env');
 const bodyParser = require('body-parser');
 
@@ -8,7 +8,7 @@ const exphbs = require('express-handlebars');
 let app = express();
 const server = require('http').createServer(app);
 
-let socket = require('./socket')(server);
+let socket = require('./lib/controllers/socket')(server);
 
 app.engine('handlebars', exphbs({ defaultLayout: 'main' }));
 app.set('view engine', 'handlebars');
