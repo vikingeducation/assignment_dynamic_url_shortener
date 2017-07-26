@@ -32,6 +32,7 @@ function update(client) {
 let baseUrl = process.env.BASE_URL || "http://localhost:3000";
 
 io.on('connection', client => {
+  _client = client;
   update(client);
 
   client.on("url", (url) => {
@@ -45,7 +46,7 @@ io.on('connection', client => {
       urlShort: `${baseUrl}/${id}`,
       count: 0
     }
-    
+
     if (validUrl.isUri(name)) {
       lib.redisTools.storeData(id, objStorage).then(() => lib.redisTools.getData(id)).then((data) => {
         client.emit("newId", data);
@@ -55,21 +56,22 @@ io.on('connection', client => {
       client.emit("inputError");
     }
   })
+})
 
-  app.all('/:id', (req, res) => {
-    const id = req.params.id.trim();
-    lib.redisTools.getData(id)
-    .then((data) => {
-      data["count"] = (parseInt(data["count"]) + 1).toString();
-      lib.redisTools.storeData(data["id"], data)
-    .then(() => lib.redisTools.getData(id))
-    .then((data) => {
-      console.log(data);
-      client.emit("count", data);
-      res.redirect(data["urlLong"])
-      })
-    }).catch((err) => console.log(err))
-  })
+
+app.all('/:id', (req, res) => {
+  const id = req.params.id.trim();
+  lib.redisTools.getData(id)
+  .then((data) => {
+    data["count"] = (parseInt(data["count"]) + 1).toString();
+    lib.redisTools.storeData(data["id"], data)
+  .then(() => lib.redisTools.getData(id))
+  .then((data) => {
+    console.log(data);
+    io.emit("count", data);
+    res.redirect(data["urlLong"])
+    })
+  }).catch((err) => console.log(err))
 })
 
 server.listen(3000);
