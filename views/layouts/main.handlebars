@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Shorter URLS</title>
+
+  <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+  <script src="/socket.io/socket.io.js"></script>
+</head>
+<body>
+  <h1>Shorten your URL here ↓ (no http:// required)</h1>
+  <form action="/newUrl" method="get">
+    <input type="text" name="enteredUrl" size="60" placeholder="Your original URL here please">
+    <input type="submit" value="Submit">
+  </form>
+
+{{{body}}}
+
+</body>
+
+<script>
+$(document).ready(function() {
+   var socket = io.connect('http://localhost:3000');
+
+   $('a').click (function(event) {
+     var classOfTarget = $(event.target).attr('class');
+     var countTarget = "td." + classOfTarget;
+     countTarget = $(countTarget).html()
+
+     socket.emit('newClick', {classOfTarget, countTarget});
+   })
+   socket.on('newCount', function(data){
+     var newCount = Number(data.data.countTarget) + 1;
+     newCount = newCount.toString();
+     const countTarget = "td." + data.data.classOfTarget;
+     $(countTarget).text(newCount);
+   })
+})
+
+</script>
+</html>
