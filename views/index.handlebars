@@ -7,8 +7,8 @@
 {{#each fullSiteList as |fullSite|}}
   <tr style="border: 1px black solid">
     <td>{{fullSite}} |</td>
-    <td><a href="{{lookup ../shortSiteList @index}}">localhost:3000{{lookup ../shortSiteList @index}}</a> |</td>
-    <td>{{lookup ../clickSiteList @index}}</td>
+    <td><a class="{{lookup ../shortSiteList @index}}" href="/sUrl/{{lookup ../shortSiteList @index}}">localhost:3000/sUrl/{{lookup ../shortSiteList @index}}</a> |</td>
+    <td class="{{lookup ../shortSiteList @index}}">{{lookup ../clickSiteList @index}}</td>
   </tr>
 {{/each}}
 </table>

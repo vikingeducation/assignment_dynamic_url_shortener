@@ -21,5 +21,23 @@
 </body>
 
 <script>
+$(document).ready(function() {
+   var socket = io.connect('http://localhost:3000');
+
+   $('a').click (function(event) {
+     var classOfTarget = $(event.target).attr('class');
+     var countTarget = "td." + classOfTarget;
+     countTarget = $(countTarget).html()
+
+     socket.emit('newClick', {classOfTarget, countTarget});
+   })
+   socket.on('newCount', function(data){
+     var newCount = Number(data.data.countTarget) + 1;
+     newCount = newCount.toString();
+     const countTarget = "td." + data.data.classOfTarget;
+     $(countTarget).text(newCount);
+   })
+})
+
 </script>
 </html>
