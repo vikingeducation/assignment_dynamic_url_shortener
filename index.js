@@ -58,7 +58,9 @@ function update(client) {
   });
 }
 
-let baseUrl = process.env.BASE_URL || "http://localhost:3000";
+// const baseUrl = process.env.BASE_URL || "http://localhost:3000";
+const baseUrl = "https://dynamic-url-shortener.herokuapp.com";
+app.set("port", process.env.PORT || 3000);
 
 // Updating number of times a short URL was visited
 app.all("/:id", (req, res) => {
@@ -80,4 +82,6 @@ app.all("/:id", (req, res) => {
     .catch(err => console.log(err));
 });
 
-server.listen(3000);
+server.listen(app.get("port"), () =>
+  console.log("App listening on port", app.get("port"))
+);

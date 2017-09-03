@@ -1,5 +1,5 @@
 {
-  "name": "assignment_dynamic_url_shortener",
+  "name": "dynamic_url_shortener",
   "version": "1.0.0",
   "description": "Build a URL shortening service, outfitted with realtime analytics.",
   "main": "index.js",
