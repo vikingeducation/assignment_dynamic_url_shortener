@@ -58,14 +58,15 @@ function update(client) {
   });
 }
 
-// const baseUrl = process.env.BASE_URL || "http://localhost:3000";
-const baseUrl = "https://dynamic-url-shortener.herokuapp.com";
 app.set("port", process.env.PORT || 3000);
+const baseURL =
+  app.get("port") === 3000
+    ? "http://localhost:3000"
+    : "https://dynamic-url-shortener.herokuapp.com";
 
 // Updating number of times a short URL was visited
 app.all("/:id", (req, res) => {
   const id = req.params.id.trim();
-  console.log(id);
   lib.redisTools
     .getData(id)
     .then(data => {
@@ -74,7 +75,6 @@ app.all("/:id", (req, res) => {
         .storeData(data["id"], data)
         .then(() => lib.redisTools.getData(id))
         .then(data => {
-          console.log(data);
           io.emit("count", data);
           res.redirect(data["urlLong"]);
         });
