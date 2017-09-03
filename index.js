@@ -3,7 +3,6 @@ const express = require("express");
 const app = express();
 const server = require("http").createServer(app);
 const io = require("socket.io")(server);
-const redisClient = require("redis").createClient();
 const hbs = require("express-handlebars");
 const bodyParser = require("body-parser");
 const validUrl = require("valid-url");
