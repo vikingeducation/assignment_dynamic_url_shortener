@@ -1,0 +1,12 @@
+{{>form}}
+<div id="row-container">
+  {{#each urls as |url|}}
+    <a id="{{url.short}}" data-long="{{url.long}}" href="{{url.short}}">
+      {{>row url=url}}
+    </a>
+  {{/each}}
+</div>
+
+<a id="template" class="hidden">
+  {{>row}}
+</a>
