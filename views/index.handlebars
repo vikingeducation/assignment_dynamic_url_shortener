@@ -1,0 +1,26 @@
+<form id="parentForm">
+	<input id="urlToShorten" name="urlToShorten" type="text">
+	<button>Shorten URL</button>
+</form>
+
+<div id="counter">
+	{{#each urls as |url|}}
+		<div>
+			<a href="/key/{{url.key}}">{{url.key}}</a>
+			<p id="{{url.key}}"class="counter">{{url.count}}</p>
+		</div>
+	{{/each}}
+</div>
+<script>
+var socket = io.connect("http://localhost:4000");
+
+$("#parentForm").on("submit",function(e){
+	e.preventDefault();
+	socket.emit("newURL",$("#urlToShorten").val());
+});
+
+$("").on("updateURL", function() {
+	
+});
+
+</script>
