@@ -1,7 +1,12 @@
 var redis = require("redis");
 var client = redis.createClient();
 
-const shortener = {};
+client.on("connect", function() {
+	console.log("connected to redis");
+});
+
+//wrapper
+var shortener = {};
 
 function makeId() {
 	var text = "";
@@ -14,13 +19,12 @@ function makeId() {
 	return text;
 }
 
-//store shortend url //shorten a url
+//store shortend url
 shortener.shorten = function(url) {
 	var id = makeId();
 
-	client.hmset("urls", {
+	client.hmset(id, {
 		url: url,
-		id: id,
 		clicks: 0
 	});
 
@@ -28,14 +32,25 @@ shortener.shorten = function(url) {
 };
 
 //get the stored info
-shortener.queryForUrls = function() {
-	var allUrlData = new Promise((resolve, reject) => {
-		client.hgetall("urls", (err, reply) => {
+shortener.queryForUrls = function(id) {
+	return new Promise((resolve, reject) => {
+		client.hgetall(id, (err, reply) => {
 			if (err) reject(err);
+			resolve(reply);
+		});
+	});
+};
 
+//ANOTHER FUNCTION TO GET ALL KEYS (IDS)
+shortener.getAllKeys = function() {
+	return new Promise((resolve, reject) => {
+		client.keys("*", (err, reply) => {
+			if (err) reject(err);
 			resolve(reply);
 		});
 	});
 };
 
 //iteratecount
+
+module.exports = shortener;
