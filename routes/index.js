@@ -2,13 +2,12 @@ var express = require("express");
 var router = express.Router();
 var shortener = require("../modules/url-shortener.js");
 
-var allUrlDataArr = [];
-
 /* GET home page. */
 router.get("/", function(req, res, next) {
 	shortener
 		.getAllKeys()
 		.then(keys => {
+			var allUrlDataArr = [];
 			keys.forEach(function(element) {
 				shortener
 					.queryForUrls(element)
@@ -28,10 +27,10 @@ router.get("/", function(req, res, next) {
 			});
 			return allUrlDataArr;
 		})
-		.then(thatData => {
+		.then(urlArr => {
 			setTimeout(function() {
-				console.log("allUrlDataArr over here", thatData);
-				res.render("index", { title: thatData });
+				console.log("allUrlDataArr over here", urlArr);
+				res.render("index", { urlArr });
 			}, 500);
 		})
 		.catch(err => {
@@ -45,10 +44,14 @@ router.post("/", (req, res) => {
 	res.redirect("back");
 });
 
-router.get("/:id", (req, res) => {
-	//parse the body id
-	//iterate the count and
-	//res.redirect(url)
+router.get("/id/:id", (req, res) => {
+	//iterate the count
+	var urlId = req.params.id;
+	var url;
+	shortener.queryForUrls(urlId).then(arr => {
+		url = arr.url;
+		res.redirect(`http://${url}`);
+	});
 });
 
 module.exports = router;

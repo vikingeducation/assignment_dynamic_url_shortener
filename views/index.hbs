@@ -1,2 +1,23 @@
-<h1>{{title}}</h1>
-<p>Welcome to {{title}}</p>
+
+<h1>Welcome to Greg's url-shortener</h1>
+
+<form action="/" method="post">
+  <label for="url">Shoten a URL</label><br>
+  <input type="url" name="url" placeholder="www.website.com"><br>
+  <input type="submit" name="submit" value="Submit">
+</form>
+
+<table style="width:65%">
+  <tr>
+    <th>Short URL</th>
+    <th>Clicks</th>
+    <th>URL</th>
+  </tr>
+  {{#each urlArr as |data|}}
+    <tr>
+      <td><a href="/id/{{data.key}}">localhotst:3000/{{data.key}}</a></td>
+      <td>{{data.clicks}}</td>
+      <td><a href="http://{{data.url}}">{{data.url}}</a></td>
+    </tr>
+  {{/each}}
+</table>
