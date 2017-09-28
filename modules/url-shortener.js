@@ -35,7 +35,9 @@ shortener.shorten = function(url) {
 shortener.queryForUrls = function(id) {
 	return new Promise((resolve, reject) => {
 		client.hgetall(id, (err, reply) => {
-			if (err) reject(err);
+			if (err) {
+				reject(err);
+			}
 			resolve(reply);
 		});
 	});
@@ -45,7 +47,9 @@ shortener.queryForUrls = function(id) {
 shortener.getAllKeys = function() {
 	return new Promise((resolve, reject) => {
 		client.keys("*", (err, reply) => {
-			if (err) reject(err);
+			if (err) {
+				reject(err);
+			}
 			resolve(reply);
 		});
 	});

@@ -40,12 +40,13 @@ router.get("/", function(req, res, next) {
 
 router.post("/", (req, res) => {
 	//shorten url
+	shortener.shorten(req.body.url);
 	//store in redis
 	res.redirect("back");
 });
 
 router.get("/id/:id", (req, res) => {
-	//iterate the count
+	//iterate the count(to do)
 	var urlId = req.params.id;
 	var url;
 	shortener.queryForUrls(urlId).then(arr => {
