@@ -55,6 +55,7 @@ shortener.getAllKeys = function() {
 	});
 };
 
+//runs everrytime GET '/'
 shortener.buildObjforRender = function() {
 	return new Promise((resolve, reject) => {
 		var allUrlDataArr = [];
@@ -91,43 +92,9 @@ shortener.buildObjforRender = function() {
 	});
 };
 
-//runs everrytime GET '/'
-
-/*
-shortener.buildObjforRender = function() {
-	return new Promise((resolve, reject) => {
-		var allUrlDataArr = [];
-		shortener
-			.getAllKeys()
-			.then(keys => {
-				keys.forEach(function(key) {
-					shortener
-						.queryForUrls(key)
-						.then(hashObj => {
-							var objBuilder = {
-								key: key,
-								url: hashObj.url,
-								clicks: hashObj.clicks
-							};
-							console.log("obj", objBuilder);
-							allUrlDataArr.push(objBuilder);
-						})
-						.catch(err => {
-							if (err) {
-								console.error(err);
-							}
-						});
-				});
-				resolve(allUrlDataArr);
-			})
-			.catch(err => {
-				if (err) {
-					console.error(err);
-				}
-			});
-	});
-};*/
-
 //iteratecount
+shortener.iterateCount = function(id) {
+	client.hincrby(id, "clicks", 1);
+};
 
 module.exports = shortener;

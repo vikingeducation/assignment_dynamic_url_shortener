@@ -32,6 +32,7 @@ router.get("/id/:id", (req, res) => {
 	//iterate the count(to do)
 	var urlId = req.params.id;
 	var url;
+	shortener.iterateCount(urlId);
 	shortener.queryForUrls(urlId).then(arr => {
 		url = arr.url;
 		res.redirect(`http://${url}`);
