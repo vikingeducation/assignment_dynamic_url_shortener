@@ -21,15 +21,12 @@ router.get("/", function(req, res, next) {
 
 //POST a new shortend url
 router.post("/", (req, res) => {
-	//shorten url
 	shortener.shorten(req.body.url);
-	//store in redis
 	res.redirect("back");
 });
 
 //when you click url link
 router.get("/id/:id", (req, res) => {
-	//iterate the count(to do)
 	var urlId = req.params.id;
 	var url;
 	shortener.iterateCount(urlId);

@@ -9,11 +9,11 @@ var users = require("./routes/users");
 var app = express();
 var server = http.createServer(app);
 
-//const io = require("socket.io")(server);
-//app.use(
-//	"/socket.io",
-//	express.static(__dirname + "node_modules/socket.io-client/dist/")
-//);
+const io = require("socket.io")(server);
+app.use(
+	"/socket.io",
+	express.static(__dirname + "node_modules/socket.io-client/dist/")
+);
 
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
