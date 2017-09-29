@@ -17,7 +17,7 @@ router.get("/", function(req, res, next) {
 							url: data.url,
 							clicks: data.clicks
 						};
-						//console.log("obj", obj);
+						console.log("obj", obj);
 						allUrlDataArr.push(obj);
 						return allUrlDataArr;
 					})
@@ -28,6 +28,8 @@ router.get("/", function(req, res, next) {
 			return allUrlDataArr;
 		})
 		.then(urlArr => {
+			console.log("allUrlDataArr not timeout", urlArr);
+
 			setTimeout(function() {
 				console.log("allUrlDataArr over here", urlArr);
 				res.render("index", { urlArr });
@@ -36,6 +38,15 @@ router.get("/", function(req, res, next) {
 		.catch(err => {
 			console.error(err);
 		});
+	/*
+		.then(urlArr => {
+			console.log("allUrlDataArr not timeout", urlArr);
+
+			setTimeout(function() {
+				console.log("allUrlDataArr over here", urlArr);
+				res.render("index", { urlArr });
+			}, 500);
+		})*/
 });
 
 router.post("/", (req, res) => {
