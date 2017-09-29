@@ -7,12 +7,7 @@ router.get("/", function(req, res, next) {
 	shortener
 		.buildObjforRender()
 		.then(urlArr => {
-			console.log("allUrlDataArr not timeout", urlArr);
-
-			setTimeout(function() {
-				console.log("allUrlDataArr over here", urlArr);
-				res.render("index", { urlArr });
-			}, 500);
+			res.render("index", { urlArr });
 		})
 		.catch(err => {
 			console.error(err);

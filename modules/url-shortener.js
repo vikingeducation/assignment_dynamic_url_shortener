@@ -63,9 +63,6 @@ shortener.buildObjforRender = function() {
 			.getAllKeys()
 			.then(keys => {
 				keys.forEach(function(key) {
-					if (keys.length >= allUrlDataArr.length) {
-						resolve(allUrlDataArr);
-					}
 					shortener
 						.queryForUrls(key)
 						.then(hashObj => {
@@ -76,6 +73,9 @@ shortener.buildObjforRender = function() {
 							};
 							console.log("obj", objBuilder);
 							allUrlDataArr.push(objBuilder);
+							if (keys.length >= allUrlDataArr.length) {
+								resolve(allUrlDataArr);
+							}
 						})
 						.catch(err => {
 							if (err) {
