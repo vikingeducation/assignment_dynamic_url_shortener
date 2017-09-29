@@ -5,28 +5,7 @@ var shortener = require("../modules/url-shortener.js");
 /* GET home page. */
 router.get("/", function(req, res, next) {
 	shortener
-		.getAllKeys()
-		.then(keys => {
-			var allUrlDataArr = [];
-			keys.forEach(function(element) {
-				shortener
-					.queryForUrls(element)
-					.then(data => {
-						var obj = {
-							key: element,
-							url: data.url,
-							clicks: data.clicks
-						};
-						console.log("obj", obj);
-						allUrlDataArr.push(obj);
-						return allUrlDataArr;
-					})
-					.catch(err => {
-						console.error(err);
-					});
-			});
-			return allUrlDataArr;
-		})
+		.buildObjforRender()
 		.then(urlArr => {
 			console.log("allUrlDataArr not timeout", urlArr);
 
@@ -38,17 +17,9 @@ router.get("/", function(req, res, next) {
 		.catch(err => {
 			console.error(err);
 		});
-	/*
-		.then(urlArr => {
-			console.log("allUrlDataArr not timeout", urlArr);
-
-			setTimeout(function() {
-				console.log("allUrlDataArr over here", urlArr);
-				res.render("index", { urlArr });
-			}, 500);
-		})*/
 });
 
+//POST a new shortend url
 router.post("/", (req, res) => {
 	//shorten url
 	shortener.shorten(req.body.url);
@@ -56,6 +27,7 @@ router.post("/", (req, res) => {
 	res.redirect("back");
 });
 
+//when you click url link
 router.get("/id/:id", (req, res) => {
 	//iterate the count(to do)
 	var urlId = req.params.id;
