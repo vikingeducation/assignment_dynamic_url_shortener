@@ -1,7 +1,7 @@
 <section id="head-form" class="clearfix">
   <h1>URL Shortener</h1>
   <div class="col-sm-12" id="form-container">
-    <form>
+    <form action="/" method="POST">
       <div class="form-group col-sm-6">
         <input type="text" name="url" class="form-control" id="url-input" placeholder="You original URL here">
       </div>
@@ -11,6 +11,7 @@
     </form>
   </div>
 </section>
+
 <section id="url-table" class="col-sm-10 col-sm-offset-1">
   <table class="table">
     <thead class="thead-default">
@@ -21,35 +22,24 @@
       </tr>
     </thead>
     <tbody>
-      <tr>
-        <td>
-          <a href="github.com">github.com</a>
-        </td>
-        <td>
-          <a href="/rAc8Q5C9">/rAc8Q5C9</a>
-        </td>
-        <td>75</td>
-      </tr>
-      <tr>
-        <td>
-          <a href="myclickshift.com/login">myclickshift.com/login</a>
-        </td>
-        <td>
-          <a href="/XfSJouU2">/XfSJouU2</a>
-        </td>
-        <td>5</td>
-      </tr>
-      <tr>
-        <td>
-          <a href="github.com/asaloff/assignment_dynamic_url_shortener">github.com/asaloff/assignment_dynamic_url_shortener</a>
-        </td>
-        <td>
-        <a href="/LFfZZYje">
-          /LFfZZYje
-        </a>
-      </td>
-        <td>62</td>
-      </tr>
+      {{#if noLinks}}
+        <tr class="text-center">
+          <td colspan="3"><b>No shortened links yet. Please use the form at the top of the page.</b></td>
+        </tr>
+      {{else}}
+        {{#each allLinks as |link|}}
+          <tr>
+            <td>
+              <a href={{link.long}}>{{link.long}}</a>
+            </td>
+            <td>
+              <a href={{formatShort @key}}>{{formatShort @key}}</a>
+            </td>
+            <td>{{link.clicks}}</td>
+          </tr>
+        {{/each}}
+      {{/if}}
     </tbody>
   </table>
 </section>
+

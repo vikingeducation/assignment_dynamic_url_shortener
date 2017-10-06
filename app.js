@@ -6,6 +6,7 @@ const morganToolkit = require('morgan-toolkit')(logger);
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const exphbs = require('express-handlebars');
+const helpers = require('./helpers');
 
 const index = require('./routes/index');
 const users = require('./routes/users');
@@ -14,6 +15,7 @@ const app = express();
 
 // view engine setup
 const hbs = exphbs.create({
+  helpers: helpers,
   defaultLayout: 'main.hbs',
   extname: '.hbs'
 });
