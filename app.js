@@ -7,6 +7,10 @@ const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const exphbs = require('express-handlebars');
 const helpers = require('./helpers');
+const cookieSession = require('cookie-session');
+const flash = require('express-flash-messages');
+const randomstring = require('randomstring');
+
 
 const index = require('./routes/index');
 const users = require('./routes/users');
@@ -17,6 +21,7 @@ const app = express();
 const hbs = exphbs.create({
   helpers: helpers,
   defaultLayout: 'main.hbs',
+  partialsDir: 'views/partials/',
   extname: '.hbs'
 });
 
@@ -29,6 +34,12 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(logger('short'));
 app.use(morganToolkit());
+app.use(flash());
+
+app.use(cookieSession({
+  name: 'session',
+  keys: [randomstring.generate()]
+}));
 
 app.use('/', index);
 app.use('/users', users);

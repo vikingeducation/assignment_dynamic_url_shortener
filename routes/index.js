@@ -26,14 +26,37 @@ router.get('/', (req, res, next) => {
 });
 
 router.get('/:shortLink', (req, res) => {
-  // redirect to long link location
+  var shortLink = 'short:' + req.url.slice(1);
+
+  client.hgetall(shortLink, (err, props) => {
+    if (props) {
+      // increment click count
+      client.hmset(shortLink, 'clicks', parseInt(props.clicks) + 1);
+
+      // redirect to long link location
+      res.redirect(props.long);
+    } else {
+      req.flash('error', 'The short link you tried to access does not exist.');
+      res.redirect('/');
+    }
+  });
 });
 
 router.post('/', (req, res) => {
+  var link = req.body.url;
 
-  // create short url
+  // validate link
+  let urlRegex = /^[\w:\/\.]+\.[a-zA-z]{2,3}$/g;
+  var validLink = urlRegex.test(link);
 
-  res.redirect('/');
+  if (validLink) {
+    // create short url
+    shortenLink(link);
+    res.redirect('/');
+  } else {
+    req.flash('error', 'Invalid link. Please try again.');
+    res.redirect('/');
+  }
 });
 
 module.exports = router;
