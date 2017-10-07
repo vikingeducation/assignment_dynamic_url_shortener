@@ -1,8 +1,7 @@
 var ViewHelper = {};
 
-ViewHelper.formatShort = (string) => {
-  string = string.slice(6);
-  return string;
+ViewHelper.formatLong = (link) => {
+  return link.slice(7);
 };
 
 module.exports = ViewHelper;

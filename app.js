@@ -1,4 +1,5 @@
 const express = require('express');
+const app = express();
 const path = require('path');
 const favicon = require('serve-favicon');
 const logger = require('morgan');
@@ -13,9 +14,6 @@ const randomstring = require('randomstring');
 
 
 const index = require('./routes/index');
-const users = require('./routes/users');
-
-const app = express();
 
 // view engine setup
 const hbs = exphbs.create({
@@ -27,11 +25,13 @@ const hbs = exphbs.create({
 
 app.engine('hbs', hbs.engine);
 app.set('view engine', 'hbs');
+app.set('Handlebars', hbs);
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use('/socket.io',express.static(path.join(__dirname, 'node_modules/socket.io-client/dist/')));
 app.use(logger('short'));
 app.use(morganToolkit());
 app.use(flash());
@@ -42,7 +42,6 @@ app.use(cookieSession({
 }));
 
 app.use('/', index);
-app.use('/users', users);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
