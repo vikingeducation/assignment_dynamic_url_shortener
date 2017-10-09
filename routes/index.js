@@ -51,6 +51,7 @@ router.get('/:shortLink', (req, res) => {
           } else {
             if (key == keys[keys.length - 1] && !found) {
               req.flash('error', 'The short link you tried to access does not exist.');
+              res.redirect('/');
             }
           }
         });

@@ -16,7 +16,6 @@ $(document).ready(() => {
       socket.emit('shortenLink', link);
     } else {
       // submit for error flash
-      // $('#shorten-link-form').submit();
       $('#link-input').val('');
       addFlashError('Invalid link. Please try again.');
     }
@@ -31,6 +30,7 @@ $(document).ready(() => {
 
     // append html to table
     $('#link-table').append(partial);
+    $('.alert').remove();
   });
 
   socket.on('increment-clicks', (id) => {
@@ -45,9 +45,9 @@ $(document).ready(() => {
 });
 
 const addFlashError = error => {
+  $('.alert').remove();
   $('#flash').append('<div class="alert alert-danger alert-dismissible text-center" role="alert" style="border-radius: 0;"></div>');
-  $('.alert').append('<button type="button" class="close" data-dismiss="alert" aria-label="Close"></button');
-  $('.close').append('<span aria-hidden="true">&times;</span>');
+  $('.alert').append('<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button');
   $('.alert').append(error);
 };
 
