@@ -12,32 +12,17 @@ $(document).ready(() => {
     var validLink = urlRegex.test(link);
 
     if (validLink) {
-      if (!link.startsWith('http')) {
-        link = 'http://' + link;
-      }
-
-      socket.emit('get-existing-keys');
-      socket.on('existing-keys', (keys) => {
-        // if long link already exists
-        if (keys.indexOf('long:' + link) > -1) {
-          validLink = false;
-        }
-
-        if (validLink) {
-          // send link for shortening
-          socket.emit('shortenLink', link);
-        } else {
-          // submit for error flash
-          $('#shorten-link-form').submit();
-        }
-      });
+      // send link for shortening
+      socket.emit('shortenLink', link);
     } else {
       // submit for error flash
-      $('#shorten-link-form').submit();
+      // $('#shorten-link-form').submit();
+      $('#link-input').val('');
+      addFlashError('Invalid link. Please try again.');
     }
   });
 
-  socket.on('newLink', (html) => {
+  socket.on('newLink', (partial) => {
     // clear input field
     $('#link-input').val('');
 
@@ -45,7 +30,7 @@ $(document).ready(() => {
     $("#no-link-tr").remove();
 
     // append html to table
-    $('#link-table').append(html);
+    $('#link-table').append(partial);
   });
 
   socket.on('increment-clicks', (id) => {
@@ -53,5 +38,16 @@ $(document).ready(() => {
     var currentVal = parseInt(clickCount.text());
     clickCount.text(currentVal + 1);
   });
+
+  socket.on('error_message', error => {
+    addFlashError(error);
+  });
 });
+
+const addFlashError = error => {
+  $('#flash').append('<div class="alert alert-danger alert-dismissible text-center" role="alert" style="border-radius: 0;"></div>');
+  $('.alert').append('<button type="button" class="close" data-dismiss="alert" aria-label="Close"></button');
+  $('.close').append('<span aria-hidden="true">&times;</span>');
+  $('.alert').append(error);
+};
 

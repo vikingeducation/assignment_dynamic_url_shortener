@@ -9,7 +9,7 @@ router.get('/', (req, res, next) => {
   redisClient.keys('long:*', (err, keys) => {
     var allLinks = {};
 
-    if (keys.length == 0) {
+    if (keys.length === 0) {
       res.render('index', { noLinks: true } );
     } else {
       keys.forEach((key) => {
@@ -32,7 +32,7 @@ router.get('/:shortLink', (req, res) => {
   var shortLink = req.url.slice(1);
 
   redisClient.keys('long:*', (err, keys) => {
-    if (keys.length == 0) {
+    if (keys.length === 0) {
       req.flash('error', 'The short link you tried to access does not exist.');
       res.redirect('/');
     } else {
@@ -57,35 +57,6 @@ router.get('/:shortLink', (req, res) => {
       });
     }
   });
-});
-
-router.post('/', (req, res) => {
-  var link = req.body.url;
-
-  // validate link
-  let urlRegex = /^[\w:\/\.]+\.[a-zA-z]{2,3}$/g;
-  var validLink = urlRegex.test(link);
-
-  if (validLink) {
-    if (!link.startsWith('http')) {
-      link = 'http://' + link;
-    }
-
-    // check if it already exists
-    redisClient.keys('long:*', (err, keys) => {
-      if (keys.indexOf('long:' + link) > -1) {
-        req.flash('error', 'That link was already shortened');
-        res.redirect('/');
-      } else {
-        // create short url
-        shortenLink(link);
-        res.redirect('/');
-      }
-    });
-  } else {
-    req.flash('error', 'Invalid link. Please try again.');
-    res.redirect('/');
-  }
 });
 
 module.exports = router;
