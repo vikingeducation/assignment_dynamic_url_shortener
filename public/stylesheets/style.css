@@ -1,0 +1,47 @@
+body {
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+
+h1 {
+  margin-top: 5px;
+}
+
+a {
+  color: #00B7FF;
+}
+
+#form-container {
+  padding-left: 0;
+  margin-top: 20px;
+}
+
+#head-form {
+  padding: 30px;
+  background-color: #2965d8;
+  color: #fff;
+}
+
+.col-sm-6, .col-sm-3 {
+  padding-left: 0;
+}
+
+.btn {
+  color: #2965d8;
+}
+
+.btn:hover {
+  background-color: #759BE6;
+  color: #fff;
+}
+
+#flash {
+  margin-top: 20px;
+}
+
+table {
+  margin-top: 30px;
+}
+
+.thead-default {
+  background-color: #f7f7f9;
+}

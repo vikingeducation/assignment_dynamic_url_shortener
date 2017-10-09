@@ -1,0 +1,21 @@
+<table class="table" id="link-table">
+  <thead class="thead-default">
+    <tr>
+      <th>Original URL</th>
+      <th>Short URL</th>
+      <th>All Clicks</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#if noLinks}}
+      <tr class="text-center" id="no-link-tr">
+        <td colspan="3"><b>No shortened links yet. Please use the form at the top of the page.</b></td>
+      </tr>
+    {{else}}
+      {{#each allLinks as |link|}}
+        {{> link_row link}}
+      {{/each}}
+    {{/if}}
+  </tbody>
+</table>
+
