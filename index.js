@@ -1,15 +1,24 @@
 const express = require('express');
+const expressHandlebars = require('express-handlebars');
+const bodyParser = require('body-parser');
+const index = require('./routes/index');
+
 const app = express();
+const server = require('http').createServer(app)
 
-const redis = require('redis');
-const redisClient = redis.createClient();
-
-app.get('/', (req, res) => {
-  redisClient.incr('visitor-count', (err, count) => {
-     res.send(`Visitor Count: ${count}`)
-   });
+const hbs = expressHandlebars.create({
+  defaultLayout: 'main'
 });
 
-app.listen(4500, () => {
-  console.log("Check out localhost:4500 for my Dynamic URL Shortener!!");
+app.engine('handlebars', hbs.engine);
+app.set('view engine', 'handlebars');
+
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.static(__dirname + '/public'));
+
+
+app.use('/', index);
+
+app.listen(4600, () => {
+  console.log("Check out localhost:4600 for my Dynamic URL Shortener");
 });

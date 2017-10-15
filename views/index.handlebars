@@ -1,0 +1,31 @@
+<div class="form-container">
+  <div class="inputBox">
+    <h1>Simplify your links</h1>
+    
+    <div class="input-container">
+      <form class="container-fluid" action="/" method="POST">
+        <div class="form-group">
+          <input type="text" class="form-control" id="longURL" placeholder="Your Original URL here" name="longURL">
+          <button type="submit">SHORTEN URL</button>
+        </div>
+      </form>
+    </div>
+  </div>  
+
+  <div class="table-container">
+    <table class="table table-hover table-bordered table-striped">
+      <tr>
+        <th width="60%">Original URL</th>
+        <th width="25%">Short URL</th>
+        <th width="15%">All Clicks</th>
+      </tr>
+      {{#each urls}}
+        <tr>
+          <td><a href="{{this.longURL}}">{{this.longURL}}</a></td>
+          <td><a href="{{../server}}/{{this.shortURL}}">my.url/{{this.shortURL}}</a></td>
+          <td>{{this.count}}</td>
+        </tr>
+      {{/each}}
+    </table>
+  </div>
+</div>
