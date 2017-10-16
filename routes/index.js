@@ -1,6 +1,11 @@
 const router = require('express').Router();
 const urlShortener = require('../modules/urlShortener.js');
 
+const express = require('express');
+const app = express();
+const server = require('http').createServer(app);
+const io = require('socket.io')(server);
+
 router.get('/', function(req, res, next) {
   let urls = [];
   urlShortener.getAllURLs().then(data => {
@@ -16,8 +21,11 @@ router.post('/', function(req, res, next) {
 
 router.get('/:shortURL', function(req, res, next){
   const shortURL = req.params.shortURL;
+  console.log(shortURL);
   urlShortener.incrementCount(shortURL);
   urlShortener.getLongURL(shortURL).then(function(obj){
+    console.log(obj);
+    io.emit("updateCount", obj);
     res.redirect(obj.longURL);
   });
 });

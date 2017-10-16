@@ -1,6 +1,9 @@
 const redisClient = require("redis").createClient();
 const shortHash = require("shorthash");
 
+redisClient.del("urls");
+
+
 function shortenURL(url) {
   let shortURL = shortHash.unique(url);
   redisClient.hmset(shortURL, {
@@ -24,9 +27,9 @@ function getAllURLs() {
 
 function getLongURL(url) {
   return new Promise(function(resolve, reject) {
-      redisClient.hgetall(url, function (err, obj) {
+      redisClient.hgetall(url, function (err, data) {
         if (err) reject(err);
-        resolve(obj);
+        resolve(data);
       });
     })
   };

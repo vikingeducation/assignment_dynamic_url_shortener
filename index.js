@@ -4,18 +4,18 @@ const bodyParser = require('body-parser');
 const index = require('./routes/index');
 
 const app = express();
-const server = require('http').createServer(app)
 
-const hbs = expressHandlebars.create({
-  defaultLayout: 'main'
-});
+const hbs = expressHandlebars.create({defaultLayout: 'main'});
 
 app.engine('handlebars', hbs.engine);
 app.set('view engine', 'handlebars');
 
+app.use(function(req, res, next){
+  next();
+});
+
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(__dirname + '/public'));
-
 
 app.use('/', index);
 
