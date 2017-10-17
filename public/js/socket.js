@@ -1,6 +1,6 @@
 $(document).ready(() => {
-  // const socket = io.connect("http://localhost:3000");
-  const socket = io.connect("https://dynamic-url-shortener.herokuapp.com");
+  const socket = io.connect("http://localhost:3000");
+  // const socket = io.connect("https://dynamic-url-shortener.herokuapp.com");
 
   $(".submission").on("click", ".makeUrl", e => {
     e.preventDefault();

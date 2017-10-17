@@ -25,7 +25,7 @@ io.on("connection", client => {
     const { name } = url;
 
     const objStorage = {
-      id: id,
+      id,
       urlLong: name,
       urlShort: `${baseUrl}/${id}`,
       count: 0
@@ -59,7 +59,7 @@ function update(client) {
 }
 
 app.set("port", process.env.PORT || 3000);
-const baseURL =
+const baseUrl =
   app.get("port") === 3000
     ? "http://localhost:3000"
     : "https://dynamic-url-shortener.herokuapp.com";
