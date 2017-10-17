@@ -1,0 +1,64 @@
+.navbar-container {
+	color: gray;
+	margin: 10px;
+}
+
+.navbar-container h4 {
+	margin-left: 40px;
+}
+
+.form-container {
+  font-family: 13px Roboto, RobotoDraft, Arial, sans-serif;
+  color: black;
+  border: solid 1px black;
+  min-height: 450px;
+}
+
+h1 {
+	color: white;
+	font-weight: normal;
+	font-size: 30px;
+	margin: 10px 40px;
+}
+
+.inputBox {
+	background-color: #366ed1;
+	color: white;
+	padding: 30px 0 45px;
+}
+
+
+.input-container {
+	margin: 20px;
+}
+
+input [type=text] {
+  height: 36px;
+  margin: 20px;
+  padding: 0 16px;
+  font-size: 12px;
+  line-height: 36px;
+  border: none;
+  border-radius: 1px;
+}
+
+button {
+	line-height: 36px;
+	padding: 2px 18px;
+  margin: 10px 0;
+}
+
+.table-container {
+	display: block;
+	margin: 20px;
+	font-size: 14px;
+	border: solid 1px, gray;
+}
+
+table {
+	width: 80%;
+}
+
+.header {
+	text-align: center;
+}
