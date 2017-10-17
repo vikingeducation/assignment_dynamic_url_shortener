@@ -1,0 +1,32 @@
+{
+  "name": "dynamic_url_shortener",
+  "version": "1.0.0",
+  "description": "Build a URL shortening service, outfitted with realtime analytics.",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Alex-Willenbrink/assignment_dynamic_url_shortener.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Alex-Willenbrink/assignment_dynamic_url_shortener/issues"
+  },
+  "homepage": "https://github.com/Alex-Willenbrink/assignment_dynamic_url_shortener#readme",
+  "dependencies": {
+    "bluebird": "^3.5.0",
+    "body-parser": "^1.17.2",
+    "express": "^4.15.3",
+    "express-handlebars": "^3.0.0",
+    "nodemon": "^1.11.0",
+    "redis": "^2.7.1",
+    "shortid": "^2.2.8",
+    "socket.io": "^2.0.3",
+    "socket.io-client": "^2.0.3",
+    "valid-url": "^1.0.9"
+  }
+}
