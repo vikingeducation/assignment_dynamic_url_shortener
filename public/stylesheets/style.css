@@ -3,16 +3,13 @@
 	margin: 10px;
 }
 
-body {
-	max-width: 960px;	
+.navbar-container h4 {
+	margin-left: 40px;
 }
 
 .form-container {
-	display: block;
   font-family: 13px Roboto, RobotoDraft, Arial, sans-serif;
   color: black;
-  padding: 0;
-  margin-left: 10px;
   border: solid 1px black;
   min-height: 450px;
 }
@@ -21,8 +18,7 @@ h1 {
 	color: white;
 	font-weight: normal;
 	font-size: 30px;
-	display: block;
-	margin: 20px;
+	margin: 10px 40px;
 }
 
 .inputBox {
@@ -33,13 +29,10 @@ h1 {
 
 
 .input-container {
-	display: block;
-	max-width: 960px;
 	margin: 20px;
 }
 
 input [type=text] {
-  width: calc(100% - 200px);
   height: 36px;
   margin: 20px;
   padding: 0 16px;
@@ -57,7 +50,6 @@ button {
 
 .table-container {
 	display: block;
-	max-width: 960px;
 	margin: 20px;
 	font-size: 14px;
 	border: solid 1px, gray;

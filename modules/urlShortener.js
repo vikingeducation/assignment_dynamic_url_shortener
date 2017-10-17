@@ -1,7 +1,7 @@
 const redisClient = require("redis").createClient();
 const shortHash = require("shorthash");
 
-redisClient.del("urls");
+// redisClient.del("urls");
 
 
 function shortenURL(url) {

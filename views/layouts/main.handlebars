@@ -25,16 +25,16 @@
   </div>
 
   <div class="container">
-    {{{body}}}
+  {{{body}}}
   </div>
 
   <script>
-    var socket = io.connect('http://localhost:4600');
+    var socket = io.connect('http://localhost:4600')
 
     socket.on('updateCount', function(data) {
-      console.log('In updateCount')
+      console.log(`count: ${data.count}`)
       $(`#${data.shortURL}-count`).html(data.count)
-    });
+    })
   </script>
 
 </body>
