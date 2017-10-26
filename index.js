@@ -48,11 +48,9 @@ app.post('/update', (req, res) => {
 
 app.get('/r/:id', function(req, res) {
   let redirect = req.params.id;
-  console.log("req.params.id", redirect)
   increment(redirect).then(count => {
     console.log("count", count);
     getLink(redirect).then(url => {
-      console.log("url", url)
       io.emit('increment count', redirect, count);
       res.redirect(url)
     })
