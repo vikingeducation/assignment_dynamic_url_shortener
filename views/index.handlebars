@@ -1,0 +1,28 @@
+<form action="/update" method="post">
+        <div class="form-group">
+          <input type="text" class="form-control" placeholder="short your link" name="link">
+        </div>
+          <button type="submit">Submit</button>
+      </form>
+<br>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>URL</th>
+      <th>put this after localhost/</th>
+
+      <th>Number of Clicks</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#each urls}}
+    <tr>
+      <td>{{this}}</td>
+      <td>{{@key}}</td>
+
+      <td></td>
+    </tr>
+    {{/each}}
+  </tbody>
+</table>
