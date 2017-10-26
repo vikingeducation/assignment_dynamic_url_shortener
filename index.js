@@ -3,13 +3,14 @@ const app = express()
 const server = require('http').createServer(app)
 const handlebars = require('express-handlebars')
 const io = require('socket.io')(server)
-const redisClient = require('redis').createClient();
 const bodyParser = require('body-parser');
 
 const {
   getLink,
   getAllLinks,
-  saveLink
+  saveLink,
+  increment,
+  getCounts
 } = require('./services/saveandgetlinks');
 
 app.engine('handlebars', handlebars({ defaultLayout: 'main' }))
@@ -25,16 +26,22 @@ io.on('connection', client => {
 });
 
 app.get('/', (req, res) => {
+
   getAllLinks().then(urls => {
-    console.log(urls);
-    res.render('index', { urls: urls });
+    getCounts().then(counts =>{
+      console.log(urls);
+      console.log(counts);
+      res.render('index', { urls, counts});
+    })
   });
 })
 
 app.post('/update', (req, res) => {
-  console.log(req.body.link)
-  let url = req.body.link;
-  saveLink(url);
+  console.log(req.body.url)
+  let url = req.body.url;
+  let shortlink = saveLink(url);
+  console.log("shortlink", shortlink)
+  io.emit('addnewlink', url, shortlink)
   res.redirect('back');
 });
 
@@ -42,20 +49,16 @@ app.post('/update', (req, res) => {
 app.get('/r/:id', function(req, res) {
   let redirect = req.params.id;
   console.log("req.params.id", redirect)
-  getLink(redirect).then(url => {
-    console.log(url)
-    res.redirect(url)
+  increment(redirect).then(count => {
+    console.log("count", count);
+    getLink(redirect).then(url => {
+      console.log("url", url)
+      io.emit('increment count', redirect, count);
+      res.redirect(url)
+    })
   })
+
 });
-// app.get('/r/:hash', (req, res) => {
-//   let redirect = req.params.hash;
-//   console.log("req.params.redirect", redirect)
-//   getLink(redirect).then(url => {
-//     console.log(url)
-//     res.redirect(url)
-//   })
-//
-// })
 
 server.listen(4000, () => {
     console.log(`Currently listening on Port 4000`)

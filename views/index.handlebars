@@ -1,6 +1,6 @@
 <form action="/update" method="post">
         <div class="form-group">
-          <input type="text" class="form-control" placeholder="short your link" name="link">
+          <input type="text" class="form-control" placeholder="short your link" name="url">
         </div>
           <button type="submit">Submit</button>
       </form>
@@ -10,7 +10,7 @@
   <thead>
     <tr>
       <th>URL</th>
-      <th>put this after localhost/</th>
+      <th>put this after localhost:4000/r/</th>
 
       <th>Number of Clicks</th>
     </tr>
@@ -21,7 +21,7 @@
       <td>{{this}}</td>
       <td>{{@key}}</td>
 
-      <td></td>
+      <td id={{@key}}>{{lookup ../counts @key}}</td>
     </tr>
     {{/each}}
   </tbody>

@@ -13,10 +13,10 @@ const getAllLinks = () => {
   });
 };
 
-const getLink = (link) => {
-  console.log(link)
+const getLink = (url) => {
+  console.log(url)
   return new Promise((resolve, reject) => {
-    redisClient.hget('urls', link, (err, value) => {
+    redisClient.hget('urls', url, (err, value) => {
       if (err) {
         reject(err);
       } else {
@@ -30,8 +30,27 @@ const getLink = (link) => {
 const saveLink = (url) => {
   let shortlink = createRandom();
   redisClient.hset('urls', shortlink, url);
+  redisClient.hset('counts', shortlink, 0);
+  return shortlink
 };
 
+const increment = url => {
+  return new Promise((resolve, reject) => {
+    redisClient.hincrby('counts', url, 1, (err, count) => {
+        console.log("count from increment function", count)
+        resolve(count);
+      })
+    });
+}
+
+const getCounts = () => {
+  return new Promise((resolve, reject) => {
+    redisClient.hgetall('counts', (err, counts) => {
+        console.log("counts", counts)
+        resolve(counts);
+      })
+    });
+  };
 
 const createRandom = () => {
   var text = "";
@@ -45,5 +64,7 @@ const createRandom = () => {
 module.exports = {
   getLink,
   getAllLinks,
-  saveLink
+  saveLink,
+  increment,
+  getCounts
 }
