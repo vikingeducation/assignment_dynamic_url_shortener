@@ -8,6 +8,10 @@ const port = 3000;
 
 const app = express();
 
+app.use(express.static(`${__dirname}/public`));
+
+app.use(bodyParser.urlencoded({ extended: true }));
+
 const hbs = expressHandlebars.create({
   defaultLayout: 'main',
   partialsDir: 'views/',
@@ -16,8 +20,8 @@ app.engine('handlebars', hbs.engine);
 app.set('view engine', 'handlebars');
 
 app.get('/', (req, res) => {
-  getAllUrls((allUrlPairs) => {
-    res.render('index', { allUrlPairs });
+  getAllUrls((urlPairs) => {
+    res.render('index', { urlPairs });
   });
 });
 
