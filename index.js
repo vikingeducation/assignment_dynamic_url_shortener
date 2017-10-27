@@ -1,16 +1,28 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const { getUrl, setUrl } = require('./models/urlHandler');
+const expressHandlebars = require('express-handlebars');
+const { getUrl, setUrl, getAllUrls } = require('./models/urlHandlers');
+
+const host = 'localhost';
+const port = 3000;
 
 const app = express();
 
-// app.get('/', (req, res) => {
-//   res.sendFile(`${__dirname}/views/index.html`);
-//   res.sendFile('./views/index.html');
-// });
+const hbs = expressHandlebars.create({
+  defaultLayout: 'main',
+  partialsDir: 'views/',
+});
+app.engine('handlebars', hbs.engine);
+app.set('view engine', 'handlebars');
+
+app.get('/', (req, res) => {
+  getAllUrls((allUrlPairs) => {
+    res.render('index', { allUrlPairs });
+  });
+});
 
 // app.get('/', (req, res) => {
-//   const url = 'm3er3';
+//   const url = '99tch';
 //   getUrl(url, (value) => {
 //     console.log(value);
 //     res.send(value);
@@ -25,6 +37,8 @@ const app = express();
 //   });
 // });
 
-app.listen(3000, () => {
-  console.log('Listening at port 3000');
+// const shortUrl = `${host}:${port}/${shortPath}`;
+
+app.listen(port, () => {
+  console.log(`Listening at ${host}:${port}`);
 });
