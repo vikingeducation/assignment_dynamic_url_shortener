@@ -12,8 +12,31 @@
   </div>
 </form>
 
-<!-- <div class='container'>
-  {{#each urlPairs as |urlPair|}}
-  {{urlPair.long}}  : {{urlPair.short}}
-  {{/each}}
-</div> -->
+<hr>
+
+<div class='row'>
+  {{#if urlPairs}}
+  <div class='col-sm-12'>
+    <div class='table-responsive'>
+      <table class='table table-striped'>
+        <thead>
+          <tr>
+            <th>Original URL</th>
+            <th>Short URL</th>
+            <th>Clicks</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#each urlPairs as |urlPair|}}
+          <tr>
+            <td><a href='{{urlPair.long}}'>{{urlPair.long}}</a></td>
+            <td><a href='{{urlPair.short}}'>/{{urlPair.short}}</a></td>
+            <td></td>
+          </tr>
+          {{/each}}
+        </tbody>
+      </table>
+    </div>
+  </div>
+  {{/if}}
+</div>

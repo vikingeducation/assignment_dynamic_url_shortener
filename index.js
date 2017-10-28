@@ -25,6 +25,19 @@ app.get('/', (req, res) => {
   });
 });
 
+app.get('/:path', (req, res) => {
+  const { path } = req.params;
+  getUrl(path, (originalUrl) => {
+    res.redirect(originalUrl);
+  });
+});
+
+app.post('/', (req, res) => {
+  const { originalUrl } = req.body;
+  setUrl(originalUrl);
+  res.redirect('/');
+});
+
 // app.get('/', (req, res) => {
 //   const url = '99tch';
 //   getUrl(url, (value) => {
