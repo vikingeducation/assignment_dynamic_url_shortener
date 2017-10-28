@@ -11,31 +11,16 @@ function _getPathList() {
   });
 }
 
-function _getUrlObjects(pathList, callback) {
-  const urlObjects = [];
-  pathList.forEach((path) => {
-    redisClient.hgetall(path, (err, urlObject) => {
-      urlObjects.push(urlObject);
-    });
-  });
-  callback(urlObjects);
-}
-
-function getUrl(shortPath, callback) {
-  const p = new Promise((resolve, reject) => {
-    redisClient.hget(shortPath, 'long', (err, reply) => {
-      if (err) {
-        reject(err);
-      }
+function getUrlObject(shortPath) {
+  return new Promise((resolve, reject) => {
+    redisClient.hgetall(shortPath, (err, reply) => {
+      if (err) reject(err);
       resolve(reply);
     });
   });
-  p.then((originalUrl) => {
-    callback(originalUrl);
-  });
 }
 
-function setUrl(originalUrl) {
+function setUrlObject(originalUrl) {
   let shortPath;
   let reply = 1;
   while (reply === 1) {
@@ -45,13 +30,16 @@ function setUrl(originalUrl) {
   }
   redisClient.hmset(shortPath, 'short', shortPath, 'long', originalUrl, 'clicks', 0);
   redisClient.lpush('pathList', shortPath);
+  return shortPath;
 }
 
 async function getAllUrlObjects(callback) {
   const pathList = await _getPathList();
-  let urlObjects;
-  _getUrlObjects(pathList, (objects) => {
-    urlObjects = objects;
+  const urlObjects = [];
+  pathList.forEach((path) => {
+    getUrlObject(path).then((urlObject) => {
+      urlObjects.push(urlObject);
+    });
   });
   callback(urlObjects);
 }
@@ -61,8 +49,8 @@ function incrementClicks(shortPath) {
 }
 
 module.exports = {
-  getUrl,
-  setUrl,
+  getUrlObject,
+  setUrlObject,
   getAllUrlObjects,
   incrementClicks,
 };

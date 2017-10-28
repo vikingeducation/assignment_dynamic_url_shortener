@@ -9,7 +9,6 @@
 
     <script src='https://code.jquery.com/jquery-3.2.1.js'></script>
     <script src="/socket.io/socket.io.js"></script>
-    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script> -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
   </head>
@@ -29,14 +28,25 @@
       {{{body}}}
     </div>
 
+    <script>
+      var socket = io.connect('http://localhost:3000');
+
+      socket.on('new count', function(urlObject) {
+        const { short, clicks } = urlObject;
+        $(`#${short}`).html(clicks);
+      });
+
+      socket.on('new urlObject', function(urlObject) {
+        const { short, long, clicks } = urlObject;
+        $('tbody').prepend(`
+          <tr>
+            <td><a href='${long}'>${long}</a></td>
+            <td><a href='${short}' target='_blank'>/${short}</a></td>
+            <td id='${short}'>${clicks}</td>
+          </tr>`);
+      });
+    </script>
+
   </body>
-
-  <script>
-    var socket = io.connect('http://localhost:3000');
-
-    socket.on('new count', function(count) {
-      $('.count').html(count);
-    });
-  </script>
 
 </html>

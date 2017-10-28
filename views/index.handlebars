@@ -30,8 +30,8 @@
           {{#each urlObjects as |urlObject|}}
           <tr>
             <td><a href='{{urlObject.long}}'>{{urlObject.long}}</a></td>
-            <td><a href='{{urlObject.short}}'>/{{urlObject.short}}</a></td>
-            <td><span class=''>{{urlObject.clicks}}</span></td>
+            <td><a href='{{urlObject.short}}' target='_blank'>/{{urlObject.short}}</a></td>
+            <td id='{{urlObject.short}}'>{{urlObject.clicks}}</td>
           </tr>
           {{/each}}
         </tbody>

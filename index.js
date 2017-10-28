@@ -2,7 +2,10 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const expressHandlebars = require('express-handlebars');
 const {
-  getUrl, setUrl, getAllUrlObjects, incrementClicks,
+  getUrlObject,
+  setUrlObject,
+  getAllUrlObjects,
+  incrementClicks,
 } = require('./models/urlHandlers');
 
 const host = 'localhost';
@@ -32,20 +35,27 @@ app.get('/', (req, res) => {
 app.get('/:path', (req, res) => {
   const { path } = req.params;
   incrementClicks(path);
-  getUrl(path, (originalUrl) => {
-    res.redirect(originalUrl);
+  getUrlObject(path).then((urlObject) => {
+    io.emit('new count', urlObject);
+    res.redirect(urlObject.long);
   });
 });
 
 app.post('/', (req, res) => {
   const { originalUrl } = req.body;
-  setUrl(originalUrl);
-  res.redirect('/');
+  const shortPath = setUrlObject(originalUrl);
+  let urlObject = {};
+  const p = new Promise((resolve) => {
+    getUrlObject(shortPath).then((data) => {
+      urlObject = data;
+      resolve(urlObject);
+    });
+  });
+  p.then(() => {
+    io.emit('new urlObject', urlObject);
+    res.redirect('/');
+  });
 });
-
-// io.on('connection', (client) => {
-//   client.emit('new count', count);
-// });
 
 server.listen(port, () => {
   console.log(`Listening at ${host}:${port}`);
