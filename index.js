@@ -1,14 +1,18 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const expressHandlebars = require('express-handlebars');
-const { getUrl, setUrl, getAllUrls } = require('./models/urlHandlers');
+const {
+  getUrl, setUrl, getAllUrlObjects, incrementClicks,
+} = require('./models/urlHandlers');
 
 const host = 'localhost';
 const port = 3000;
 
 const app = express();
+const server = require('http').createServer(app);
+const io = require('socket.io')(server);
 
-app.use(express.static(`${__dirname}/public`));
+app.use('/socket.io', express.static(`${__dirname}node_modules/socket.io-client/dist/`));
 
 app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -20,13 +24,14 @@ app.engine('handlebars', hbs.engine);
 app.set('view engine', 'handlebars');
 
 app.get('/', (req, res) => {
-  getAllUrls((urlPairs) => {
-    res.render('index', { urlPairs });
+  getAllUrlObjects((urlObjects) => {
+    res.render('index', { urlObjects });
   });
 });
 
 app.get('/:path', (req, res) => {
   const { path } = req.params;
+  incrementClicks(path);
   getUrl(path, (originalUrl) => {
     res.redirect(originalUrl);
   });
@@ -38,24 +43,10 @@ app.post('/', (req, res) => {
   res.redirect('/');
 });
 
-// app.get('/', (req, res) => {
-//   const url = '99tch';
-//   getUrl(url, (value) => {
-//     console.log(value);
-//     res.send(value);
-//   });
+// io.on('connection', (client) => {
+//   client.emit('new count', count);
 // });
 
-// app.get('/', (req, res) => {
-//   const url = 'looooooooooongUrl';
-//   setUrl(url, (value) => {
-//     console.log(value);
-//     res.send(value);
-//   });
-// });
-
-// const shortUrl = `${host}:${port}/${shortPath}`;
-
-app.listen(port, () => {
+server.listen(port, () => {
   console.log(`Listening at ${host}:${port}`);
 });

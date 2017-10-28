@@ -15,7 +15,7 @@
 <hr>
 
 <div class='row'>
-  {{#if urlPairs}}
+  {{#if urlObjects}}
   <div class='col-sm-12'>
     <div class='table-responsive'>
       <table class='table table-striped'>
@@ -27,11 +27,11 @@
           </tr>
         </thead>
         <tbody>
-          {{#each urlPairs as |urlPair|}}
+          {{#each urlObjects as |urlObject|}}
           <tr>
-            <td><a href='{{urlPair.long}}'>{{urlPair.long}}</a></td>
-            <td><a href='{{urlPair.short}}'>/{{urlPair.short}}</a></td>
-            <td></td>
+            <td><a href='{{urlObject.long}}'>{{urlObject.long}}</a></td>
+            <td><a href='{{urlObject.short}}'>/{{urlObject.short}}</a></td>
+            <td><span class=''>{{urlObject.clicks}}</span></td>
           </tr>
           {{/each}}
         </tbody>
