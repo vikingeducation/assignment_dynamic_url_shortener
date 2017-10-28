@@ -1,0 +1,42 @@
+<h1>Shorten your links</h1>
+<form class='form' action='/' method='post'>
+  <div class='row'>
+    <div class='col-sm-6'>
+      <div class='input-group'>
+        <input type='text' class='form-control' id='originalUrl' name='originalUrl' placeholder='Your original URL here'>
+        <span class='input-group-btn'>
+          <button type='submit' class='btn btn-primary'>SHORTEN URL</button>
+        </span>
+      </div>
+    </div>
+  </div>
+</form>
+
+<hr>
+
+<div class='row'>
+  {{#if urlObjects}}
+  <div class='col-sm-12'>
+    <div class='table-responsive'>
+      <table class='table table-striped'>
+        <thead>
+          <tr>
+            <th>Original URL</th>
+            <th>Short URL</th>
+            <th>Clicks</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#each urlObjects as |urlObject|}}
+          <tr>
+            <td><a href='{{urlObject.long}}'>{{urlObject.long}}</a></td>
+            <td><a href='{{urlObject.short}}' target='_blank'>/{{urlObject.short}}</a></td>
+            <td id='{{urlObject.short}}'>{{urlObject.clicks}}</td>
+          </tr>
+          {{/each}}
+        </tbody>
+      </table>
+    </div>
+  </div>
+  {{/if}}
+</div>
