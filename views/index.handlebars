@@ -6,11 +6,18 @@
   </form>
 </section>
 
-<section class='urls-section'>
-  {{#each urls}}
-    <div class='url'>
-      <a href='/{{@key}}'>{{../baseURL}}/{{@key}}</a>
-      <a>{{this}}</a>
-    </div>
+<table>
+  <tr>
+    <th>Original URL</th>
+    <th>Short URL</th>
+    <th>All Clicks</th>
+  </tr>
+
+  {{#each urls as |url|}}
+  <tr>
+    <td>{{url.longURL}}</td>
+    <td><a href='/{{url.shortenedURL}}'>{{../baseURL}}/{{url.shortenedURL}}</a></td>
+    <td>{{visits}}</td>
+  </tr>
   {{/each}}
-</section>
+</table>
