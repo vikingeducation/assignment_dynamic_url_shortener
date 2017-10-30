@@ -16,8 +16,8 @@
   {{#each urls as |url|}}
   <tr>
     <td>{{url.longURL}}</td>
-    <td><a href='/{{url.shortenedURL}}'>{{../baseURL}}/{{url.shortenedURL}}</a></td>
-    <td>{{visits}}</td>
+    <td><a href='/home/{{url.shortenedURL}}'>{{../baseURL}}/{{url.shortenedURL}}</a></td>
+    <td id='{{url.shortenedURL}}'>{{url.visits}}</td>
   </tr>
   {{/each}}
 </table>

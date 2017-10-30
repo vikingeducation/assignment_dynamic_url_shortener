@@ -5,10 +5,21 @@
     <title>URL Shortener</title>
     <link rel='stylesheet' href='/styles/reset.css'>
     <link rel='stylesheet' href='/styles/style.css'>
+    <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
   </head>
   <body>
 
     {{{body}}}
 
   </body>
+  <script>
+    $('document').ready(function() {
+      var client = io.connect('http://localhost:3000');
+
+      client.on('new visit', function(obj) {
+        $(`#${obj.shortenedURL}`).html(obj.visits);
+      });
+    });
+  </script>
 </html>

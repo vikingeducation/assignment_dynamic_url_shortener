@@ -1,5 +1,6 @@
 const router = require('express').Router();
-const { getURLs, getFullURL } = require('../helpers/url-shortener.js');
+const { getURLs, getFullURL, incrementCounter } = require('../helpers/url-shortener.js');
+
 
 router.get('/', (req, res) => {
   const urls = [];
@@ -21,8 +22,11 @@ router.get('/', (req, res) => {
 router.get('/:id', (req, res) => {
   const { id } = req.params;
 
+  incrementCounter(id);
+
   getFullURL(id)
     .then((obj) => {
+      req.io.emit('new visit', obj);
       res.redirect(obj.longURL);
     })
 });

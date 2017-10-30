@@ -42,9 +42,14 @@ const getFullURL = (id) => {
   })
 };
 
+const incrementCounter = (id) => {
+  redisClient.hincrby(id, 'visits', 1);
+};
+
 
 module.exports = {
   makeShortenedURL,
   getURLs,
-  getFullURL
+  getFullURL,
+  incrementCounter
 }
