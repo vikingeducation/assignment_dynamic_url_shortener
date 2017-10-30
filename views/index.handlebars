@@ -1,23 +1,25 @@
-<section class='form'>
+<section class='top-section'>
   <h3>Simplifiy Your Links</h3>
   <form action='/create' method='post'>
     <input type='text' placeholder='Enter a full url to shorten' name='fullURL' />
-    <input type='submit' value='Shorten URL' />
+    <button type='submit'>Shorten URL</button>
   </form>
 </section>
 
-<table>
-  <tr>
-    <th>Original URL</th>
-    <th>Short URL</th>
-    <th>All Clicks</th>
-  </tr>
+<section class='table-container'>
+  <table>
+    <tr>
+      <th>Original URL</th>
+      <th>Short URL</th>
+      <th>All Clicks</th>
+    </tr>
 
-  {{#each urls as |url|}}
-  <tr>
-    <td>{{url.longURL}}</td>
-    <td><a href='/home/{{url.shortenedURL}}'>{{../baseURL}}/{{url.shortenedURL}}</a></td>
-    <td id='{{url.shortenedURL}}'>{{url.visits}}</td>
-  </tr>
-  {{/each}}
-</table>
+    {{#each urls as |url|}}
+    <tr>
+      <td>{{url.longURL}}</td>
+      <td><a href='/home/{{url.shortenedURL}}'>{{../baseURL}}/{{url.shortenedURL}}</a></td>
+      <td id='{{url.shortenedURL}}'>{{url.visits}}</td>
+    </tr>
+    {{/each}}
+  </table>
+</section>
