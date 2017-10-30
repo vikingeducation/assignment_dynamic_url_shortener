@@ -1,0 +1,70 @@
+html {
+  font-size: 16px;
+  font-family: sans-serif;
+}
+
+h3 {
+  font-size: 2rem;
+  margin-bottom: 15px;
+}
+
+table, th, td {
+  border: 1px solid #000;
+}
+
+a {
+  color: rgba(18, 129, 218, 0.87);
+}
+
+
+.top-section {
+  width: 100%;
+  padding: 50px 100px;
+  box-sizing: border-box;
+  background-color: rgba(5, 120, 212, 0.87);
+}
+
+.top-section h3 {
+  color: #fff;
+}
+
+form input[type=text] {
+  width: 50%;
+  height: 5vh;
+  text-align: right;
+  font-size: 1.2rem;
+  padding-right: 15px;
+  box-sizing: border-box;
+  vertical-align: bottom;
+  margin-right: 5px;
+}
+
+button {
+  padding: 7px 50px;
+  font-size: 1rem;
+  color: rgba(33, 150, 243, 0.87);
+  background-color: #fff;
+  vertical-align: bottom;
+}
+
+.table-container {
+  width: 100%;
+  padding: 30px;
+  box-sizing: border-box;
+}
+
+table {
+  width: 100%
+}
+
+th {
+  font-weight: bold;
+}
+
+td {
+  text-align: center;
+}
+
+th, td {
+  padding: 2px 3px;
+}
