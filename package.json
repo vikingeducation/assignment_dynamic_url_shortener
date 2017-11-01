@@ -1,0 +1,29 @@
+{
+  "name": "assignment_dynamic_url_shortener",
+  "version": "1.0.0",
+  "description": "Build a URL shortening service, outfitted with realtime analytics.",
+  "main": "gulpfile.js",
+  "dependencies": {
+    "express": "^4.16.2",
+    "express-handlebars": "^3.0.0"
+  },
+  "devDependencies": {
+    "browser-sync": "^2.18.13",
+    "gulp": "^3.9.1",
+    "gulp-nodemon": "^2.2.1"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/oaksofmamre/assignment_dynamic_url_shortener.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/oaksofmamre/assignment_dynamic_url_shortener/issues"
+  },
+  "homepage": "https://github.com/oaksofmamre/assignment_dynamic_url_shortener#readme"
+}
