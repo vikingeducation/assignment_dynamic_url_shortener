@@ -11,8 +11,8 @@
   <body>
     <nav class="navbar navbar-dark bg-light justify-content-center mt-4">
       <a class="navbar-brand">Dynamic URL Shortener</a>
-      <form action="/action_page.php" class="form-inline">
-        <input class="form-control mr-sm-2" type="search" placeholder="" aria-label="Search">
+      <form action="/update" method="post" class="form-inline">
+        <input class="form-control mr-sm-2" type="search" placeholder="" aria-label="Search" name="formOrigUrl">
         <button class="btn btn-primary my-2 my-sm-0" type="submit">Shorten URL</button>
       </form>
     </nav>

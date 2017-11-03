@@ -5,7 +5,9 @@
   "main": "gulpfile.js",
   "dependencies": {
     "express": "^4.16.2",
-    "express-handlebars": "^3.0.0"
+    "express-handlebars": "^3.0.0",
+    "randomstring": "^1.1.5",
+    "redis": "^2.8.0"
   },
   "devDependencies": {
     "browser-sync": "^2.18.13",
