@@ -22,6 +22,19 @@ app.get("/", (req, res) => {
 	res.render("results", { test: "test content" }); // render() for views, sendFile() for not
 });
 
+app.get("/:shorturl", (req, res) => {
+	let shortUrl = req.params.shorturl;
+	redis
+		.getOriginalUrl(shortUrl)
+		.then(data => {
+			let link = data;
+			res.redirect(link);
+		})
+		.catch(err => {
+			console.log(err);
+		});
+});
+
 app.post("/update", (req, res) => {
 	let originalUrl = req.body.formOrigUrl; // console.log(originalUrl);
 	let shortUrl = randomstring.generate({ length: 5, charset: "alphabetic" });
@@ -44,6 +57,9 @@ app.post("/update", (req, res) => {
 		})
 		.then(data => {
 			let host = req.get("host");
+			console.log(">>>");
+			console.log(host);
+			console.log("<<<");
 			counts = data;
 			// console.log(counts); // console.log(urls); // res.redirect("back");
 			res.render("results", {
