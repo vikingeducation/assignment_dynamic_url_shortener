@@ -43,10 +43,14 @@ app.post("/update", (req, res) => {
 			return redis.getCounts();
 		})
 		.then(data => {
+			let host = req.get("host");
 			counts = data;
-			console.log(counts);
-			console.log(urls); // res.redirect("back");
-			res.render("results", { myCounts: counts, myUrls: urls });
+			// console.log(counts); // console.log(urls); // res.redirect("back");
+			res.render("results", {
+				myCounts: counts,
+				myUrls: urls,
+				myHost: host
+			});
 		})
 		.catch(err => {
 			console.log(err);

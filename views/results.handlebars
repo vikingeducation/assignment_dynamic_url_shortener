@@ -11,11 +11,10 @@
               {{#each myUrls}}
                  <tr>
                    <th scope="row">{{this}}</th>
-                   <td>{{@key}}</td>
+                   <td><b><a href="{{@key}}">{{../myHost}}/{{@key}}</a></b></td>
                    <td>{{lookup ../myCounts @key}}</td>
                  </tr>
                {{/each}} 
             
             </tbody>
           </table>
-          
