@@ -6,7 +6,7 @@ const handlebars = require("express-handlebars");
 const bodyParser = require("body-parser");
 const randomstring = require("randomstring");
 const redis = require("./lib/redis-lib");
-const port = 4005;
+const port = 4000;
 
 //body-parser extracts the entire body portion of an incoming request stream and exposes it on req.body
 app.use(bodyParser.urlencoded({ extended: false }));

@@ -7,16 +7,15 @@
               </tr>
             </thead>
             <tbody>
-
-            {{#each myCounts}}
-              {{#each ../myUrls}}
-                <tr>
-                  <th scope="row">{{this}}</th>
-                  <td>{{@key}}</td>
-                  <td>{{../this}}</td>
-                </tr>
-              {{/each}}   
-            {{/each}}   
-
+            
+              {{#each myUrls}}
+                 <tr>
+                   <th scope="row">{{this}}</th>
+                   <td>{{@key}}</td>
+                   <td>{{lookup ../myCounts @key}}</td>
+                 </tr>
+               {{/each}} 
+            
             </tbody>
           </table>
+          
