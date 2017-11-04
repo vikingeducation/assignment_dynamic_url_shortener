@@ -20,6 +20,11 @@ app.set("views", __dirname + "/views");
 app.engine("handlebars", handlebars({ defaultLayout: "maind" }));
 app.set("view engine", "handlebars");
 
+app.use(
+	"/socket.io", // DC: this is saying use socket.io.js file in below path (I think)
+	express.static(__dirname + "node_modules/socket.io-client/dist/")
+);
+
 //body-parser extracts the entire body portion of an incoming request stream and exposes it on req.body
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(__dirname + "/public"));
@@ -84,6 +89,11 @@ app.post("/update", (req, res) => {
 		});
 });
 
-app.listen(PORT, () => {
+io.on("connection", () => {
+	console.log("a user connected");
+});
+
+//when using socket.io make sure you change app --> server
+server.listen(PORT, () => {
 	console.log(`listening on localhost:${PORT}`);
 });
