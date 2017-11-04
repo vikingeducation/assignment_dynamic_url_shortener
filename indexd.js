@@ -2,6 +2,9 @@
 
 const express = require("express");
 const app = express();
+const server = require("http").createServer(app);
+const io = require("socket.io")(server);
+
 const handlebars = require("express-handlebars");
 const bodyParser = require("body-parser");
 const randomstring = require("randomstring");
@@ -9,19 +12,19 @@ const redis = require("./lib/redis-lib");
 
 const APP_URL_KEY = "urlKey";
 const APP_CLICK_KEY = "clickKey";
-const SHORT_URL_SIZE = 5;
+const SHORTURL_LENGTH = 5;
 const PORT = 4000;
-
-//body-parser extracts the entire body portion of an incoming request stream and exposes it on req.body
-app.use(bodyParser.urlencoded({ extended: false }));
 
 //setup handlebars
 app.set("views", __dirname + "/views");
 app.engine("handlebars", handlebars({ defaultLayout: "maind" }));
 app.set("view engine", "handlebars");
 
+//body-parser extracts the entire body portion of an incoming request stream and exposes it on req.body
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(__dirname + "/public"));
 
+//register routes
 app.get("/", (req, res) => {
 	res.render("results", { test: "test content" }); // render() for views, sendFile() for not
 });
@@ -46,7 +49,7 @@ app.get("/:shorturl", (req, res) => {
 app.post("/update", (req, res) => {
 	let originalUrl = req.body.formOrigUrl; // console.log(originalUrl);
 	let shortUrl = randomstring.generate({
-		length: SHORT_URL_SIZE,
+		length: SHORTURL_LENGTH,
 		charset: "alphabetic"
 	});
 	let urls,
