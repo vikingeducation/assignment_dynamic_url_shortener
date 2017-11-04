@@ -13,21 +13,20 @@ const redis = require("./lib/redis-lib");
 const APP_URL_KEY = "urlKey";
 const APP_CLICK_KEY = "clickKey";
 const SHORTURL_LENGTH = 5;
-const PORT = 4000;
+const PORT = 3000;
 
 //setup handlebars
 app.set("views", __dirname + "/views");
-app.engine("handlebars", handlebars({ defaultLayout: "maind" }));
+app.engine("handlebars", handlebars({ defaultLayout: "main" }));
 app.set("view engine", "handlebars");
-
-app.use(
-	"/socket.io", // DC: this is saying use socket.io.js file in below path (I think)
-	express.static(__dirname + "node_modules/socket.io-client/dist/")
-);
 
 //body-parser extracts the entire body portion of an incoming request stream and exposes it on req.body
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(__dirname + "/public"));
+app.use(
+	"/socket.io", // DC: this is saying use socket.io.js file in below path (I think)
+	express.static(__dirname + "node_modules/socket.io-client/dist/")
+);
 
 //register routes
 app.get("/", (req, res) => {
@@ -35,6 +34,9 @@ app.get("/", (req, res) => {
 });
 
 app.get("/:shorturl", (req, res) => {
+	io.on("connection", () => {
+		console.log("a user connected at /:shorturl");
+	});
 	let shortUrl = req.params.shorturl;
 	redis
 		.incrementCount(APP_CLICK_KEY, shortUrl)
@@ -52,6 +54,9 @@ app.get("/:shorturl", (req, res) => {
 });
 
 app.post("/update", (req, res) => {
+	io.on("connection", () => {
+		console.log("a user connected at /update");
+	});
 	let originalUrl = req.body.formOrigUrl; // console.log(originalUrl);
 	let shortUrl = randomstring.generate({
 		length: SHORTURL_LENGTH,
