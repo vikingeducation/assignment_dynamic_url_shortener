@@ -25,6 +25,7 @@ Highlights:
 - Express handled my routes
 - with Handlebars for templating
 - and lots of promises for handling async calls
+- styled with bootstrap
 
 
 #### by Dennis C :coffee:
