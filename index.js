@@ -5,6 +5,9 @@ const app = express();
 const server = require("http").createServer(app);
 const io = require("socket.io")(server);
 
+const favicon = require("serve-favicon");
+const path = require("path");
+
 const handlebars = require("express-handlebars");
 const bodyParser = require("body-parser");
 const randomstring = require("randomstring");
@@ -23,6 +26,8 @@ app.set("view engine", "handlebars");
 //setup middleware
 app.use(bodyParser.urlencoded({ extended: false })); //body-parser extracts the entire body portion of an incoming request stream and exposes it on req.body
 app.use(express.static(__dirname + "/public"));
+//was getting favicon.ico error on chrome browser. resolved by simply mounting favicon middleware
+app.use(favicon(path.join(__dirname, "public/favicon", "favicon.ico")));
 
 // this code may not be useful
 // see here for app.use() usage: https://expressjs.com/en/api.html#path-examples
@@ -37,7 +42,7 @@ app.use(express.static(__dirname + "/public"));
 // and here: https://stackoverflow.com/questions/1003350/why-is-chrome-searching-for-my-favicon-ico-when-i-serve-up-a-file-from-asp-net-m
 // potential solution here: https://stackoverflow.com/questions/27117337/exclude-route-from-express-middleware
 // note: no issues on firefox 56, edge 40
-// conclusion: use non-chrome browser for now as I am not attempting to resolve this bug at the moment
+// conclusion: resolved by using favicon. fully resolves google chrome bug
 // DC, 2017-11-09
 
 //register routes
@@ -54,7 +59,7 @@ app.get("/:shorturl", (req, res) => {
 		});
 	});
 	let shortUrl = req.params.shorturl;
-	console.log("DC: shortUrl = " + shortUrl);
+	console.log("shortUrl clicked = " + shortUrl);
 	redis
 		.incrementCount(APP_CLICK_KEY, shortUrl)
 		.then(data => {
