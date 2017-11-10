@@ -1,0 +1,20 @@
+      <table class="table table-sm table-hover">
+        <thead class="thead-dark">
+          <tr>
+            <th scope="col">Original URL</th>
+            <th scope="col">Short URL</th>
+            <th scope="col">Click Count</th>
+          </tr>
+        </thead>
+        <tbody>
+        
+          {{#each myUrls}}
+             <tr>
+               <th scope="row">{{this}}</th>
+               <td><b><a href="{{@key}}">{{../myHost}}/{{@key}}</a></b></td>
+               <td>{{lookup ../myCounts @key}}</td>
+             </tr>
+           {{/each}} 
+
+        </tbody>
+      </table>   
