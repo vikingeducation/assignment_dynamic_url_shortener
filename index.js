@@ -7,8 +7,8 @@ const io = require("socket.io")(server);
 const redisClient = require("redis").createClient();
 
 //URL shortener
-var GoogleUrl = require("google-url");
-googleUrl = new GoogleURL();
+var googleUrl = require("google-url");
+googleUrl = new googleUrl();
 
 //Examples
 googleUrl.shorten("http://bluerival.com/", function(err, shortUrl) {
@@ -28,6 +28,16 @@ redisClient.setnx("count", 0);
 
 app.get("/", (req, res) => {
   res.sendFile(__dirname + "/index.html");
+});
+
+app.post("/", (req, res) => {
+  res.redirect("/");
+});
+
+io.on("visitor-count", client => {
+  redisClient.incr("visitor-count", (err, count) => {
+    client.emit("new count", count);
+  });
 });
 
 server.listen(3000);
