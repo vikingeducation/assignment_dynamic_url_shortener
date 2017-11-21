@@ -6,6 +6,8 @@ const redisClient = redis.createClient();
 
 const app = express();
 let visited = [];
+let links = [];
+let counts =[]
 const hbs = expressHandlebars.create({
   defaultLayout: "main"
   // helpers: helpers.registered
@@ -20,10 +22,32 @@ app.set("view engine", "handlebars");
 //app.use(express.static(__dirname + "/public"));
 
 app.get("/", (req, res) => {
+  redisClient.KEYS("*", (err, keys) => {
+      console.log("database keys" + keys);
+      for (var i = 0; i < keys.length; i++) {
+       redisClient.hgetall(keys[i], (err, url) => {
+        //console.log("This is the data:" + url["link"]);
+        
+        if (url) {
+          links.push(url["link"])
+          counts.push(url["count"])
+          console.log("this is it:" + url["count"])
+          console.log("these are the:" +links)
+          console.log("this is it:" + url["link"])
+
+        }
+
+        }) 
+      }
+
+    });
+
   redisClient.incr("visitor-count", (err, count) => {
-    res.render("form");
+    console.log(links)
+    res.render("form", {links: links, counts: counts});
     //
   });
+
 });
 
 app.post("/postinputurl", (req, res) => {
@@ -43,7 +67,7 @@ app.post("/postinputurl", (req, res) => {
     if (err) {
       console.log("error");
     } else {
-      visited.push(id)
+      
       res.render("form", { res: id });
 
 
@@ -71,9 +95,7 @@ app.get("/:id", (req, res) => {
   /*var geturl = new Promise((resolve, reject) => {*/
   redisClient.hgetall(id, function(err, url) {
     console.log("url object: " + url);
-    redisClient.keys("*", (err, keys) => {
-      console.log("database keys" + keys);
-    });
+
     if (url["link"].slice("")[0]==="h"){
     /*let redirect = url;*/
 
@@ -91,6 +113,8 @@ app.get("/:id", (req, res) => {
     /*resolve(url);*/
   }
 });
+
+
 
   /*});*/
   /*geturl.then(url => {
