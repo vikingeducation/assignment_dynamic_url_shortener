@@ -29,10 +29,33 @@ app.get('/', (req, res) => {
 
 app.post('/postinputurl', (req, res) => {
   //res.redirect("back")
-  redisClient.incr('visitor-count', (err, count) => {
-    res.send(`Visitor Count: ${count}`)
+  let url, id; 
+  id = Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 5);
+  url = req.body.inputurl
+  console.log(url)
+  redisClient.set(id, url, (err, response) => {
+   if (err) {
+    console.log('error')
+   } else {
+   res.render('form', {res: id})
+    console.log(id)
+   }
   })
+  /*redisClient.incr('visitor-count', (err, count) => {
+    res.send(`Visitor Count: ${count}`)
+  })*/
 });
+
+app.get('/:id', (req, res) =>{
+  console.log(req.params)
+  let id = req.params.id
+  redisClient.get(id, function (err, url) {
+  console.log("get: ", url);
+  res.redirect(url)
+  });
+
+
+})
 
 app.listen(3000, () => {
   console.log('server has started');
