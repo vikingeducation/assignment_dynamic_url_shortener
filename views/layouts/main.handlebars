@@ -6,10 +6,34 @@
   <meta name="description" content="The HTML5 Herald">
   <meta name="author" content="SitePoint">
   <link rel="stylesheet" href="css/styles.css?v=1.0">
+  <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+  <script src="/socket.io/socket.io.js"></script>
 </head>
 
 <body>
   {{{body}}}
 </body>
+
+<script>
+  var socket = io.connect("http://localhost:3000");
+
+  socket.on("new count", function(data) {
+    $("#count").html(data);
+  });
+
+
+
+  $(".urlLink").click(function() {
+    socket.emit("linkClicked", )
+  })
+
+  $("#increment").click(function() {
+    socket.emit("increment");
+  });
+
+  $("#decrement").click(function() {
+    socket.emit("decrement");
+  });
+</script>
 
 </html>
