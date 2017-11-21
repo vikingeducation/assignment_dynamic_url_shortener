@@ -28,20 +28,22 @@ app.post("/", (req, res) => {
 
   TinyURL.shorten(longUrl, function(shortUrl) {
     redisClient.hmset(
-      longUrl, {
+      longUrl,
+      {
         longUrl: longUrl,
         shortUrl: shortUrl,
         clicks: 0
       },
       (err, data) => {
-
+        // getting ALL keys from redis
         let keyArray = [];
-        redisClient.keys('*', (err, keys) => {
+        redisClient.keys("*", (err, keys) => {
           keys.forEach(longUrl => {
             keyArray.push(longUrl);
-
           });
           console.log("keyArray is " + keyArray);
+          // set params array to hold all objects in redis
+          // found using their keys
           var params = [];
           keyArray.forEach(longUrl => {
             console.log("longUrl is " + longUrl);
@@ -55,12 +57,12 @@ app.post("/", (req, res) => {
             });
           });
 
-
           params = {
             params: params
           };
           res.render("main", params);
         });
-      });
+      }
+    );
   });
 });
