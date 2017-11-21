@@ -17,23 +17,22 @@
 <script>
   var socket = io.connect("http://localhost:3000");
 
-  socket.on("new count", function(data) {
-    $("#count").html(data);
-  });
 
 
-
-  $(".urlLink").click(function() {
-    socket.emit("linkClicked", )
+  $(".urlLink").click(function(e) {
+    e.preventDefault();
+    var longURL = $(e.target).parent().parent().attr("id");
+    console.log(longURL);
+    socket.emit("linkClicked", longURL);
   })
 
-  $("#increment").click(function() {
-    socket.emit("increment");
+  socket.on("newCount", function(clickInfo) {
+    let id = clickInfo.id;
+    let clicks = clickInfo.clicks;
+    let str = "#"+id+"clicks";
+    $(str).html(clicks);
   });
 
-  $("#decrement").click(function() {
-    socket.emit("decrement");
-  });
 </script>
 
 </html>

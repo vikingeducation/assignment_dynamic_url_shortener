@@ -24,8 +24,7 @@ app.post("/", (req, res) => {
 
   TinyURL.shorten(longUrl, function(shortUrl) {
     redisClient.hmset(
-      longUrl,
-      {
+      longUrl, {
         longUrl: longUrl,
         shortUrl: shortUrl,
         clicks: 0
@@ -57,6 +56,22 @@ app.post("/", (req, res) => {
 
 io.on("connection", client => {
   console.log("New connection!");
+
+  client.on("linkClicked", (longUrl) => {
+    console.log(longUrl);
+    redisClient.hmget(longUrl, 'clicks', (err, array) => {
+      let clicks = Number(array[0]);
+      clicks++;
+      redisClient.hmset(longUrl, "clicks", clicks, (err, data) => {
+        console.log("err is " + err);
+        let clickInfo = {
+          clicks: clicks,
+          id: longUrl
+        }
+        client.emit("newCount", clickInfo);
+      });
+    });
+  })
 
   // client.emit("new count", count);
   //
