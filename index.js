@@ -16,15 +16,37 @@ app.use(
 );
 
 app.get("/", (req, res) => {
-  res.render("main");
+  let keyArray = [];
+  redisClient.keys("*", (err, keys) => {
+    keys.forEach(longUrl => {
+      keyArray.push(longUrl);
+    });
+    var params = [];
+    keyArray.forEach(longUrl => {
+      console.log("longUrl is " + longUrl);
+      redisClient.hgetall(longUrl, (err, obj) => {
+        params.push(obj);
+      });
+    });
+
+    let paramsObj = {
+      params: params
+    };
+    res.render("main", paramsObj);
+  });
 });
 
 app.post("/", (req, res) => {
   let longUrl = req.body["url-input"];
+  let httpCheck = longUrl.slice(0, 7);
+  if (httpCheck != "http://") {
+    longUrl = "http://" + longUrl;
+  }
 
   TinyURL.shorten(longUrl, function(shortUrl) {
     redisClient.hmset(
-      longUrl, {
+      longUrl,
+      {
         longUrl: longUrl,
         shortUrl: shortUrl,
         clicks: 0
@@ -57,9 +79,9 @@ app.post("/", (req, res) => {
 io.on("connection", client => {
   console.log("New connection!");
 
-  client.on("linkClicked", (longUrl) => {
+  client.on("linkClicked", longUrl => {
     console.log(longUrl);
-    redisClient.hmget(longUrl, 'clicks', (err, array) => {
+    redisClient.hmget(longUrl, "clicks", (err, array) => {
       let clicks = Number(array[0]);
       clicks++;
       redisClient.hmset(longUrl, "clicks", clicks, (err, data) => {
@@ -67,26 +89,11 @@ io.on("connection", client => {
         let clickInfo = {
           clicks: clicks,
           id: longUrl
-        }
-        client.emit("newCount", clickInfo);
+        };
+        io.emit("newCount", clickInfo);
       });
     });
-  })
-
-  // client.emit("new count", count);
-  //
-  // // NEW CODE BELOW!
-  // client.on("increment", () => {
-  //   count++;
-  //   io.emit("new count", count);
-  // });
-  //
-  // client.on("decrement", () => {
-  //   count--;
-  //   io.emit("new count", count);
-  // });
-  // NEW CODE ABOVE!!
+  });
 });
 
 server.listen(3000);
-// app.listen(3000, "localhost", () => {});
