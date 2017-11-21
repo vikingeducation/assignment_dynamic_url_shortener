@@ -20,6 +20,7 @@
   "dependencies": {
     "express": "^4.16.2",
     "express-handlebars": "^3.0.0",
+    "node-url-shorter": "0.0.4",
     "redis": "^2.8.0",
     "short-url": "0.0.1",
     "socket.io": "^2.0.4",
