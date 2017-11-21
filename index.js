@@ -10,9 +10,7 @@ app.set("view engine", "handlebars");
 const bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({ extended: true }));
 const redisClient = require("redis").createClient();
-var TinyURL = require('tinyurl');
-
-
+var TinyURL = require("tinyurl");
 
 app.use(
   "/socket.io",
@@ -23,27 +21,40 @@ app.get("/", (req, res) => {
   res.render("main");
 });
 
-redisClient.setnx("urlArray", []);
-
 app.listen(3000, "localhost", () => {});
 
 app.post("/", (req, res) => {
   let longUrl = req.body["url-input"];
 
   TinyURL.shorten(longUrl, function(shortUrl) {
-    redisClient.setnx(longUrl, shortUrl);
-    redisClient.setnx(shortUrl, longUrl);
-    console.log(longUrl);
-    console.log(shortUrl);
+    redisClient.hmset(
+      longUrl,
+      {
+        longUrl: longUrl,
+        shortUrl: shortUrl,
+        clicks: 0
+      },
+      (err, data) => {
+        console.log(data);
+        console.log(err);
+        let params = [];
+        let keyArray = [];
+        redisClient.keys(keys => {
+          keys.forEach(longUrl => {
+            keyArray.push(longUrl);
 
-    res.redirect("back");
-
+          });
+          keyArray.forEach(longUrl => {
+            redisClient.hgetall(longUrl, (err, obj) => {
+              params.push(obj);
+            });
+          });
+          params = {
+            params: params
+          };
+          res.redirect("back", params);
+        }
+        });
+    );
   });
-
-
-
-
-  // redisClient.get(long_url, (err, short) => {
-
-  // });
 });
