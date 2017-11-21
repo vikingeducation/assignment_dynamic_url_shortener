@@ -1,0 +1,27 @@
+{
+  "name": "assignment_dynamic_url_shortener",
+  "version": "1.0.0",
+  "description": "Build a URL shortening service, outfitted with realtime analytics.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SamuelLangenfeld/assignment_dynamic_url_shortener.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/SamuelLangenfeld/assignment_dynamic_url_shortener/issues"
+  },
+  "homepage": "https://github.com/SamuelLangenfeld/assignment_dynamic_url_shortener#readme",
+  "dependencies": {
+    "express": "^4.16.2",
+    "express-handlebars": "^3.0.0",
+    "redis": "^2.8.0",
+    "socket.io": "^2.0.4",
+    "socket.io-client": "^2.0.4"
+  }
+}
