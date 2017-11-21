@@ -37,15 +37,15 @@ app.post("/postinputurl", (req, res) => {
   url= req.body.inputurl;
   let count= 0;
   redisClient.HMSET(id, {
-  "link": url, 
-  "count": "0"
+    "link": url,
+    "count": "0"
   }, (err, response) => {
     if (err) {
       console.log("error");
     } else {
       visited.push(id)
       res.render("form", { res: id });
-     
+
 
     }
   });
@@ -61,38 +61,42 @@ app.post("/postinputurl", (req, res) => {
       console.log(id);
     }
   });*/
- 
+
 
 
 app.get("/:id", (req, res) => {
   let id = req.params.id;
-  let redirect;
+  console.log("id: " + id);
+  //let redirect;
   /*var geturl = new Promise((resolve, reject) => {*/
-    redisClient.hgetall(id, function(err, url) {
-   console.log(url);
-      if (url["link"].slice("")[0]==="h"){
-      /*let redirect = url;*/
-      
-      let num = (Number(url["count"]) + 1);
-      console.log(visited)
-      /*url["count"]=  num*/;
-     redisClient.HMSET(id, { 
-    "count": num
-    }, (err, response) => {})
-     
-      res.redirect(url["link"]);
-
-    } else {
-      res.redirect("/")
-      /*resolve(url);*/
-    }
+  redisClient.hgetall(id, function(err, url) {
+    console.log("url object: " + url);
+    redisClient.keys("*", (err, keys) => {
+      console.log("database keys" + keys);
     });
+    if (url["link"].slice("")[0]==="h"){
+    /*let redirect = url;*/
+
+      let num = (Number(url["count"]) + 1);
+      //console.log(visited)
+      /*url["count"]=  num*/;
+      redisClient.HMSET(id, {
+        "link": url["link"],
+        "count": num
+        }, (err, response) => {})
+
+      res.redirect(url["link"]);
+    } else {
+    res.redirect("/")
+    /*resolve(url);*/
+  }
+});
 
   /*});*/
   /*geturl.then(url => {
     res.redirect(url);
   });*/
-  
+
 });
 
 app.listen(3000, () => {
