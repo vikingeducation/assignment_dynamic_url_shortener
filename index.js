@@ -82,14 +82,20 @@ io.on("connection", client => {
     });
   });
 
-  for (let i = 1; i < tableArr.length; i++) {
-    client.on("website-count" + i, () => {
-      console.log("website-count" + i);
-      redisClient.incr("website-count" + i, (err, count) => {
-        io.emit("new website-count" + i, count);
-      });
+  client.on("click", data => {
+    redisClient.incr("click", (err, count) => {
+      io.emit("new click", count);
     });
-  }
+  });
+
+  // for (let i = 1; i < tableArr.length; i++) {
+  //   client.on("website-count" + i, () => {
+  //     console.log("website-count" + i);
+  //     redisClient.incr("website-count" + i, (err, count) => {
+  //       io.emit("new website-count" + i, count);
+  //     });
+  //   });
+  // }
 });
 
 server.listen(3000);

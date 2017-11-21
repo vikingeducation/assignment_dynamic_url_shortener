@@ -31,7 +31,7 @@
         <tr>
           <th scope="row">{{obj.longUrl}}</th>
           <td><a href="{{obj.shortUrl}}" class="linkCount" id="link{{objLength}}" target="_blank">{{obj.shortUrl}}</a></td>
-          <td>0</td>
+          <td id="linkCountId"></td>
         </tr>
       {{/each}}
       </tbody>
@@ -54,16 +54,38 @@ $(document).ready(() => {
   socket.emit("visitor-count");
 });
 
-for (let i = 1; i < $("tr").length; i++) {
-  socket.on("new website-count" + i, website-count => {
-    $("#link" + i).html(website-count);
-  });
+//var baseUrl = $('body').eq(0).attr('data-base-url');
+//var socket = io.connect(baseUrl);
 
-  $("#link" + i).click(() => {
-    socket.emit('website-count' + i);
-  });
-}
+socket.on("new click", count => {
+  $('#linkCountId').html(count);
+});
+
+$('.linkCount').click(function(e) {
+    e.preventDefault();
+    var $target = $(e.target);
+    var data = {
+    id: $target.attr('id');
+    };
+    socket.emit('click', data);
+    window.location.href = $target.attr('href');
+    return false;
+});
+
+
+
+// for (let i = 1; i < $("tr").length; i++) {
+//   socket.on("new website-count" + i, website-count => {
+//     $("#link" + i).html(website-count);
+//   });
+//
+//   $("#link" + i).click(() => {
+//     socket.emit('website-count' + i);
+//   });
+// }
 
 </script>
+
+
 
 </body>
