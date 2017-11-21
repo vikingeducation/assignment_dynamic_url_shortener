@@ -3,16 +3,13 @@
   <input type="submit">
 </form>
 
-{{#each params as |param|}}
-<h1>  param.longUrl</h1>
-
-{{/each}}
-
 <table>
   <tr>
     <th>Original URL</th><th>Short URL</th><th>All Clicks</th>
   </tr>
+  {{#each params as |param|}}
   <tr>
-    <td></td><td></td><td></td>
+    <td>{{param.longUrl}}</td><td><a href="{{param.shortUrl}}">{{param.shortUrl}}</a></td><td>{{param.clicks}}</td>
   </tr>
+  {{/each}}
 </table>

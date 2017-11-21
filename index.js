@@ -41,25 +41,20 @@ app.post("/", (req, res) => {
             keyArray.push(longUrl);
 
           });
-          console.log("keyArray is " + keyArray);
           var params = [];
           keyArray.forEach(longUrl => {
             console.log("longUrl is " + longUrl);
             redisClient.hgetall(longUrl, (err, obj) => {
               console.log("err " + err);
-              console.log(obj);
-              console.log(typeof obj);
-              console.log(typeof params);
-              console.log(Array.isArray(params));
               params.push(obj);
             });
           });
 
 
-          params = {
+          let paramsObj = {
             params: params
           };
-          res.render("main", params);
+          res.render("main", paramsObj);
         });
       });
   });
