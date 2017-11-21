@@ -33,33 +33,62 @@ app.post("/postinputurl", (req, res) => {
     .toString(36)
     .replace(/[^a-z]+/g, "")
     .substr(0, 5);
-  url = req.body.inputurl;
-  console.log(url);
-  redisClient.set(id, url, (err, response) => {
+
+  url= req.body.inputurl;
+  let count= 0;
+  redisClient.HMSET(id, {
+  "link": url, 
+  "count": "0"
+  }, (err, response) => {
+    if (err) {
+      console.log("error");
+    } else {
+      res.render("form", { res: id });
+     
+
+    }
+  });
+
+})
+
+
+  /*redisClient.set(id, url, (err, response) => {
     if (err) {
       console.log("error");
     } else {
       res.render("form", { res: id });
       console.log(id);
     }
-  });
-  /*redisClient.incr('visitor-count', (err, count) => {
-    res.send(`Visitor Count: ${count}`)
-  })*/
-});
+  });*/
+ 
+
 
 app.get("/:id", (req, res) => {
-  console.log(req.params);
+ 
   let id = req.params.id;
-  var geturl = new Promise((resolve, reject) => {
+  let redirect;
+  /*var geturl = new Promise((resolve, reject) => {*/
     redisClient.get(id, function(err, url) {
-      console.log("get: ", url);
-      resolve(url);
+   console.log(url);
+      if (url["link"].slice("")[0]==="h"){
+      /*let redirect = url;*/
+      
+      let num = (Number(url["count"]) + 1);
+      url["count"] = num;
+     
+      res.redirect(url["link"]);
+
+    } else {
+      res.redirect("/")
+      /*resolve(url);*/
+    }
     });
-  });
-  geturl.then(url => {
+
+  /*});*/
+  /*geturl.then(url => {
     res.redirect(url);
-  });
+  });*/
+  
 });
 
 app.listen(3000, () => {
