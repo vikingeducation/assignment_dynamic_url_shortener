@@ -8,12 +8,10 @@ const redisClient = require("redis").createClient();
 const querystring = require("querystring");
 const bodyParser = require("body-parser");
 const expressHandlebars = require("express-handlebars");
-const helpers = require("./helpers");
 
 const hbs = expressHandlebars.create({
-  helpers: helpers,
   partialsDir: "views/",
-  defaultLayout: "application"
+  defaultLayout: "main"
 });
 
 app.engine("handlebars", hbs.engine);
@@ -37,10 +35,12 @@ app.use(
 redisClient.setnx("count", 0);
 
 app.get("/", (req, res) => {
-  res.sendFile(__dirname + "/index.html");
+  res.render("index");
 });
 
-app.post("/postform", (req, res) => {
+let tableArr = [];
+
+app.post("/", (req, res) => {
   let shortenUrl = "test";
   let short = url => {
     return new Promise((resolve, reject) => {
@@ -64,13 +64,12 @@ app.post("/postform", (req, res) => {
         req.body.userURL,
         (error, result) => {
           if (error) res.send("Error: " + error);
+          redisClient.hgetall("table", function(err, object) {
+            tableArr.push(object);
+            res.render("index", { urlObject: tableArr });
+          });
         }
       );
-      let urlObject = redisClient.hgetall("table", function(err, object) {
-        console.log(object);
-      });
-
-      res.redirect("/");
     })
     .catch(function(err) {
       console.error(err);
