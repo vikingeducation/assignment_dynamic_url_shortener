@@ -21,10 +21,6 @@ app.set("view engine", "handlebars");
 let googleUrl = require("google-url");
 googleUrl = new googleUrl({ key: "AIzaSyDJGdPIZSgoDjYijfRFRY6OvXmqjnxUVlY" });
 
-googleUrl.shorten("http://goo.gl/BzpZ54", function(err, longUrl) {
-  // longUrl should be http://bluerival.com/
-});
-
 app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use(
@@ -55,7 +51,6 @@ app.post("/", (req, res) => {
   };
   short(req.body.userURL)
     .then(function(result) {
-      console.log(shortenUrl);
       redisClient.hmset(
         "table",
         "shortUrl",
@@ -66,7 +61,10 @@ app.post("/", (req, res) => {
           if (error) res.send("Error: " + error);
           redisClient.hgetall("table", function(err, object) {
             tableArr.push(object);
-            res.render("index", { urlObject: tableArr });
+            res.render("index", {
+              urlObject: tableArr,
+              objLength: tableArr.length
+            });
           });
         }
       );
@@ -78,27 +76,20 @@ app.post("/", (req, res) => {
 
 //Total count
 io.on("connection", client => {
-  console.log("hello world");
   client.on("visitor-count", () => {
-    console.log("client listener");
     redisClient.incr("visitor-count", (err, count) => {
       io.emit("new count", count);
     });
   });
+
+  for (let i = 1; i < tableArr.length; i++) {
+    client.on("website-count" + i, () => {
+      console.log("website-count" + i);
+      redisClient.incr("website-count" + i, (err, count) => {
+        io.emit("new website-count" + i, count);
+      });
+    });
+  }
 });
 
 server.listen(3000);
-
-/*
-io.on("connection", client => {
-  redisClient.get("visitor-count", (err, count) => {
-    console.log(count);
-    client.emit("new count", count); //server is emitting data back to client via new count event
-  });
-
-
-  });*/
-
-//emit visitor-count from client. Client emits
-//Server catches it, emits to client. set up listener on client. Once server updates
-//Client catches it. once receive data, update html when appending

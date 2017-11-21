@@ -22,7 +22,6 @@
       <thead class="thead-default">
         <tr>
           <th>Original URL</th>
-          <th>Created</th>
           <th>Google URL</th>
           <th>All Clicks</th>
         </tr>
@@ -31,8 +30,7 @@
       {{#each urlObject as |obj|}}
         <tr>
           <th scope="row">{{obj.longUrl}}</th>
-          <td>Created Time</td>
-          <td>{{obj.shortUrl}}</td>
+          <td><a href="{{obj.shortUrl}}" class="linkCount" id="link{{objLength}}" target="_blank">{{obj.shortUrl}}</a></td>
           <td>0</td>
         </tr>
       {{/each}}
@@ -55,6 +53,17 @@ socket.on("new count", count => {
 $(document).ready(() => {
   socket.emit("visitor-count");
 });
+
+for (let i = 1; i < $("tr").length; i++) {
+  socket.on("new website-count" + i, website-count => {
+    $("#link" + i).html(website-count);
+  });
+
+  $("#link" + i).click(() => {
+    socket.emit('website-count' + i);
+  });
+}
+
 </script>
 
 </body>
