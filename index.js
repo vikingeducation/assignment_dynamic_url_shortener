@@ -5,7 +5,7 @@ const redis = require("redis");
 const redisClient = redis.createClient();
 
 const app = express();
-
+let visited = [];
 const hbs = expressHandlebars.create({
   defaultLayout: "main"
   // helpers: helpers.registered
@@ -43,6 +43,7 @@ app.post("/postinputurl", (req, res) => {
     if (err) {
       console.log("error");
     } else {
+      visited.push(id)
       res.render("form", { res: id });
      
 
@@ -64,17 +65,20 @@ app.post("/postinputurl", (req, res) => {
 
 
 app.get("/:id", (req, res) => {
- 
   let id = req.params.id;
   let redirect;
   /*var geturl = new Promise((resolve, reject) => {*/
-    redisClient.get(id, function(err, url) {
+    redisClient.hgetall(id, function(err, url) {
    console.log(url);
       if (url["link"].slice("")[0]==="h"){
       /*let redirect = url;*/
       
       let num = (Number(url["count"]) + 1);
-      url["count"] = num;
+      console.log(visited)
+      /*url["count"]=  num*/;
+     redisClient.HMSET(id, { 
+    "count": num
+    }, (err, response) => {})
      
       res.redirect(url["link"]);
 
