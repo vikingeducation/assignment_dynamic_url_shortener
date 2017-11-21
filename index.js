@@ -9,6 +9,7 @@ const bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({ extended: true }));
 const redisClient = require("redis").createClient();
 var TinyURL = require("tinyurl");
+app.use(express.static(__dirname + '/public'));
 
 app.use(
   "/socket.io",
@@ -45,8 +46,7 @@ app.post("/", (req, res) => {
 
   TinyURL.shorten(longUrl, function(shortUrl) {
     redisClient.hmset(
-      longUrl,
-      {
+      longUrl, {
         longUrl: longUrl,
         shortUrl: shortUrl,
         clicks: 0

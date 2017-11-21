@@ -1,6 +1,6 @@
 <form action="/" method="post" class="page-header">
   <label>Input a URL</label><input type="text" name="url-input" >
-  <input type="submit">
+  <input class="btn" type="submit">
 </form>
 
 <table class="table">
@@ -10,7 +10,7 @@
   {{#each params as |param|}}
   <tr id="{{param.longUrl}}">
     <td>{{param.longUrl}}</td>
-    <td class="urlLink"><a href="{{param.shortUrl}}">{{param.shortUrl}}</a></td>
+    <td class="urlLink"><a href="{{param.shortUrl}}" target="_blank">{{param.shortUrl}}</a></td>
     <td id="{{param.longUrl}}clicks">{{param.clicks}}</td>
   </tr>
   {{/each}}

@@ -32,7 +32,7 @@
   socket.on("newCount", function(clickInfo) {
     let id = clickInfo.id.replace(/\./g, '\\.');
     id = id.replace(/\:/g, '\\:');
-    id = id.replace(/\//g, '\\');
+    id = id.replace(/\//g, '\\/');
     id = id.replace(/\_/g, '\\_');
     let clicks = clickInfo.clicks;
     let str = "#"+id+"clicks";
