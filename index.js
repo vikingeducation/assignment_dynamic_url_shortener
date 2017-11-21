@@ -28,33 +28,39 @@ app.post("/", (req, res) => {
 
   TinyURL.shorten(longUrl, function(shortUrl) {
     redisClient.hmset(
-      longUrl,
-      {
+      longUrl, {
         longUrl: longUrl,
         shortUrl: shortUrl,
         clicks: 0
       },
       (err, data) => {
-        console.log(data);
-        console.log(err);
-        let params = [];
+
         let keyArray = [];
-        redisClient.keys(keys => {
+        redisClient.keys('*', (err, keys) => {
           keys.forEach(longUrl => {
             keyArray.push(longUrl);
 
           });
+          console.log("keyArray is " + keyArray);
+          var params = [];
           keyArray.forEach(longUrl => {
+            console.log("longUrl is " + longUrl);
             redisClient.hgetall(longUrl, (err, obj) => {
+              console.log("err " + err);
+              console.log(obj);
+              console.log(typeof obj);
+              console.log(typeof params);
+              console.log(Array.isArray(params));
               params.push(obj);
             });
           });
+
+
           params = {
             params: params
           };
-          res.redirect("back", params);
-        }
+          res.render("main", params);
         });
-    );
+      });
   });
 });
