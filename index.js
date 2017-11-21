@@ -24,7 +24,6 @@ app.get("/", (req, res) => {
     });
     var params = [];
     keyArray.forEach(longUrl => {
-      console.log("longUrl is " + longUrl);
       redisClient.hgetall(longUrl, (err, obj) => {
         params.push(obj);
       });
@@ -60,7 +59,6 @@ app.post("/", (req, res) => {
           });
           var params = [];
           keyArray.forEach(longUrl => {
-            console.log("longUrl is " + longUrl);
             redisClient.hgetall(longUrl, (err, obj) => {
               params.push(obj);
             });
@@ -77,15 +75,11 @@ app.post("/", (req, res) => {
 });
 
 io.on("connection", client => {
-  console.log("New connection!");
-
   client.on("linkClicked", longUrl => {
-    console.log(longUrl);
     redisClient.hmget(longUrl, "clicks", (err, array) => {
       let clicks = Number(array[0]);
       clicks++;
       redisClient.hmset(longUrl, "clicks", clicks, (err, data) => {
-        console.log("err is " + err);
         let clickInfo = {
           clicks: clicks,
           id: longUrl
