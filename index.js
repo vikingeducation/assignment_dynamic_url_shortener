@@ -30,13 +30,29 @@ app.get("/", (req, res) => {
 });
 
 app.post("/postform", (req, res) => {
-  console.log(req.body.userURL);
-  googleUrl.shorten(req.body.userURL, function(err, shortUrl) {
+  let shortenUrl = "test";
+  googleUrl.shorten(req.body.userURL, (err, shortUrl) => {
+    if (err) {
+      return err;
+    }
     console.log(shortUrl);
+    shortenUrl = shortUrl;
   });
+  console.log(shortenUrl);
+  redisClient.hmset(
+    "table",
+    "shortUrl",
+    shortenUrl,
+    "longUrl",
+    req.body.userURL,
+    (error, result) => {
+      if (error) res.send("Error: " + error);
+    }
+  );
   res.redirect("/");
 });
 
+//Total count
 io.on("connection", client => {
   console.log("hello world");
   client.on("visitor-count", () => {
