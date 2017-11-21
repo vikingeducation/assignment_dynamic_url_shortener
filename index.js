@@ -10,7 +10,9 @@ app.set("view engine", "handlebars");
 const bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({ extended: true }));
 const redisClient = require("redis").createClient();
-const url = require("short-url");
+var TinyURL = require('tinyurl');
+
+
 
 app.use(
   "/socket.io",
@@ -21,17 +23,27 @@ app.get("/", (req, res) => {
   res.render("main");
 });
 
+redisClient.setnx("urlArray", []);
+
 app.listen(3000, "localhost", () => {});
 
 app.post("/", (req, res) => {
-  let long_url = req.body["url-input"];
+  let longUrl = req.body["url-input"];
 
-  url.shorten("www.google.com", function(err, short_url) {
-    // redisClient.setnx(long_url, short_url);
-    // redisClient.get(long_url, (err, short) => {
-    console.log(short_url);
+  TinyURL.shorten(longUrl, function(shortUrl) {
+    redisClient.setnx(longUrl, shortUrl);
+    redisClient.setnx(shortUrl, longUrl);
+    console.log(longUrl);
+    console.log(shortUrl);
 
-    // });
-    res.redirect("/");
+    res.redirect("back");
+
   });
+
+
+
+
+  // redisClient.get(long_url, (err, short) => {
+
+  // });
 });
