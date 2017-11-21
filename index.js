@@ -6,19 +6,17 @@ const server = require("http").createServer(app);
 const io = require("socket.io")(server);
 const redisClient = require("redis").createClient();
 const querystring = require("querystring");
+const bodyParser = require("body-parser");
 
 //URL shortener
-var googleUrl = require("google-url");
-googleUrl = new googleUrl();
-
-//Examples
-googleUrl.shorten("http://bluerival.com/", function(err, shortUrl) {
-  // shortUrl should be http://goo.gl/BzpZ54
-});
+let googleUrl = require("google-url");
+googleUrl = new googleUrl({ key: "AIzaSyDJGdPIZSgoDjYijfRFRY6OvXmqjnxUVlY" });
 
 googleUrl.shorten("http://goo.gl/BzpZ54", function(err, longUrl) {
   // longUrl should be http://bluerival.com/
 });
+
+app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use(
   "/socket.io",
@@ -31,10 +29,11 @@ app.get("/", (req, res) => {
   res.sendFile(__dirname + "/index.html");
 });
 
-app.post("/", (req, res) => {
-  //take URL queries
-  let userURL = querystring.parse(req.url);
-
+app.post("/postform", (req, res) => {
+  console.log(req.body.userURL);
+  googleUrl.shorten(req.body.userURL, function(err, shortUrl) {
+    console.log(shortUrl);
+  });
   res.redirect("/");
 });
 

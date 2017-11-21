@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/edwinyung/assignment_dynamic_url_shortener#readme",
   "dependencies": {
+    "body-parser": "^1.18.2",
     "express": "^4.16.2",
     "google-url": "0.0.4",
     "redis": "^2.8.0",
