@@ -7,6 +7,17 @@ const io = require("socket.io")(server);
 const redisClient = require("redis").createClient();
 const querystring = require("querystring");
 const bodyParser = require("body-parser");
+const expressHandlebars = require("express-handlebars");
+const helpers = require("./helpers");
+
+const hbs = expressHandlebars.create({
+  helpers: helpers,
+  partialsDir: "views/",
+  defaultLayout: "application"
+});
+
+app.engine("handlebars", hbs.engine);
+app.set("view engine", "handlebars");
 
 //URL shortener
 let googleUrl = require("google-url");
@@ -31,25 +42,39 @@ app.get("/", (req, res) => {
 
 app.post("/postform", (req, res) => {
   let shortenUrl = "test";
-  googleUrl.shorten(req.body.userURL, (err, shortUrl) => {
-    if (err) {
-      return err;
-    }
-    console.log(shortUrl);
-    shortenUrl = shortUrl;
-  });
-  console.log(shortenUrl);
-  redisClient.hmset(
-    "table",
-    "shortUrl",
-    shortenUrl,
-    "longUrl",
-    req.body.userURL,
-    (error, result) => {
-      if (error) res.send("Error: " + error);
-    }
-  );
-  res.redirect("/");
+  let short = url => {
+    return new Promise((resolve, reject) => {
+      googleUrl.shorten(req.body.userURL, (err, shortUrl) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve((shortenUrl = shortUrl));
+        }
+      });
+    });
+  };
+  short(req.body.userURL)
+    .then(function(result) {
+      console.log(shortenUrl);
+      redisClient.hmset(
+        "table",
+        "shortUrl",
+        shortenUrl,
+        "longUrl",
+        req.body.userURL,
+        (error, result) => {
+          if (error) res.send("Error: " + error);
+        }
+      );
+      let urlObject = redisClient.hgetall("table", function(err, object) {
+        console.log(object);
+      });
+
+      res.redirect("/");
+    })
+    .catch(function(err) {
+      console.error(err);
+    });
 });
 
 //Total count
