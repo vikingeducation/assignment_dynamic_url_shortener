@@ -5,13 +5,22 @@ const redis = require("redis");
 const redisClient = redis.createClient();
 
 const app = express();
+
+//for websocket via socket.io
+const server = require('http').createServer(app)
+const io = require('socket.io')(server)
+
 let visited = [];
 let links = [];
-let counts =[]
-const hbs = expressHandlebars.create({
-  defaultLayout: "main"
-  // helpers: helpers.registered
-});
+let counts =[];
+let shortenedlinks = [];
+const hbs = expressHandlebars.create({defaultLayout: "main"});
+
+
+app.use(
+  "/socket.io",
+  express.static(__dirname + "node_modules/socket.io-client/dist/")
+);
 
 app.use(bodyParser.urlencoded({ extended: true }));
 //app.use(bodyParser.json());
@@ -19,39 +28,44 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.engine("handlebars", expressHandlebars({ defaultLayout: "main" }));
 app.set("view engine", "handlebars");
 
-//app.use(express.static(__dirname + "/public"));
+let visitorcount;
 
 app.get("/", (req, res) => {
-  redisClient.KEYS("*", (err, keys) => {
-      console.log("database keys" + keys);
-      for (var i = 0; i < keys.length; i++) {
-       redisClient.hgetall(keys[i], (err, url) => {
-        //console.log("This is the data:" + url["link"]);
-        
-        if (url) {
-          links.push(url["link"])
-          counts.push(url["count"])
-          console.log("this is it:" + url["count"])
-          console.log("these are the:" +links)
-          console.log("this is it:" + url["link"])
-
-        }
-
-        }) 
-      }
-
-    });
-
   redisClient.incr("visitor-count", (err, count) => {
-    console.log(links)
-    res.render("form", {links: links, counts: counts});
-    //
+    visitorcount = count;
   });
 
-});
+  redisClient.KEYS("*", (err, keys) => {
+      for (var i = 0; i < keys.length; i++) {
+         let shortenedlink = `http://localhost:3000/${keys[i]}`
+         shortenedlinks.push(shortenedlink)
+         redisClient.hgetall(keys[i], (err, url) => {
+
+            if (url) {
+              links.push(url["link"])
+              counts.push(url["count"])
+            }
+          })
+        }
+  });
+
+  res.render("form", {links: links, counts: counts, shortenedlinks: shortenedlinks.slice(0, shortenedlinks.length-1)});
+
+  //this is to refresh the arrays so that they aren't doubled on page refresh
+  links = []
+  counts = []
+  shortenedlinks = []
+})
+
+io.on('connection', client => {
+  console.log("New connection!")
+
+  client.emit('visitorcount', visitorcount)
+
+  io.emit('visitorcount', visitorcount)
+})
 
 app.post("/postinputurl", (req, res) => {
-  //res.redirect("back")
   let url, id;
   id = Math.random()
     .toString(36)
@@ -67,62 +81,24 @@ app.post("/postinputurl", (req, res) => {
     if (err) {
       console.log("error");
     } else {
-      
       res.render("form", { res: id });
-
-
     }
   });
-
 })
-
-
-  /*redisClient.set(id, url, (err, response) => {
-    if (err) {
-      console.log("error");
-    } else {
-      res.render("form", { res: id });
-      console.log(id);
-    }
-  });*/
-
-
 
 app.get("/:id", (req, res) => {
   let id = req.params.id;
-  console.log("id: " + id);
-  //let redirect;
-  /*var geturl = new Promise((resolve, reject) => {*/
+
   redisClient.hgetall(id, function(err, url) {
-    console.log("url object: " + url);
-
     if (url["link"].slice("")[0]==="h"){
-    /*let redirect = url;*/
-
       let num = (Number(url["count"]) + 1);
-      //console.log(visited)
-      /*url["count"]=  num*/;
       redisClient.HMSET(id, {
         "link": url["link"],
         "count": num
         }, (err, response) => {})
-
       res.redirect(url["link"]);
-    } else {
-    res.redirect("/")
-    /*resolve(url);*/
-  }
-});
+    } else { res.redirect("/") }
+  })
+})
 
-
-
-  /*});*/
-  /*geturl.then(url => {
-    res.redirect(url);
-  });*/
-
-});
-
-app.listen(3000, () => {
-  console.log("server has started");
-});
+server.listen(3000)

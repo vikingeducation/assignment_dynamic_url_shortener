@@ -3,22 +3,30 @@
   <form class="form-inline" method="post" action="/postinputurl">
     <div class="form-group">
     <label for="inputurl">URL: </label>
-    <input name="inputurl" type="text" class="form-control" id="inputurl">  
+    <input name="inputurl" type="text" class="form-control" id="inputurl">
       </div>
-      
+
   <button type="submit" class="btn btn-default">Submit</button>
   </form>
-    <div id="shortenedurl"><h1>Shortened Url</h1><a href="http://localhost:3000/{{res}}">http://localhost:3000/{{res}}</a></div>
+
+  <div id="shortenedurl"><h1>Current Shortened Url</h1><a href="http://localhost:3000/{{res}}">http://localhost:3000/{{res}}</a></div>
+
   <div class="original">
-      <h1>Original URL:</h1>
-      {{#each links as |link|}} 
+      <h1>Past Original URL:</h1>
+      {{#each links as |link|}}
       <div> {{link}}</div>
       {{/each}}
-     
+
+      <h1>Past Shortened URL:</h1>
+      {{#each shortenedlinks as |shortenedlink|}}
+      <div> {{shortenedlink}}</div>
+      {{/each}}
+
       <h1>Times Visited:</h1>
-      {{#each counts as |count|}} 
+      {{#each counts as |count|}}
       <div>{{count}}</div>
       {{/each}}
+ </div>
+
+ <p id="visitorcount"></p>
 </div>
-</div>
-    
