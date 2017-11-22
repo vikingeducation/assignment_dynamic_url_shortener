@@ -29,6 +29,12 @@
     socket.on('visitorcount', function(data) {
       $('#visitorcount').html(data)
     })
+
+    socket.on('newwebcount', function(data) {
+      location.reload(true)
+      location.reload(true)
+
+    })
   </script>
 </body>
 </html>
