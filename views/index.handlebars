@@ -30,8 +30,8 @@
       {{#each urlObject as |obj|}}
         <tr>
           <th scope="row">{{obj.longUrl}}</th>
-          <td><a href="{{obj.shortUrl}}" class="linkCount" id="link{{objLength}}" target="_blank">{{obj.shortUrl}}</a></td>
-          <td id="linkCountId"></td>
+          <td><a href="{{obj.shortUrl}}" class="linkCount" id="link{{@index}}" target="_blank">{{obj.shortUrl}}</a></td>
+          <td class="link{{@index}}"></td>
         </tr>
       {{/each}}
       </tbody>
@@ -47,7 +47,7 @@
 var socket = io.connect("http://localhost:3000");
 
 socket.on("new count", count => {
-  $("#count").html(count);
+  $("#count").text(count);
 });
 
 $(document).ready(() => {
@@ -57,22 +57,21 @@ $(document).ready(() => {
 //var baseUrl = $('body').eq(0).attr('data-base-url');
 //var socket = io.connect(baseUrl);
 
-socket.on("new click", count => {
-  $('#linkCountId').html(count);
+socket.on("new click", (count, data) => {
+  console.log(count, data);
+  $("."+data.id).text(count);
 });
 
 $('.linkCount').click(function(e) {
     e.preventDefault();
     var $target = $(e.target);
     var data = {
-    id: $target.attr('id');
+    id: $target.attr('id')
     };
     socket.emit('click', data);
-    window.location.href = $target.attr('href');
+    //window.location.href = $target.attr('href');
     return false;
 });
-
-
 
 // for (let i = 1; i < $("tr").length; i++) {
 //   socket.on("new website-count" + i, website-count => {

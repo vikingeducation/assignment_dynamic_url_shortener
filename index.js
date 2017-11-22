@@ -84,7 +84,7 @@ io.on("connection", client => {
 
   client.on("click", data => {
     redisClient.incr("click", (err, count) => {
-      io.emit("new click", count);
+      io.emit("new click", count, data);
     });
   });
 
