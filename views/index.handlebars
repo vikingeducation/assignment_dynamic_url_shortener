@@ -1,0 +1,69 @@
+
+<body>
+  <div class="jumbotron jumbotron-fluid">
+    <div class="container">
+      <div class="row">
+        <h1 class="display-3">Simplify your links</h1>
+      </div>
+      <div class="form-group row">
+        <form action="/" method="post">
+          <label for="inputURL" class="col-2 col-form-label">Original URL</label>
+          <div class="col-12">
+            <input name="userURL" class="form-control" type="text" placeholder="Your original URL here" id="inputURL">
+            <input type="submit" class="btn btn-primary">
+          </div>
+        </form>
+      </div>
+      <p class="lead">All goo.gl URLs and click analytics</p>
+    </div>
+  </div>
+  <div class="container">
+    <table class="table">
+      <thead class="thead-default">
+        <tr>
+          <th>Original URL</th>
+          <th>Google URL</th>
+          <th>All Clicks</th>
+        </tr>
+      </thead>
+      <tbody>
+      {{#each urlObject as |obj|}}
+        <tr>
+          <th scope="row">{{obj.longUrl}}</th>
+          <td><a href="{{obj.shortUrl}}" class="linkCount" id="link{{objLength}}" target="_blank">{{obj.shortUrl}}</a></td>
+          <td>0</td>
+        </tr>
+      {{/each}}
+      </tbody>
+    </table>
+    <div class="row">
+      <h3>Total Visitor Count to this Page:</h3>
+    </div>
+    <h3 id="count"></h3>
+  </div>
+
+
+<script>
+var socket = io.connect("http://localhost:3000");
+
+socket.on("new count", count => {
+  $("#count").html(count);
+});
+
+$(document).ready(() => {
+  socket.emit("visitor-count");
+});
+
+for (let i = 1; i < $("tr").length; i++) {
+  socket.on("new website-count" + i, website-count => {
+    $("#link" + i).html(website-count);
+  });
+
+  $("#link" + i).click(() => {
+    socket.emit('website-count' + i);
+  });
+}
+
+</script>
+
+</body>
