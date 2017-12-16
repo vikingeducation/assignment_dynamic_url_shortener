@@ -1,0 +1,41 @@
+<h1 class="text-center">URL Shortener</h1>
+
+<div class="bar">
+  <form action="/create" method="POST">
+
+    <div class="form-group">
+      <input type="text" class="form-control" name="longUrl" placeholder="Your original URL here">
+    </div>
+
+    <div class="form-group">
+      <button type="submit" class="btn btn-primary" method='post'>Shorten URL</button>
+    </div>
+
+  </form>
+</div>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th class="limit-width">Original URL</th>
+      <th>#</th>
+      <th>Short URL</th>
+      <th>All CLicks</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#each object }}
+      <tr>
+        <td class="limit-width" scope="row"><a href={{ this }}>{{this}}</a></td>
+        <td>tbc</td>
+        <td><a href={{ @key }}>{{@key}}</a></td>
+        <td>allclicks</td>
+      </tr>
+    {{/each}}
+  </tbody>
+</table>
+
+<!-- <h1 id="count"></h1>
+
+<button id="increment">Increment!</button>
+<button id="decrement">Decrement!</button> -->
