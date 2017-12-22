@@ -28,12 +28,12 @@
       var socket = io.connect('http://localhost:3000')
 
       socket.on('new linkShortener', function(object) {
-        $(window).html(object)
+        $('document').html(object)
       })
 
-      // $('#increment').click(function() {
-      //   socket.emit('increment')
-      // })
+      $('#increment').click(function() {
+        socket.emit('increment')
+      })
       //
       // $('#decrement').click(function() {
       //   socket.emit('decrement')

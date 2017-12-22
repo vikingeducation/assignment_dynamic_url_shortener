@@ -17,8 +17,9 @@
 <table class="table">
   <thead>
     <tr>
+      <th>ID</th>
       <th class="limit-width">Original URL</th>
-      <th>#</th>
+      <th>Created At</th>
       <th>Short URL</th>
       <th>All CLicks</th>
     </tr>
@@ -26,10 +27,12 @@
   <tbody>
     {{#each object }}
       <tr>
-        <td class="limit-width" scope="row"><a href={{ this }}>{{this}}</a></td>
-        <td>tbc</td>
-        <td><a href={{ @key }}>{{@key}}</a></td>
-        <td>allclicks</td>
+        {{#each @key }}
+        <td id='{{ object.index }}'>{{ object.index }}</td>
+        <td class="limit-width" scope="row" id="long-url"><a href={{ object.long_url }}>{{object.long_url}}</a></td>
+        <td id='clicks-counter'>tbc</td>
+        <td><a href={{ object.short_url }}>{{object.short_url}}</a></td>
+        <td id="test">{{ object.clicks }}</td>
       </tr>
     {{/each}}
   </tbody>

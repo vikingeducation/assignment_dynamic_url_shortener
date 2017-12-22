@@ -13,6 +13,4 @@ function makeid() {
 // urlCollection['http://localhost:3000/short/' + makeid()] = 'https://i.pinimg.com/736x/32/97/4b/32974b49b7910d6959b79f1bb677dbdd--house-styles-bedroom-decor.jpg';
 //
 
-
-
 module.exports = urlCollection;
