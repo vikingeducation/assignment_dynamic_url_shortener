@@ -23,11 +23,10 @@ Challenges:
 
 What things you need to install the software and how to install them
 
-* node
-* npm
-* mongodb
+* nodejs
+* reddis
 
-## Local Deployment 
+### Local Deployment 
 How to deploy this on your local machine
 
 ```
