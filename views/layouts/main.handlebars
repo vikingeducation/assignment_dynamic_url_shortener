@@ -25,19 +25,22 @@
     <script src="/socket.io/socket.io.js"></script>
 
     <script>
-      var socket = io.connect('http://localhost:3000')
 
-      socket.on('new linkShortener', function(object) {
-        $('document').html(object)
+      $('document').ready( function() {
+        var socket = io.connect('http://localhost:3000/short/');
+        $( "a" ).click( function() {
+          // var idx = $('td[id]').eq(0).attr('id');
+          var idx = $(this).eq(0).parent().attr('id');
+          alert( "Handler for .click() called.  " + idx);
+          socket = io.connect('http://localhost:3000/short/' + idx)
+          socket.on('count', (id, totalClicks)=> {
+            var $output = $('#' + id).eq(0);
+            $output.text(totalClicks)
+          })
+        });
+
       })
 
-      $('#increment').click(function() {
-        socket.emit('increment')
-      })
-      //
-      // $('#decrement').click(function() {
-      //   socket.emit('decrement')
-      // })
     </script>
   </body>
 </html>

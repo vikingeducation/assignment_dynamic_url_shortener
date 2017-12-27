@@ -6,6 +6,10 @@ const app = express();
 const asyncRedis = require("async-redis");
 const redisClient = asyncRedis.createClient();
 
+redisClient.on('connect', () => {
+  console.log('connected to Redis!')
+})
+
 // Body Parser
 const bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({ extended: true }) );
@@ -22,16 +26,10 @@ app.set('view engine', 'handlebars');
 
 app.use(express.static(`${__dirname}/public`));
 
+let urls = {};
 let idx = 0;
-// app.get('/', (req, res) => {
-//   redisClient.incr('visitor-count', (err, count) => {
-//     res.send(`Visitor Count: ${count}`)
-//   })
-// });
-//
-// let shorty = 'http://localhost:3000/short/' + makeid();
-// let longy = 'https://i.pinimg.com/736x/32/97/4b/32974b49b7910d6959b79f1bb677dbdd--house-styles-bedroom-decor.jpg';
-// redisClient.hset('linkShortener', shorty, longy );
+
+
 
 function makeid() {
   var text = "";
@@ -41,20 +39,14 @@ function makeid() {
   return text;
 }
 
-app.get('/short/:id', (req, res)=> {
+app.get('/short/:id', async (req, res)=> {
   var id = req.params.id;
-  let reqLink = 'http://localhost:3000/short/' + id;
-  io.emit('new value', value)
-  redisClient.hgetall('linkShortener', function(err, object) {
-    console.log('object is:  ');
-      console.log(object);
-      res.redirect(object);
-  });
-  // redisClient.hget('linkShortener', reqLink, function(err, object) {
-  //   console.log('object is:  ');
-  //     console.log(object);
-  //     res.redirect(object);
-  // });
+  let direction = await redisClient.hget(id, 'long_url');
+  let totalClicks = await redisClient.hget(id, 'clicks');
+  totalClicks = parseInt(totalClicks) + 1;
+  io.sockets.emit('count', id, totalClicks);
+  redisClient.hset(id, "clicks", totalClicks);
+  res.redirect(direction);
 });
 
 app.post('/create', (req, res)=> {
@@ -67,63 +59,51 @@ app.post('/create', (req, res)=> {
   res.redirect('back');
 });
 
-
-app.get('/', async (req, res, next) => {
-  redisClient.keys('index:*', (err, keys) => {
-    keys.forEach( key => {
-      redisClient.hgetall(key, (err, url) => {
-        
-      })
-    })
-  })
-});
-
-// let count = 0;
-
-io.on('connection', client => {
-  console.log("Made socket connection!")
-  // redisClient.get('linkShortener', (err, object) => {
-  //   console.log(object)
-  //   client.emit('new linkShortener', object);
-  // });
-  redisClient.hgetall('linkShortener', (err, object)=> {
-    console.log('this is my object');
-    console.log(object);
-    // redisClient.setnx('myLinks', object );
-    client.emit('new linkShortener', object);
-  });
-
-  redisClient.incr('increment', (err, value)=> {
-    io.emit('new value', value);
-  });
-
-
-  //   redisClient.incr('visitor-count', (err, count) => {
-  //     res.send(`Visitor Count: ${count}`)
-  //   })
+app.get('/', async (req, res, next)=> {
+  try {
+    const indexes = await redisClient.keys("index:*");
+    for( let idx of indexes ) {
+      urls[idx] = await redisClient.hgetall(idx);
+    }
+    console.log( urls)
+    res.render('index', { urls } );
+  } catch(e) {
+    console.log('error');
+    next(e);
+  };
+  urls = {};
 });
 
 
+//
 // io.on('connection', client => {
 //   console.log("New connection!")
 //
-//   redisClient.get('count', (err, count) => {
-//     client.emit('new count', count);
-//   });
+//   // redisClient.get('count', (err, count) => {
+//   //   client.emit('new count', count);
+//   // });
 //
 //   // client.emit('new count', count);
 //
-//   client.on('increment', () => {
-//     redisClient.incr('count', (err, count)=> {
-//       io.emit('new count', count);
-//     });
-//   });
+//   // client.on('increment', async () => {
+//   //   try {
+//   //     await redisClient.incr('count',
+//   //     io.emit('new count', count);
+//   //   });
+//   //   } catch {
+//   //
+//   //   }
+//   // });
 //
-//   client.on('decrement', () => {
-//     redisClient.decr('count', (err, count)=> {
-//       io.emit('new count', count);
-//     });
-//   });
+//   client.on('', async ()=> {
+//     io.emit('count', data);
+//   })
+//
+//   // client.on('decrement', () => {
+//   //   redisClient.decr('count', (err, count)=> {
+//   //     io.emit('new count', count);
+//   //   });
+//   // });
 // });
 
 // app.listen(3000)
