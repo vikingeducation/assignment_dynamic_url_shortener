@@ -1,0 +1,34 @@
+{
+  "name": "assignment_dynamic_url_shortener",
+  "version": "1.0.0",
+  "description": "URL shortening service, outfitted with realtime analytics.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Visiona/assignment_dynamic_url_shortener.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Visiona/assignment_dynamic_url_shortener/issues"
+  },
+  "homepage": "https://github.com/Visiona/assignment_dynamic_url_shortener#readme",
+  "dependencies": {
+    "async-redis": "^1.0.0",
+    "body-parser": "^1.18.2",
+    "express": "^4.16.2",
+    "express-handlebars": "^3.0.0",
+    "handlebars": "^4.0.11",
+    "nodemon": "^1.14.3",
+    "redis": "^2.8.0",
+    "shortid": "^2.2.8",
+    "socket.io": "^2.0.4",
+    "socket.io-client": "^2.0.4"
+  },
+  "devDependencies": {},
+  "keywords": []
+}

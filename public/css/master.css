@@ -1,0 +1,15 @@
+div.bar {
+  height: 200px;
+  background-color: #194eaa;
+}
+
+form {
+  padding: 80px 40px 0 40px;
+}
+
+.limit-width {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 420px;
+}
