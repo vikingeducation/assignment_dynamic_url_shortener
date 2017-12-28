@@ -1,5 +1,5 @@
 # My URL shortener
-URL shortening service, outfitted with realtime analytics.
+URL shortening service, outfitted with realtime analytics (WEBSOCKETS) and NoSQL database REDIS.
 
 ## Getting Started
 
