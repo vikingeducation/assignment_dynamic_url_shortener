@@ -26,20 +26,12 @@
 
     <script>
 
-      $('document').ready( function() {
-        var socket = io.connect('http://localhost:3000/short/');
-        $( "a" ).click( function() {
-          // var idx = $('td[id]').eq(0).attr('id');
-          var idx = $(this).eq(0).parent().attr('id');
-          alert( "Handler for .click() called.  " + idx);
-          socket = io.connect('http://localhost:3000/short/' + idx)
-          socket.on('count', (id, totalClicks)=> {
-            var $output = $('#' + id).eq(0);
-            $output.text(totalClicks)
-          })
-        });
-
-      })
+        var socket = io.connect('http://localhost:3000');
+        socket.on('count', (selector, totalClicks)=> {
+          console.log(selector);
+          console.log(totalClicks)
+          $('#' + selector).last().text(totalClicks);
+        })
 
     </script>
   </body>

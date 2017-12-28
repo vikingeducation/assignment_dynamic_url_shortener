@@ -44,8 +44,9 @@ app.get('/short/:id', async (req, res)=> {
   let direction = await redisClient.hget(id, 'long_url');
   let totalClicks = await redisClient.hget(id, 'clicks');
   totalClicks = parseInt(totalClicks) + 1;
-  io.sockets.emit('count', id, totalClicks);
   redisClient.hset(id, "clicks", totalClicks);
+  selector = id.replace(/:/g, '\\:')
+  io.sockets.emit('count', selector, totalClicks);
   res.redirect(direction);
 });
 
@@ -65,7 +66,7 @@ app.get('/', async (req, res, next)=> {
     for( let idx of indexes ) {
       urls[idx] = await redisClient.hgetall(idx);
     }
-    console.log( urls)
+    // console.log( urls)
     res.render('index', { urls } );
   } catch(e) {
     console.log('error');
@@ -73,38 +74,6 @@ app.get('/', async (req, res, next)=> {
   };
   urls = {};
 });
-
-
-//
-// io.on('connection', client => {
-//   console.log("New connection!")
-//
-//   // redisClient.get('count', (err, count) => {
-//   //   client.emit('new count', count);
-//   // });
-//
-//   // client.emit('new count', count);
-//
-//   // client.on('increment', async () => {
-//   //   try {
-//   //     await redisClient.incr('count',
-//   //     io.emit('new count', count);
-//   //   });
-//   //   } catch {
-//   //
-//   //   }
-//   // });
-//
-//   client.on('', async ()=> {
-//     io.emit('count', data);
-//   })
-//
-//   // client.on('decrement', () => {
-//   //   redisClient.decr('count', (err, count)=> {
-//   //     io.emit('new count', count);
-//   //   });
-//   // });
-// });
 
 // app.listen(3000)
 server.listen(3000);
