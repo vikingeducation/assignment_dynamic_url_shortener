@@ -2,7 +2,7 @@
 
 Build a URL shortening service, outfitted with realtime analytics.
 
-Runs with npm run start with localhost at port 8000
+Runs with npm run start with localhost at port 3000
 
 Instructions:
 
