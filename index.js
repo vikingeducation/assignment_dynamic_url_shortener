@@ -98,6 +98,16 @@ io.on("connection", client => {
   // }
 });
 
-server.listen(process.env.PORT || 3000, () => {
-  console.log(`App listening on port ${PORT}!`);
+const port = process.env.PORT || process.argv[2] || 3000;
+const host = "localhost";
+
+let args;
+process.env.NODE_ENV === "production" ? (args = [port]) : (args = [port, host]);
+
+args.push(() => {
+  console.log(`Listening: http://${host}:${port}\n`);
 });
+
+if (require.main === module) {
+  app.listen.apply(app, args);
+}
