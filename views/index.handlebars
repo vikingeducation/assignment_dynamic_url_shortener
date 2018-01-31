@@ -45,13 +45,14 @@
 
 
   <script>
-    var socket = io.connect(process.env.REDIS_URL); //http://localhost:3000/
+    var socket = io.connect("http://localhost:3000"); //http://localhost:3000/
 
     socket.on("new count", count => {
       $("#count").text(count);
     });
 
     $(document).ready(() => {
+      console.log("Document ready!")
       socket.emit("visitor-count");
     });
 
@@ -64,6 +65,7 @@
     });
 
     $('.linkCount').click(function (e) {
+      console.log("CLICK EVENT");
       e.preventDefault();
       var $target = $(e.target);
       var data = {

@@ -4,7 +4,7 @@ const express = require("express");
 const app = express();
 const server = require("http").createServer(app);
 const io = require("socket.io")(server);
-const redisClient = require("redis").createClient(process.env.REDIS_URL);
+const redisClient = require("redis").createClient(6379);
 const querystring = require("querystring");
 const bodyParser = require("body-parser");
 const expressHandlebars = require("express-handlebars");
@@ -60,7 +60,9 @@ app.post("/", (req, res) => {
         (error, result) => {
           if (error) res.send("Error: " + error);
           redisClient.hgetall("table", function(err, object) {
+            console.log(object);
             tableArr.push(object);
+            console.log(tableArr);
             res.render("index", {
               urlObject: tableArr,
               objLength: tableArr.length
@@ -99,7 +101,6 @@ io.on("connection", client => {
 });
 
 const PORT = process.env.PORT || 3000;
-app.locals.port = PORT;
 
 app.listen(PORT, () => {
   console.log(`App listening on port ${PORT}!`);
