@@ -101,5 +101,8 @@ io.on("connection", client => {
 });
 
 const PORT = process.env.PORT || 3000;
+if (process.env.REDIS_URL) {
+  app.locals.REDIS_URL = process.env.REDIS_URL;
+}
 
 server.listen(PORT);
