@@ -98,4 +98,8 @@ io.on("connection", client => {
   // }
 });
 
-server.listen(3000);
+const PORT = process.env.PORT || 8000;
+
+app.listen(PORT, () => {
+  console.log(`App listening on port ${PORT}!`);
+});
