@@ -4,7 +4,7 @@ const express = require("express");
 const app = express();
 const server = require("http").createServer(app);
 const io = require("socket.io")(server);
-const redisClient = require("redis").createClient(6379);
+const redisClient = require("redis").createClient();
 const querystring = require("querystring");
 const bodyParser = require("body-parser");
 const expressHandlebars = require("express-handlebars");
@@ -102,6 +102,4 @@ io.on("connection", client => {
 
 const PORT = process.env.PORT || 3000;
 
-app.listen(PORT, () => {
-  console.log(`App listening on port ${PORT}!`);
-});
+server.listen(PORT);
