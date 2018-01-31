@@ -1,0 +1,94 @@
+<body>
+  <div class="jumbotron jumbotron-fluid">
+    <div class="container">
+      <div class="row">
+        <h1 class="display-3">Simplify your links</h1>
+      </div>
+      <div class="form-group row">
+        <form action="/" method="post">
+          <label for="inputURL" class="col-2 col-form-label">Original URL</label>
+          <div class="col-12">
+            <input name="userURL" class="form-control" type="text" placeholder="Your original URL here" id="inputURL">
+            <input type="submit" class="btn btn-primary">
+          </div>
+        </form>
+      </div>
+      <p class="lead">All goo.gl URLs and click analytics</p>
+    </div>
+  </div>
+  <div class="container">
+    <table class="table">
+      <thead class="thead-default">
+        <tr>
+          <th>Original URL</th>
+          <th>Google URL</th>
+          <th>All Clicks</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each urlObject as |obj|}}
+        <tr>
+          <th scope="row">{{obj.longUrl}}</th>
+          <td>
+            <a href="{{obj.shortUrl}}" class="linkCount" id="link{{@index}}" target="_blank">{{obj.shortUrl}}</a>
+          </td>
+          <td class="link{{@index}}"></td>
+        </tr>
+        {{/each}}
+      </tbody>
+    </table>
+    <div class="row">
+      <h3>Total Visitor Count to this Page:</h3>
+    </div>
+    <h3 id="count"></h3>
+  </div>
+
+
+  <script>
+    var redis_url = "{{REDIS_CLIENT}}"
+    var socket = io.connect(redis_url); //http://localhost:3000/
+
+    socket.on("new count", count => {
+      $("#count").text(count);
+    });
+
+    $(document).ready(() => {
+      console.log("Document ready!")
+      socket.emit("visitor-count");
+    });
+
+    //var baseUrl = $('body').eq(0).attr('data-base-url');
+    //var socket = io.connect(baseUrl);
+
+    socket.on("new click", (count, data) => {
+      console.log(count, data);
+      $("." + data.id).text(count);
+    });
+
+    $('.linkCount').click(function (e) {
+      console.log("CLICK EVENT");
+      e.preventDefault();
+      var $target = $(e.target);
+      var data = {
+        id: $target.attr('id')
+      };
+      socket.emit('click', data);
+      //window.location.href = $target.attr('href');
+      return false;
+    });
+
+// for (let i = 1; i < $("tr").length; i++) {
+//   socket.on("new website-count" + i, website-count => {
+//     $("#link" + i).html(website-count);
+//   });
+//
+//   $("#link" + i).click(() => {
+//     socket.emit('website-count' + i);
+//   });
+// }
+
+  </script>
+
+
+
+</body>
