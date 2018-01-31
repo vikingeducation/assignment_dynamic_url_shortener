@@ -5,6 +5,9 @@ const app = express();
 const server = require("http").createServer(app);
 const io = require("socket.io")(server);
 const redisClient = require("redis").createClient(process.env.REDIS_URL);
+if (process.env.REDIS_URL) {
+  app.locals.REDIS_URL = process.env.REDIS_URL;
+}
 const querystring = require("querystring");
 const bodyParser = require("body-parser");
 const expressHandlebars = require("express-handlebars");
@@ -101,8 +104,5 @@ io.on("connection", client => {
 });
 
 const PORT = process.env.PORT || 3000;
-if (process.env.REDIS_URL) {
-  app.locals.REDIS_URL = process.env.REDIS_URL;
-}
 
 server.listen(PORT);

@@ -45,7 +45,8 @@
 
 
   <script>
-    var socket = io.connect(app.locals.REDIS_URL); //http://localhost:3000/
+    var redis_url = "{{REDIS_CLIENT}}"
+    var socket = io.connect(redis_url); //http://localhost:3000/
 
     socket.on("new count", count => {
       $("#count").text(count);
