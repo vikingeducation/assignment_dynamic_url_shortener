@@ -1,2 +1,6 @@
-# assignment_dynamic_url_shortener
-Build a URL shortening service, outfitted with realtime analytics.
+# url_shortener
+Built a URL shortening service, outfitted with realtime analytics.
+
+Now a days it doesn't work
+
+Gregory Alford
