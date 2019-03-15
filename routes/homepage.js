@@ -18,8 +18,18 @@ ROUTER.get('/:id', (req, res) => {
 
 ROUTER.get('', (req, res) => {
   //delete
-  // client.del("hashIds")
-
+//   client.del("hashIds")
+//
+// for(var i = 0; i < 50; i++) {
+//   var delKey = i.toString()
+//   client.del(delKey, function(err, response) {
+//     if (response == 1) {
+//       console.log("Deleted Successfully!")
+//     } else{
+//       console.log("Cannot delete")
+//     }
+//   })
+// } //
 
   client.lrange('hashIds', 0, -1, function(err, reply) {
     let urlIds = reply;
@@ -27,15 +37,11 @@ ROUTER.get('', (req, res) => {
 
     urlIds.forEach( (urlId) => {
       client.hgetall( urlId, (err, object) => {
-        var views;
-        client.get(urlId, (err, count) => {
-          console.log('!!count', count, '!!count')
-          views = count
-          console.log('@@views', views, '@@views')
-        });
 
-// console.log('!!views', views, '!!views')
-        allUrls.push( {id: urlId, fullUrl: object.fullUrl, viewCount: object.viewCount } )
+        if( object ) {
+          allUrls.push( {id: urlId, fullUrl: object.fullUrl, viewCount: object.viewCount } )
+        }
+
       });
     });
     res.render('partials/index', { allUrls });
@@ -45,20 +51,13 @@ ROUTER.get('', (req, res) => {
 
 ROUTER.post('', (req, res) => {
   client.lrange('hashIds', 0, -1, function(err, reply) {
-  var id = reply.length.toString();
+    var id = reply.length.toString();
 
-  client.setnx(id, 0);
-  client.lpush(["hashIds", id], function(err,reply) { });
-  client.hmset( id, 'fullUrl', req.body.url, 'viewCount', '0' );
+    client.lpush(["hashIds", id], function(err,reply) { });
+    client.hmset( id, 'fullUrl', req.body.url, 'viewCount', '0' );
 
-  // client.get(id, (err, reply2) => {
-  //   console.log('hh', reply2)
-  // })
-  res.redirect("/");
+    res.redirect("/");
   });
-
-
-
 });
 //
 module.exports = ROUTER;
