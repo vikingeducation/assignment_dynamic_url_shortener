@@ -1,10 +1,22 @@
-message
-{{message}}
+{{#each allUrls as |url|}}
+  <h2>
+    {{url.fullUrl}}
+    <a href="/{{url.id}}">
+      localhost:3000/{{url.id}}
+    </a>
+
+    {{url.viewCount}}</h2>
+  </h2>
+
+  <hr>
+{{/each}}
+
+<!--  -->
 
 <hr>
 
 <form class="" action="/" method="post">
   <p>URL to shorten:</p>
-  <input type="text" name="" value="" placeholder="URL">
+  <input type="text" name="url">
   <input type="submit" name="" value="Shorten URL">
 </form>

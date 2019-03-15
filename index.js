@@ -7,8 +7,12 @@ app.engine('handlebars', exphbs( {defaultLayout: 'main'}));
 app.set('view engine', 'handlebars');
 
 //redis
-const redis = require('redis');
-const redisCLient = redis.createClient();
+// const redis = require('redis');
+// const redisCLient = redis.createClient();
+
+//body parser
+const bodyParser = require('body-parser');
+app.use( bodyParser.urlencoded( {extended: true}) );
 
 // routers
 const homepageRouter = require('./routes/homepage');
@@ -20,17 +24,3 @@ app.use('/', homepageRouter);
 
 
 app.listen(3000);
-
-/*
-psuedo code
-
-methods:
-  store/create the full URL, along with a shortened version of it,
-         with the following statistics options:
-            *time created
-            *times clicked
-
-  retreieve/get the shortened URL
-
-
-*/
