@@ -2,6 +2,29 @@ const redis = require('redis');
 const client = redis.createClient();
 
 const LS = {
+  getExternalWebsite(id, res){
+    client.hgetall(id, (err, object) => {
+      let newCount = (Number( object.viewCount ) + 1).toString();
+      client.hset(id, 'viewCount', newCount);
+
+      res.redirect( object.fullUrl );
+    });
+  },
+  getAll(res){
+    client.lrange('hashIds', 0, -1, function(err, reply) {
+      let urlIds = reply;
+      let allUrls = [];
+
+      urlIds.forEach( (urlId) => {
+        client.hgetall( urlId, (err, object) => {
+          if( object ) {
+            allUrls.push( {id: urlId, fullUrl: object.fullUrl, viewCount: object.viewCount } )
+          }
+        });
+      });
+      res.render('partials/index', { allUrls });
+    });
+  },
   createURL(hashName, url){
     client.lrange(hashName, 0, -1, function(err, reply) {
       let id = reply.length.toString();
@@ -11,7 +34,7 @@ const LS = {
                         'viewCount', '0' );
     });
   },
-  deleteAll(){
+  deleteAllTemp(){
     // delete list
     client.del("hashIds")
 

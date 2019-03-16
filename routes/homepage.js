@@ -6,36 +6,20 @@ const client = redis.createClient();
 
 const LS = require('../services/link-shortener');
 
-ROUTER.get('/:id', (req, res) => {
-  let id = req.params.id;
-  client.hgetall(id, (err, object) => {
-    let newCount = (Number( object.viewCount ) + 1).toString();
-    client.hset(id, 'viewCount', newCount);
-
-    res.redirect( object.fullUrl );
-  });
-});
-
 
 ROUTER.get('/', (req, res) => {
-  client.lrange('hashIds', 0, -1, function(err, reply) {
-    let urlIds = reply;
-    let allUrls = [];
-
-    urlIds.forEach( (urlId) => {
-      client.hgetall( urlId, (err, object) => {
-        if( object ) {
-          allUrls.push( {id: urlId, fullUrl: object.fullUrl, viewCount: object.viewCount } )
-        }
-      });
-    });
-    res.render('partials/index', { allUrls });
-  });
+  LS.getAll(res);
+  // LS.deleteAllTemp();
 });
 
 ROUTER.post('/', (req, res) => {
   LS.createURL('hashIds', req.body.url);
   res.redirect("/");
+});
+
+ROUTER.get('/:id', (req, res) => {
+  console.log("ROUTER.get('/:id' ran" )
+  LS.getExternalWebsite(req.params.id, res);
 });
 //
 module.exports = ROUTER;
