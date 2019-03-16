@@ -1,0 +1,39 @@
+<div class="container">
+  <h2>Simplify your links</h2>
+  <p>
+    <form class="" action="/" method="post">
+      <p>URL to shorten:</p>
+      <h4>Must use full URL format: https://www.google.com/</h4>
+      <input type="text" name="url">
+      <input type="submit" name="" value="Shorten URL">
+    </form>
+  </p>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Original URL</th>
+        <th>Short URL</th>
+        <th>Click Count</th>
+      </tr>
+    </thead>
+    <tbody>
+<!-- each begin -->
+      {{#each allUrls as |url|}}
+      <tr>
+        <td>
+          {{url.fullUrl}}
+        </td>
+        <td>
+          <a href="/{{url.id}}" target="_blank" >
+            localhost:3000/{{url.id}}
+          </a>
+        </td>
+        <td>
+          {{url.viewCount}}
+        </td>
+      </tr>
+      {{/each}}
+<!-- /each end -->
+    </tbody>
+  </table>
+</div>
